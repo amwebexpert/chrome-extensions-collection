@@ -1,9 +1,9 @@
 import { Environment } from '../app.types'
 
 chrome.runtime.onInstalled.addListener(async () => {
-  console.info('====>>> onInstalled', Environment)
+  console.info('====>>> service-worker:onInstalled', JSON.stringify(Environment, null, 2))
 })
 
-chrome.runtime.onMessage.addListener((message: {}) => {
+chrome.runtime.onMessage.addListener((message) => {
   console.info('====>>> info', message)
 })
