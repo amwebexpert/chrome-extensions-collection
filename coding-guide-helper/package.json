@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
+    "@types/chrome": "^0.0.268",
     "@types/lodash": "^4.17.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
