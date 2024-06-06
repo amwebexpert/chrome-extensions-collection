@@ -1,7 +1,7 @@
 {
   "name": "coding-guide-helper",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,12 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "biome lint ./src check",
-    "lint:fix": "biome check ./src --apply"
+    "lint:fix": "biome check ./src --apply",
+    "test:watch": "vitest",
+    "test": "vitest run",
+    "release": "semantic-release",
+    "release:build": "yarn build && zip -r dist.zip dist",
+    "postversion": "yarn release:build"
   },
   "dependencies": {
     "antd": "^5.17.3",
@@ -19,16 +24,27 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
+    "@crxjs/vite-plugin": "^1.0.14",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^10.0.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^14.0.0",
     "@types/chrome": "^0.0.268",
-    "@types/lodash": "^4.17.4",
+    "@types/jest": "^29.5.3",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^18.15.11",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-react": "^4.3.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.7",
+    "jsdom": "^22.1.0",
+    "semantic-release": "^21.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
-    "vite-plugin-package-version": "^1.1.0",
-    "vite-plugin-singlefile": "^2.0.1"
+    "vitest": "^1.6.0",
+    "vite-plugin-package-version": "^1.1.0"
   }
 }
