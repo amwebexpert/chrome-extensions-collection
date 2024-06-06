@@ -1,0 +1,10 @@
+{
+  "name": "coding-guide-helper",
+  "description": "Coding guide helper is a chrome extension to help doing pull requests review process",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icons/icon16x16.png"
+  }
+}
