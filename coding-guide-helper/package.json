@@ -36,8 +36,6 @@
     "@types/node": "^18.15.11",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "@typescript-eslint/parser": "^5.0.0",
     "@vitejs/plugin-react": "^4.3.0",
     "jsdom": "^22.1.0",
     "semantic-release": "^21.0.1",
