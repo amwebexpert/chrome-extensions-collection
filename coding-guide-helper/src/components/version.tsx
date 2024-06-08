@@ -8,7 +8,7 @@ export const Version: FunctionComponent = () => {
   const information = `${title} v${version}`
 
   return (
-    <Flex justify="right" onClick={() => console.info('on Version click')}>
+    <Flex justify="right">
       <Typography.Text className="versionTypo">{information}</Typography.Text>
     </Flex>
   )

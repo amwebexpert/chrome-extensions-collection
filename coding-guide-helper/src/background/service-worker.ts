@@ -1,9 +1,25 @@
+import { marked } from 'marked'
 import { Environment } from '../app.types'
 
-chrome.runtime.onInstalled.addListener(async () => {
-  console.info('====>>> service-worker:onInstalled', JSON.stringify(Environment, null, 2))
+const url =
+  'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
+
+chrome.runtime.onInstalled.addListener(async (detail) => {
+  console.info('service-worker', { detail, environment: Environment, url, guidelinesUrl: url })
+
+  fetchCodingGuidelines(url).then((markdownTokens) => {
+    console.info('guidelines markdown', markdownTokens)
+  })
 })
 
 chrome.runtime.onMessage.addListener((message) => {
-  console.info('====>>> info', message)
+  console.info('service-worker message', message)
 })
+
+const fetchCodingGuidelines = async (url: string) => {
+  const response = await fetch(url)
+  const markdown = await response.text()
+
+  const tokens = marked.lexer(markdown)
+  return tokens
+}

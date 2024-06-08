@@ -1,10 +1,13 @@
-import { Flex, Typography } from 'antd'
-import { type FunctionComponent, useEffect } from 'react'
+import { Flex, Input, Space, Typography } from 'antd'
+import type { SearchProps } from 'antd/es/input/Search'
+import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment } from './app.types'
 import { Version } from './components/version'
 
+const { title } = Environment
+
 export const App: FunctionComponent = () => {
-  const { title } = Environment
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     chrome.runtime.getPlatformInfo().then((info) => {
@@ -12,10 +15,26 @@ export const App: FunctionComponent = () => {
     })
   }, [])
 
+  const onSearch = () => {
+    chrome.runtime.sendMessage({ action: 'search', value: search })
+  }
+
   return (
-    <Flex vertical={true} style={{ minWidth: 600 }}>
-      <Flex gap="middle" justify="center">
+    <Flex vertical={true} style={{ minWidth: 600, minHeight: 400 }}>
+      <Flex gap="middle" vertical={true} flex={1} align="center">
         <Typography.Text>{title}</Typography.Text>
+
+        <Space>
+          <Input.Search
+            placeholder="input search text"
+            allowClear
+            enterButton
+            size="large"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onSearch={onSearch}
+          />
+        </Space>
       </Flex>
 
       <Version />
