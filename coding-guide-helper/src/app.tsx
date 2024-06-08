@@ -13,10 +13,15 @@ export const App: FunctionComponent = () => {
     chrome.runtime.getPlatformInfo().then((info) => {
       console.log('platform info', JSON.stringify(info, null, 2))
     })
+
+    // restore search value
+    chrome.storage.local.get('search', (data) => {
+      setSearch(data.search ?? '')
+    })
   }, [])
 
   const onSearch = () => {
-    chrome.runtime.sendMessage({ action: 'search', value: search })
+    chrome.runtime.sendMessage({ action: 'setSearch', payload: search })
   }
 
   return (

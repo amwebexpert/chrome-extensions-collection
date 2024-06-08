@@ -14,6 +14,10 @@ chrome.runtime.onInstalled.addListener(async (detail) => {
 
 chrome.runtime.onMessage.addListener((message) => {
   console.info('service-worker message', message)
+
+  if (message.action === 'setSearch') {
+    chrome.storage.local.set({ search: message.payload })
+  }
 })
 
 const fetchCodingGuidelines = async (url: string) => {
