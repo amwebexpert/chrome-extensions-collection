@@ -1,12 +1,11 @@
 import { marked } from 'marked'
-import { Environment } from '../app.types'
 import { MessageType } from '../models/models'
 
 const url =
   'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
 
-chrome.runtime.onInstalled.addListener(async (detail) => {
-  console.info('service-worker', { detail, environment: Environment, url, guidelinesUrl: url })
+chrome.runtime.onInstalled.addListener((detail) => {
+  console.info(`service-worker ${detail.reason}`)
 
   fetchCodingGuidelines(url).then((markdownTokens) => {
     console.info('guidelines markdown', markdownTokens)
@@ -14,24 +13,23 @@ chrome.runtime.onInstalled.addListener(async (detail) => {
 })
 
 chrome.runtime.onMessage.addListener((message) => {
-  console.info('service-worker message', message)
-  const { action, payload } = message
+  const { type, payload } = message
+  console.info(`message received ${type}`)
 
-  switch (action) {
+  switch (type) {
     case MessageType.SET_SEARCH:
       chrome.storage.local.set({ search: payload })
       break
     case MessageType.CONTENT_SCRIPT_STARTED:
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        console.info('====>>> info', tabs)
+        console.info('content script started', tabs)
       })
       break
     case MessageType.SEND_SELECTION:
-      console.info('message', { action, payload })
       break
 
     default:
-      console.warn('unhandled message', action)
+      console.warn('unhandled message', type)
       break
   }
 })

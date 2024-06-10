@@ -21,7 +21,7 @@ export const App: FunctionComponent = () => {
   }, [])
 
   const onSearch = () => {
-    chrome.runtime.sendMessage({ action: 'setSearch', payload: search })
+    chrome.runtime.sendMessage({ type: 'setSearch', payload: search })
   }
 
   return (
