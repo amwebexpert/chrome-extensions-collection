@@ -2,11 +2,10 @@ import { marked } from 'marked'
 import { MenuItems } from '../models/models'
 
 export const fetchCodingGuidelines = async (url: string) => {
-  const response = await fetch(url)
+  const response = await fetch(url, { method: 'GET', redirect: 'follow' })
   const markdown = await response.text()
 
-  const tokens = marked.lexer(markdown)
-  return tokens
+  return marked.lexer(markdown)
 }
 
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
