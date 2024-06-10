@@ -1,18 +1,7 @@
-import { marked } from 'marked'
-import { MessageType } from '../models/models'
+import { MenuItems, MessageType } from '../models/models'
+import { fetchCodingGuidelines, menuItemSendSelection } from './service-worker.utils'
 
-const url =
-  'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
-
-enum MenuItems {
-  SEND_SELECTION = 'sendSelection',
-}
-
-chrome.contextMenus.create({
-  id: MenuItems.SEND_SELECTION,
-  title: 'Search in Coding Guidelines',
-  contexts: ['selection'],
-})
+chrome.contextMenus.create(menuItemSendSelection)
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const { menuItemId, selectionText } = info
@@ -24,6 +13,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
+  const url =
+    'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
 
   fetchCodingGuidelines(url).then((markdownTokens) => {
     console.info('guidelines markdown', markdownTokens)
@@ -43,19 +34,9 @@ chrome.runtime.onMessage.addListener((message) => {
         console.info('content script started', tabs)
       })
       break
-    case MessageType.SEND_SELECTION:
-      break
 
     default:
       console.warn('unhandled message', type)
       break
   }
 })
-
-const fetchCodingGuidelines = async (url: string) => {
-  const response = await fetch(url)
-  const markdown = await response.text()
-
-  const tokens = marked.lexer(markdown)
-  return tokens
-}
