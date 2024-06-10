@@ -14,8 +14,8 @@ export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
   contexts: ['selection'],
 }
 
-export const getTableOfContent = (tokensList: TokensList): Tokens.List =>
-  tokensList.find((token) => token.type === 'list') as Tokens.List
+export const getTableOfContent = (tokens: TokensList): Tokens.List =>
+  tokens.find((token) => token.type === 'list') as Tokens.List
 
 export const getTableOfContentLinks = (toc: Tokens.List): Tokens.Link[] => {
   const links: Tokens.Link[] = []
@@ -32,4 +32,24 @@ export const getTableOfContentLinks = (toc: Tokens.List): Tokens.Link[] => {
   }
 
   return links
+}
+
+type GuidelineLink = {
+  title: string
+  href: string
+  searchItems: string[]
+}
+
+export const parseMarkdownGuidelines = (tokens: TokensList): Map<string, GuidelineLink> => {
+  const guidelines = new Map<string, GuidelineLink>()
+
+  const toc = getTableOfContent(tokens)
+  const links = getTableOfContentLinks(toc)
+
+  for (const link of links) {
+    const { text, href } = link
+    guidelines.set(text, { title: text, href, searchItems: [] })
+  }
+
+  return guidelines
 }
