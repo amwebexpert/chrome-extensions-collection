@@ -7,7 +7,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const { menuItemId, selectionText } = info
 
   if (menuItemId === MenuItems.SEND_SELECTION && tab?.id) {
-    console.info(`====>>> selected text on tab ${tab.id} is ${selectionText}`)
+    chrome.storage.local.set({ search: selectionText })
   }
 })
 

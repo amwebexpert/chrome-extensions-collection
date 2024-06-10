@@ -44,4 +44,13 @@ export const manifest: ManifestV3Export = {
   // Host permissions for all urls is needed because websites to block are determined by users.
   // Thus extension does not know which urls to block in advance
   host_permissions: ['<all_urls>'],
+  commands: {
+    _execute_action: {
+      suggested_key: {
+        default: 'Ctrl+Shift+Y',
+        mac: 'Command+Shift+Y',
+      },
+      description: 'Toggle Coding Guide Helper',
+    },
+  },
 }
