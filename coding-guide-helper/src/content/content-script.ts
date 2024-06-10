@@ -1,13 +1,21 @@
-import { Environment } from '../app.types'
+import debounce from 'debounce'
 import { MessageType } from '../models/models'
 
-const onStart = () => {
-  const documentUrl = window.location.href
-  console.info('started', { environment: Environment, documentUrl })
-  chrome.runtime.sendMessage({ type: MessageType.CONTENT_SCRIPT_STARTED })
+const onSelectionChange = () => {
+  const payload = window.getSelection()?.toString() ?? ''
+  chrome.runtime.sendMessage({ type: MessageType.ON_SELECTION_CHANGE, payload })
 }
 
-onStart()
+const init = () => {
+  document.addEventListener('selectionchange', debounce(onSelectionChange, 600))
+
+  chrome.runtime.sendMessage({
+    type: MessageType.CONTENT_SCRIPT_STARTED,
+    payload: window.location.href,
+  })
+}
+
+init()
 
 // const element = document.querySelector("body");
 // element.style.color = "red";

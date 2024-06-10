@@ -1,10 +1,12 @@
 import { Flex, Input, Space, Typography } from 'antd'
-import type { SearchProps } from 'antd/es/input/Search'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment } from './app.types'
 import { Version } from './components/version'
+import { MessageType, PortName } from './models/models'
 
 const { title } = Environment
+
+const port = chrome.runtime.connect({ name: PortName.POPUP })
 
 export const App: FunctionComponent = () => {
   const [search, setSearch] = useState('')
@@ -18,11 +20,19 @@ export const App: FunctionComponent = () => {
     chrome.storage.local.get('search', (data) => {
       setSearch(data.search ?? '')
     })
+
+    port.onMessage.addListener((message, port) => {
+      if (port.name !== PortName.POPUP) return
+
+      if (message.type === MessageType.ECHO) {
+        console.info('====>>> popup message echo', message)
+        return
+      }
+    })
   }, [])
 
-  const onSearch = () => {
-    chrome.runtime.sendMessage({ type: 'setSearch', payload: search })
-  }
+  const onSearch = () =>
+    chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload: search })
 
   return (
     <Flex vertical={true} style={{ minWidth: 600, minHeight: 400 }}>
