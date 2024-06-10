@@ -12,7 +12,7 @@ chrome.runtime.onConnect.addListener((port) => {
   })
 })
 
-chrome.contextMenus.remove(MenuItems.SEND_SELECTION)
+chrome.contextMenus.removeAll()
 chrome.contextMenus.create(menuItemSendSelection)
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   const { menuItemId, selectionText } = info
