@@ -4,6 +4,24 @@ import { MessageType } from '../models/models'
 const url =
   'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
 
+enum MenuItems {
+  SEND_SELECTION = 'sendSelection',
+}
+
+chrome.contextMenus.create({
+  id: MenuItems.SEND_SELECTION,
+  title: 'Search in Coding Guidelines',
+  contexts: ['selection'],
+})
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  const { menuItemId, selectionText } = info
+
+  if (menuItemId === MenuItems.SEND_SELECTION && tab?.id) {
+    console.info(`====>>> selected text on tab ${tab.id} is ${selectionText}`)
+  }
+})
+
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
 
