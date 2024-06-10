@@ -1,5 +1,6 @@
 import { marked } from 'marked'
 import { Environment } from '../app.types'
+import { MessageType } from '../models/models'
 
 const url =
   'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
@@ -17,19 +18,20 @@ chrome.runtime.onMessage.addListener((message) => {
   const { action, payload } = message
 
   switch (action) {
-    case 'setSearch':
+    case MessageType.SET_SEARCH:
       chrome.storage.local.set({ search: payload })
       break
-    case 'contentScriptStarted':
+    case MessageType.CONTENT_SCRIPT_STARTED:
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         console.info('====>>> info', tabs)
-        // const tabId = Number(tabs[0].id)
-        // if (tabId) chrome.pageAction.show(tabId)
       })
+      break
+    case MessageType.SEND_SELECTION:
+      console.info('message', { action, payload })
       break
 
     default:
-      console.warn('service-worker message not handled', action)
+      console.warn('unhandled message', action)
       break
   }
 })
