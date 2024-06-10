@@ -1,10 +1,13 @@
 import { Environment } from '../app.types'
 
-console.info(
-  'Extensions can run scripts that read and modify the content of a page',
-  document.location.href,
-  Environment,
-)
+const onStart = () => {
+  const documentUrl = window.location.href
+  console.info('content-script started', { environment: Environment, documentUrl })
+  console.info('content-script sending message to service-worker')
+  chrome.runtime.sendMessage({ action: 'contentScriptStarted' })
+}
+
+onStart()
 
 // const element = document.querySelector("body");
 // element.style.color = "red";
