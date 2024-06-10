@@ -37,7 +37,7 @@ export const manifest: ManifestV3Export = {
   ],
   content_scripts: [
     {
-      js: ['src/content/content.ts'],
+      js: ['src/content/content-script.ts'],
       matches: ['https://*/*', 'http://*/*'],
     },
   ],
