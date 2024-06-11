@@ -1,5 +1,9 @@
 import { MenuItems, MessageType } from '../models/models'
-import { fetchCodingGuidelines, menuItemSendSelection } from './service-worker.utils'
+import {
+  fetchCodingGuidelines,
+  menuItemSendSelection,
+  parseMarkdownGuidelines,
+} from './service-worker.utils'
 
 let popupPort: chrome.runtime.Port | null = null
 
@@ -28,7 +32,7 @@ chrome.runtime.onInstalled.addListener((detail) => {
     'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
 
   fetchCodingGuidelines(url).then((markdownTokens) => {
-    console.info('guidelines markdown', markdownTokens)
+    console.info('guidelines markdown', parseMarkdownGuidelines(markdownTokens))
   })
 })
 
