@@ -28,16 +28,16 @@ export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
 export const buildGuidelineMap = async (): Promise<Map<string, GuidelineLink>> => {
   const completeGuidelines = new Map<string, GuidelineLink>()
 
-  const guidelineFilenames = [
+  const guidelineResourceUrls = [
     chrome.runtime.getURL('markdowns/example-1.md'),
     chrome.runtime.getURL('markdowns/example-2.md'),
   ]
 
-  for (const filename of guidelineFilenames) {
-    const markdownText = await fetchCodingGuidelinesText(filename)
+  for (const resourceUrl of guidelineResourceUrls) {
+    const markdownText = await fetchCodingGuidelinesText(resourceUrl)
     const markdownTokens = marked.lexer(markdownText)
 
-    const guide = parseMarkdownGuidelines(markdownTokens)
+    const guide = parseMarkdownGuidelines({ tokens: markdownTokens, resourceUrl })
     for (const [key, value] of guide) {
       completeGuidelines.set(key, value)
     }
@@ -54,7 +54,7 @@ export const buildGuidelineMapOnline = async (): Promise<Map<string, GuidelineLi
     const markdownText = await fetchCodingGuidelinesText(resourceUrl)
     const markdownTokens = marked.lexer(markdownText)
 
-    const guide = parseMarkdownGuidelines(markdownTokens)
+    const guide = parseMarkdownGuidelines({ tokens: markdownTokens, resourceUrl })
     for (const [key, value] of guide) {
       completeGuidelines.set(key, value)
     }
@@ -118,7 +118,14 @@ const getTableOfContent = (tokens: TokensList): Tokens.List => {
   return secondTocLevel
 }
 
-export const parseMarkdownGuidelines = (tokens: TokensList): Map<string, GuidelineLink> => {
+type ParseMarkdownGuidelinesArgs = {
+  tokens: TokensList
+  resourceUrl: string
+}
+export const parseMarkdownGuidelines = ({
+  tokens,
+  resourceUrl,
+}: ParseMarkdownGuidelinesArgs): Map<string, GuidelineLink> => {
   const guidelines = new Map<string, GuidelineLink>()
 
   const toc = getTableOfContent(tokens)
@@ -127,8 +134,13 @@ export const parseMarkdownGuidelines = (tokens: TokensList): Map<string, Guideli
   for (const link of links) {
     const { text: title, href } = link
     const searchItems = buildSearchItemsForRule({ title, tokens })
+    const baseUrl = resourceUrl.replace('/raw/', '/blob/')
 
-    guidelines.set(title, { title, href, searchItems })
+    guidelines.set(title, {
+      title,
+      href: `${baseUrl}${href}`,
+      searchItems,
+    })
   }
 
   return guidelines

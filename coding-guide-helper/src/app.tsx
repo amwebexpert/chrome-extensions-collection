@@ -5,6 +5,8 @@ import { Environment, type GuidelineLink } from './app.types'
 import { Version } from './components/version'
 import { MessageType, PortName } from './models/models'
 import './app.css'
+import { CopyOutlined } from '@ant-design/icons'
+import copy from 'copy-to-clipboard'
 import debounce from 'debounce'
 
 const { title } = Environment
@@ -65,7 +67,19 @@ export const App: FunctionComponent = () => {
             style={{ minWidth: '100%' }}
             items={searchResults.map(({ title, href, searchItems }) => ({
               key: title,
-              label: <Typography.Text onClick={() => console.info(href)}>{title}</Typography.Text>,
+              label: (
+                <Typography.Text>
+                  {title}
+                  <CopyOutlined
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      console.info('====>>> copy to clipboard')
+                      copy(`Suggestion:\n- [${title}](${href})`)
+                    }}
+                  />
+                </Typography.Text>
+              ),
               children: (
                 <div className="container-full">
                   <Markdown>{searchItems.join('\n')}</Markdown>
