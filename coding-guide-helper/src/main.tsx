@@ -1,9 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './app'
 import './main.css'
+import App from './app'
+import Options from './app-options'
 
-const main = () => {
+export enum Page {
+  App = 'app',
+  Options = 'options',
+}
+
+export const main = (page: Page = Page.App) => {
   const root = document.getElementById('root')
 
   if (!root) {
@@ -12,10 +18,6 @@ const main = () => {
   }
 
   ReactDOM.createRoot(root).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
+    <React.StrictMode>{page === Page.App ? <App /> : <Options />}</React.StrictMode>,
   )
 }
-
-main()

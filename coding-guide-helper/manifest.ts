@@ -9,6 +9,7 @@ export const manifest: ManifestV3Export = {
   action: {
     default_popup: 'index.html',
   },
+  options_page: 'index-options.html',
   icons: {
     16: 'icons/icon-16.png',
     32: 'icons/icon-32.png',
