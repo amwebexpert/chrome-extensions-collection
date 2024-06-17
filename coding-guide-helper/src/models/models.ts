@@ -3,7 +3,7 @@ export enum MessageType {
   SET_SEARCH = 'setSearch',
   SET_OPTIONS = 'setOptions',
   ON_SELECTION_CHANGE = 'onSelectionChange',
-  ECHO = 'echo',
+  ON_SEARCH_COMPLETED = 'onSearchCompleted',
 }
 
 export enum MenuItems {

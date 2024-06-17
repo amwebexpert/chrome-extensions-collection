@@ -1,8 +1,23 @@
 import { type Tokens, type TokensList, marked } from 'marked'
+import type { GuidelineLink } from '../app.types'
 import { MenuItems } from '../models/models'
 
 const RULES_TITLE_LOCATION_DEPTH: number = 2
 const isRulesAtLevelOne = RULES_TITLE_LOCATION_DEPTH === 1
+
+type FilterGuidelines = {
+  search: string
+  guideLines: Map<string, GuidelineLink>
+}
+export const filterGuidelines = ({ search, guideLines }: FilterGuidelines): GuidelineLink[] => {
+  const searchLowercase = search.toLowerCase()
+  const allGuidelines = Array.from(guideLines.values())
+
+  return allGuidelines.filter((guideline) => {
+    const searchItems = guideline.searchItems
+    return searchItems.some((item) => item.toLowerCase().includes(searchLowercase))
+  })
+}
 
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
   id: MenuItems.SEND_SELECTION,
@@ -93,12 +108,6 @@ const getTableOfContentLinks = (toc: Tokens.List): Tokens.Link[] => {
   }
 
   return links
-}
-
-type GuidelineLink = {
-  title: string
-  href: string
-  searchItems: string[]
 }
 
 const getTableOfContent = (tokens: TokensList): Tokens.List => {

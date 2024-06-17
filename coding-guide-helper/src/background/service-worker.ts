@@ -1,5 +1,10 @@
+import type { GuidelineLink } from '../app.types'
 import { MenuItems, MessageType } from '../models/models'
-import { buildGuidelineMapOnline, menuItemSendSelection } from './service-worker.utils'
+import {
+  buildGuidelineMapOnline,
+  filterGuidelines,
+  menuItemSendSelection,
+} from './service-worker.utils'
 
 // communications with popup
 let popupPort: chrome.runtime.Port | null = null
@@ -24,10 +29,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 })
 
 // service worker startup and guidelines parsing
+let guideLines: Map<string, GuidelineLink> = new Map()
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
 
   buildGuidelineMapOnline().then((result) => {
+    guideLines = result
     console.info('guidelines markdown', result)
   })
 })
@@ -37,10 +44,13 @@ chrome.runtime.onMessage.addListener((message) => {
   const { type, payload } = message
 
   switch (type) {
-    case MessageType.SET_SEARCH:
-      chrome.storage.local.set({ search: payload })
-      popupPort?.postMessage({ type: MessageType.ECHO, payload })
+    case MessageType.SET_SEARCH: {
+      const search = payload
+      chrome.storage.local.set({ search })
+      const results = filterGuidelines({ search, guideLines })
+      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
       break
+    }
     case MessageType.SET_OPTIONS:
       chrome.storage.local.set({ options: payload })
       break
