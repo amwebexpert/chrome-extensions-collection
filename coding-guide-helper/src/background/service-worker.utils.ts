@@ -49,7 +49,7 @@ export const buildGuidelineMap = async (): Promise<Map<string, GuidelineLink>> =
 export const buildGuidelineMapOnline = async (): Promise<Map<string, GuidelineLink>> => {
   const completeGuidelines = new Map<string, GuidelineLink>()
 
-  const guidelineFilenames = await getGuidelineFilenames()
+  const guidelineFilenames = await getGuidelineUrlResources()
   for (const filename of guidelineFilenames) {
     const markdownText = await fetchCodingGuidelinesText(filename)
     const markdownTokens = marked.lexer(markdownText)
@@ -63,7 +63,7 @@ export const buildGuidelineMapOnline = async (): Promise<Map<string, GuidelineLi
   return completeGuidelines
 }
 
-const getGuidelineFilenames = async (): Promise<string[]> => {
+const getGuidelineUrlResources = async (): Promise<string[]> => {
   return new Promise((resolve) => {
     chrome.storage.local.get('options', ({ options }) => {
       const organizationName: string = options?.organizationName ?? ''
