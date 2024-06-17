@@ -5,25 +5,30 @@ import { Environment, type GuidelineLink } from './app.types'
 import { Version } from './components/version'
 import { MessageType, PortName } from './models/models'
 import './app.css'
+import debounce from 'debounce'
 
 const { title } = Environment
 
 const port = chrome.runtime.connect({ name: PortName.POPUP })
+
+const doSearch = (payload: string) =>
+  chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
+
+const doSearchDebounced = debounce(doSearch, 500)
 
 export const App: FunctionComponent = () => {
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<GuidelineLink[]>([])
 
   useEffect(() => {
-    chrome.runtime.getPlatformInfo().then((info) => {
-      console.log('platform info', JSON.stringify(info, null, 2))
-    })
+    chrome.runtime
+      .getPlatformInfo()
+      .then((info) => console.log('platform info', JSON.stringify(info, null, 2)))
 
     // restore search value
-    chrome.storage.local.get('search', ({ search }) => {
-      setSearch(search ?? '')
-    })
+    chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
+    // listen for worker search results and update the state
     port.onMessage.addListener((message, port) => {
       if (port.name !== PortName.POPUP) return
 
@@ -34,8 +39,9 @@ export const App: FunctionComponent = () => {
     })
   }, [])
 
-  const onSearch = () =>
-    chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload: search })
+  useEffect(() => {
+    doSearchDebounced(search)
+  }, [search])
 
   return (
     <Flex vertical={true} style={{ minWidth: 800, minHeight: 400 }}>
@@ -49,11 +55,8 @@ export const App: FunctionComponent = () => {
             enterButton
             size="large"
             value={search}
-            onChange={(e) => {
-              console.info('====>>> info', e.target.value)
-              setSearch(e.target.value)
-            }}
-            onSearch={onSearch}
+            onChange={(e) => setSearch(e.target.value)}
+            onSearch={() => doSearch(search)}
           />
         </Space>
 
