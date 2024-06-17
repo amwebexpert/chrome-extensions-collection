@@ -22,7 +22,7 @@ export const manifest: ManifestV3Export = {
   },
   web_accessible_resources: [
     {
-      resources: ['public/*.jpg'],
+      resources: ['public/*.jpg', 'public/*.md'],
       matches: ['*://*/*'],
     },
   ],

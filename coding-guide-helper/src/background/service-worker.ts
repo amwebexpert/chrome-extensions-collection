@@ -1,12 +1,8 @@
 import { MenuItems, MessageType } from '../models/models'
-import {
-  fetchCodingGuidelines,
-  menuItemSendSelection,
-  parseMarkdownGuidelines,
-} from './service-worker.utils'
+import { buildGuidelineMapOnline, menuItemSendSelection } from './service-worker.utils'
 
+// communications with popup
 let popupPort: chrome.runtime.Port | null = null
-
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name !== 'popup') return
 
@@ -16,6 +12,7 @@ chrome.runtime.onConnect.addListener((port) => {
   })
 })
 
+// context menu
 chrome.contextMenus.removeAll()
 chrome.contextMenus.create(menuItemSendSelection)
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -26,16 +23,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 })
 
+// service worker startup and guidelines parsing
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
-  const url =
-    'https://raw.githubusercontent.com/amwebexpert/poc-archiver-bare/master/docs/coding-patterns.md'
 
-  fetchCodingGuidelines(url).then((markdownTokens) => {
-    console.info('guidelines markdown', parseMarkdownGuidelines(markdownTokens))
+  buildGuidelineMapOnline().then((result) => {
+    console.info('guidelines markdown', result)
   })
 })
 
+// message handling
 chrome.runtime.onMessage.addListener((message) => {
   const { type, payload } = message
 
@@ -43,6 +40,9 @@ chrome.runtime.onMessage.addListener((message) => {
     case MessageType.SET_SEARCH:
       chrome.storage.local.set({ search: payload })
       popupPort?.postMessage({ type: MessageType.ECHO, payload })
+      break
+    case MessageType.SET_OPTIONS:
+      chrome.storage.local.set({ options: payload })
       break
     case MessageType.CONTENT_SCRIPT_STARTED:
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

@@ -1,12 +1,8 @@
 import { type Tokens, type TokensList, marked } from 'marked'
 import { MenuItems } from '../models/models'
 
-export const fetchCodingGuidelines = async (url: string) => {
-  const response = await fetch(url, { method: 'GET', redirect: 'follow' })
-  const markdown = await response.text()
-
-  return marked.lexer(markdown)
-}
+const RULES_TITLE_LOCATION_DEPTH: number = 2
+const isRulesAtLevelOne = RULES_TITLE_LOCATION_DEPTH === 1
 
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
   id: MenuItems.SEND_SELECTION,
@@ -14,10 +10,75 @@ export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
   contexts: ['selection'],
 }
 
-export const getTableOfContent = (tokens: TokensList): Tokens.List =>
-  tokens.find((token) => token.type === 'list') as Tokens.List
+export const buildGuidelineMap = async (): Promise<Map<string, GuidelineLink>> => {
+  const completeGuidelines = new Map<string, GuidelineLink>()
 
-export const getTableOfContentLinks = (toc: Tokens.List): Tokens.Link[] => {
+  const guidelineFilenames = [
+    chrome.runtime.getURL('markdowns/example-1.md'),
+    chrome.runtime.getURL('markdowns/example-2.md'),
+  ]
+
+  for (const filename of guidelineFilenames) {
+    const markdownText = await fetchCodingGuidelinesText(filename)
+    const markdownTokens = marked.lexer(markdownText)
+
+    const guide = parseMarkdownGuidelines(markdownTokens)
+    for (const [key, value] of guide) {
+      completeGuidelines.set(key, value)
+    }
+  }
+
+  return completeGuidelines
+}
+
+export const buildGuidelineMapOnline = async (): Promise<Map<string, GuidelineLink>> => {
+  const completeGuidelines = new Map<string, GuidelineLink>()
+
+  const guidelineFilenames = await getGuidelineFilenames()
+  for (const filename of guidelineFilenames) {
+    const markdownText = await fetchCodingGuidelinesText(filename)
+    const markdownTokens = marked.lexer(markdownText)
+
+    const guide = parseMarkdownGuidelines(markdownTokens)
+    for (const [key, value] of guide) {
+      completeGuidelines.set(key, value)
+    }
+  }
+
+  return completeGuidelines
+}
+
+const getGuidelineFilenames = async (): Promise<string[]> => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get('options', ({ options }) => {
+      const organizationName: string = options?.organizationName ?? ''
+      const repoName: string = options?.repoName ?? ''
+      const filesString: string = options?.files ?? ''
+      const filenames = filesString
+        .split('\n')
+        .map((filename) => filename.trim())
+        .filter(Boolean)
+
+      const fullFilenames = filenames.map(
+        (filename) => `https://github.com/${organizationName}/${repoName}/raw/main/${filename}`,
+      )
+
+      resolve(fullFilenames)
+    })
+  })
+}
+
+export const fetchCodingGuidelinesText = async (url: string) => {
+  const response = await fetch(url, { method: 'GET', redirect: 'follow' })
+  return await response.text()
+}
+
+export const fetchCodingGuidelines = async (url: string) => {
+  const markdownText = await fetchCodingGuidelinesText(url)
+  return marked.lexer(markdownText)
+}
+
+const getTableOfContentLinks = (toc: Tokens.List): Tokens.Link[] => {
   const links: Tokens.Link[] = []
 
   for (const item of toc.items) {
@@ -38,6 +99,14 @@ type GuidelineLink = {
   title: string
   href: string
   searchItems: string[]
+}
+
+const getTableOfContent = (tokens: TokensList): Tokens.List => {
+  const firstTocLevel = tokens.find((token) => token.type === 'list') as Tokens.List
+  if (isRulesAtLevelOne) return firstTocLevel
+
+  const secondTocLevel = firstTocLevel.items[0].tokens[1] as Tokens.List
+  return secondTocLevel
 }
 
 export const parseMarkdownGuidelines = (tokens: TokensList): Map<string, GuidelineLink> => {
@@ -67,7 +136,7 @@ const findFirstHeaderIndex = ({ title, tokens }: BuildSearchItemsArgs): number =
     if (token.type !== 'heading') continue
 
     const headingToken = token as Tokens.Heading
-    if (headingToken.depth !== 1) continue
+    if (headingToken.depth !== RULES_TITLE_LOCATION_DEPTH) continue
 
     if (headingToken.text !== title) continue
 
@@ -81,7 +150,7 @@ const isHeadingTokenWithDepth1 = (token: Tokens.Generic): boolean => {
   if (token.type !== 'heading') return false
 
   const headingToken = token as Tokens.Heading
-  return headingToken.depth === 1
+  return headingToken.depth === RULES_TITLE_LOCATION_DEPTH
 }
 
 const ELEMENTS_TO_IGNORE = [

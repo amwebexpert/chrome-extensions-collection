@@ -17,8 +17,8 @@ export const App: FunctionComponent = () => {
     })
 
     // restore search value
-    chrome.storage.local.get('search', (data) => {
-      setSearch(data.search ?? '')
+    chrome.storage.local.get('search', ({ search }) => {
+      setSearch(search ?? '')
     })
 
     port.onMessage.addListener((message, port) => {
