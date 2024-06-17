@@ -84,12 +84,16 @@ const isHeadingTokenWithDepth1 = (token: Tokens.Generic): boolean => {
   return headingToken.depth === 1
 }
 
+const ELEMENTS_TO_IGNORE = [
+  'Reference:',
+  'References:',
+  'Explanation:',
+  '### ❌ avoid',
+  '### ✅ prefer',
+]
+
 const isSearchableToken = (raw: string): boolean => {
-  if (raw.includes('Reference:\n\n')) return false
-  if (raw.includes('References:\n\n')) return false
-  if (raw.includes('Explanation:\n\n')) return false
-  if (raw.startsWith('### ✅ prefer\n\n')) return false
-  if (raw.startsWith('### ❌ avoid\n\n')) return false
+  if (ELEMENTS_TO_IGNORE.some((element) => raw.includes(`${element}\n`))) return false
 
   return true
 }
