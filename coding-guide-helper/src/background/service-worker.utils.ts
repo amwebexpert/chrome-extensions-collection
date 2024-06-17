@@ -49,8 +49,8 @@ export const buildGuidelineMap = async (): Promise<Map<string, GuidelineLink>> =
 export const buildGuidelineMapOnline = async (): Promise<Map<string, GuidelineLink>> => {
   const completeGuidelines = new Map<string, GuidelineLink>()
 
-  const guidelineFilenames = await getGuidelineUrlResources()
-  for (const resourceUrl of guidelineFilenames) {
+  const guidelineResourceUrls = await getGuidelineUrlResources()
+  for (const resourceUrl of guidelineResourceUrls) {
     const markdownText = await fetchCodingGuidelinesText(resourceUrl)
     const markdownTokens = marked.lexer(markdownText)
 
