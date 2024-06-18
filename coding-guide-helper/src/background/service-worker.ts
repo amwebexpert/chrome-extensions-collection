@@ -30,12 +30,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 // service worker startup and guidelines parsing
 let guideLines: Map<string, GuidelineLink> = new Map()
+chrome.storage.local.get('guideLinesCache', ({ guideLinesCache }) => {
+  if (guideLinesCache) {
+    guideLines = new Map(JSON.parse(guideLinesCache))
+  }
+})
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
 
   buildGuidelineMapOnline().then((result) => {
     guideLines = result
     console.info('guidelines markdown', result)
+    chrome.storage.local.set({ guideLinesCache: JSON.stringify(Array.from(result.entries())) })
   })
 })
 

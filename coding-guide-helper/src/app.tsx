@@ -1,15 +1,13 @@
-import { Collapse, Flex, Input, Space, Typography } from 'antd'
-import { type FunctionComponent, useEffect, useState } from 'react'
-import Markdown from 'react-markdown'
-import { Environment, type GuidelineLink } from './app.types'
-import { Version } from './components/version'
-import { MessageType, PortName } from './models/models'
-import './app.css'
 import { CopyOutlined } from '@ant-design/icons'
+import { Collapse, Flex, Input, Space, Typography } from 'antd'
 import copy from 'copy-to-clipboard'
 import debounce from 'debounce'
-
-const { title } = Environment
+import { type FunctionComponent, useEffect, useState } from 'react'
+import Markdown from 'react-markdown'
+import './app.css'
+import type { GuidelineLink } from './app.types'
+import { Version } from './components/version'
+import { MessageType, PortName } from './models/models'
 
 const port = chrome.runtime.connect({ name: PortName.POPUP })
 
@@ -46,9 +44,11 @@ export const App: FunctionComponent = () => {
   }, [search])
 
   return (
-    <Flex vertical={true} style={{ minWidth: 800, minHeight: 400 }}>
+    <Flex vertical={true} style={{ minWidth: 400, minHeight: 400 }}>
       <Flex gap="middle" vertical={true} flex={1} align="center">
-        <Typography.Text>{title}</Typography.Text>
+        <Typography.Text strong={true} type="secondary">
+          Coding guidelines helper
+        </Typography.Text>
 
         <Space>
           <Input.Search
