@@ -1,6 +1,10 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { splitTocAndContent } from './markdown-parser'
+import {
+  buildGuidelineLinksFromTocText,
+  jsonSerializeReplacer,
+  splitTocAndContent,
+} from './markdown-parser'
 
 import { marked } from 'marked'
 
@@ -27,5 +31,18 @@ describe('markdown parser tests suite', () => {
     // assert
     expect(toc).toBeDefined()
     expect(content).toBeDefined()
+  })
+
+  it('should build guideline links from TOC', () => {
+    // arrange
+    const { toc } = splitTocAndContent(markdownText)
+    console.info('====>>> toc', toc)
+
+    // act
+    const tocLinks = buildGuidelineLinksFromTocText(toc)
+
+    // assert
+    expect(tocLinks).toBeDefined()
+    console.info('====>>> tocLinks', JSON.stringify(tocLinks, jsonSerializeReplacer, 2))
   })
 })

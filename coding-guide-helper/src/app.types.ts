@@ -7,4 +7,5 @@ export type GuidelineLink = {
   title: string
   href: string
   searchItems: string[]
+  subLinks?: GuidelineLink[]
 }

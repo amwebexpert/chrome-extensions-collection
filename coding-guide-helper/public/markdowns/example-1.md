@@ -1,8 +1,8 @@
 - [Project coding standards](#project-coding-standards)
   - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)
-    - [:x: avoid](#x-avoid)
-    - [:white\_check\_mark: prefer](#white_check_mark-prefer)
-    - [:thinking: :information\_source: Explanation](#thinking-information_source-explanation)
+    - [❌ avoid](#-avoid)
+    - [✅ prefer](#-prefer)
+    - [ℹ️ :information\_source: Explanation](#ℹ️-information_source-explanation)
   - [single arrow function event handler](#single-arrow-function-event-handler)
     - [❌ avoid double arrows functions](#-avoid-double-arrows-functions)
     - [✅ prefer single arrow functions](#-prefer-single-arrow-functions)
@@ -14,7 +14,7 @@ This section list coding patterns promoted in the project.
 
 ## avoid `{renderAbc()}` pattern
 
-### :x: avoid
+### ❌ avoid
 
 ```typescript
 const renderToggleIcon = useCallback(() => {
@@ -40,7 +40,7 @@ return (
 )
 ```
 
-### :white_check_mark: prefer
+### ✅ prefer
 
 ````typescript
 // define small dumb components with props
@@ -52,7 +52,7 @@ return (
 )```
 ````
 
-### :thinking: :information_source: Explanation
+### ℹ️ :information_source: Explanation
 
 the `useCallback` hook:
 
