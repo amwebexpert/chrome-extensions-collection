@@ -29,8 +29,7 @@ export const manifest: ManifestV3Export = {
   permissions: [
     'activeTab',
     'declarativeNetRequest',
-    // This permission is need for redirecting
-    'declarativeNetRequestWithHostAccess',
+    'declarativeNetRequestWithHostAccess', // for http redirections
     'tabs',
     'contextMenus',
     'unlimitedStorage',
@@ -42,8 +41,6 @@ export const manifest: ManifestV3Export = {
       matches: ['https://*/*', 'http://*/*'],
     },
   ],
-  // Host permissions for all urls is needed because websites to block are determined by users.
-  // Thus extension does not know which urls to block in advance
   host_permissions: ['<all_urls>'],
   commands: {
     _execute_action: {
