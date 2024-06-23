@@ -1,8 +1,7 @@
 import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
-import { Environment } from './app.types'
-import { MessageType } from './models/models'
+import { Environment, MessageType } from './models/models'
 
 type OptionsType = {
   organizationName?: string

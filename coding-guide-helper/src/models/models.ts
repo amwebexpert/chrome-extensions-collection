@@ -1,3 +1,18 @@
+export const Environment = Object.freeze({
+  title: import.meta.env.VITE_TITLE, // https://vitejs.dev/guide/env-and-mode#env-files
+  version: import.meta.env.PACKAGE_VERSION, // https://www.npmjs.com/package/vite-plugin-package-version
+})
+
+export type GuidelineNode = {
+  level: number
+  title: string
+  titleMarkdown: string
+  href: string
+  markdownLines: string[]
+  subLinks: GuidelineNode[]
+  parent?: GuidelineNode
+}
+
 export enum MessageType {
   CONTENT_SCRIPT_STARTED = 'contentScriptStarted',
   SET_SEARCH = 'setSearch',

@@ -1,7 +1,7 @@
-import type { GuidelineLink } from '../app.types'
-import { MenuItems, MessageType } from '../models/models'
+import { type GuidelineNode, MenuItems, MessageType } from '../models/models'
+import { buildOrderedNodes } from './markdown-parser'
 import {
-  buildGuidelineMapOnline,
+  collectOnlineGuidelines,
   filterGuidelines,
   menuItemSendSelection,
 } from './service-worker.utils'
@@ -29,19 +29,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 })
 
 // service worker startup and guidelines parsing
-let guideLines: Map<string, GuidelineLink> = new Map()
-chrome.storage.local.get('guideLinesCache', ({ guideLinesCache }) => {
-  if (guideLinesCache) {
-    guideLines = new Map(JSON.parse(guideLinesCache))
-  }
-})
+let rootNode: GuidelineNode
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
 
-  buildGuidelineMapOnline().then((result) => {
-    guideLines = result
-    console.info('guidelines markdown', result)
-    chrome.storage.local.set({ guideLinesCache: JSON.stringify(Array.from(result.entries())) })
+  collectOnlineGuidelines().then((node) => {
+    rootNode = node
+
+    // debug
+    const allOrderedNodes: GuidelineNode[] = []
+    buildOrderedNodes({ node, allOrderedNodes })
+    console.info(
+      '====>>> guidelines ordered nodes:',
+      allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
+    )
   })
 })
 
@@ -53,8 +54,12 @@ chrome.runtime.onMessage.addListener((message) => {
     case MessageType.SET_SEARCH: {
       const search = payload
       chrome.storage.local.set({ search })
-      const results = filterGuidelines({ search, guideLines })
-      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
+      const results = filterGuidelines({ search, rootNode })
+
+      const allOrderedNodes: GuidelineNode[] = []
+      buildOrderedNodes({ node: rootNode, allOrderedNodes })
+
+      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: [] })
       break
     }
     case MessageType.SET_OPTIONS:

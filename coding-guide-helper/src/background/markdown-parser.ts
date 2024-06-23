@@ -1,16 +1,12 @@
-export type GuidelineNode = {
-  level: number
-  title: string
-  titleMarkdown: string
-  href: string
-  markdownLines: string[]
-  subLinks: GuidelineNode[]
-  parent?: GuidelineNode
-}
+import type { GuidelineNode } from '../models/models'
 
-export const createFullGuidelines = (markdownText: string): GuidelineNode => {
-  const { toc, content } = splitTocAndContent(markdownText)
-  const rootNode = buildGuidelineLinksFromTocText(toc)
+type GuidelineFromTextArgs = {
+  rootNode: GuidelineNode
+  text: string
+}
+export const createGuidelineNodes = ({ rootNode, text }: GuidelineFromTextArgs): GuidelineNode => {
+  const { toc, content } = splitTocAndContent(text)
+  buildGuidelineLinksFromTocText({ rootNode, text: toc })
 
   const allOrderedNodes: GuidelineNode[] = []
   buildOrderedNodes({ node: rootNode, allOrderedNodes })
@@ -85,10 +81,14 @@ export const splitTocAndContent = (markdownText: string): SplitTocAndContentResu
   }
 }
 
-export const buildGuidelineLinksFromTocText = (tocText: string): GuidelineNode => {
-  const lines = tocText.split('\n').filter((line) => line.trim().length > 0)
-
-  const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+export const buildGuidelineLinksFromTocText = ({
+  rootNode,
+  text,
+}: GuidelineFromTextArgs): GuidelineNode => {
+  const lines = text
+    .split('\n')
+    .filter((line) => line.trim().length > 0)
+    .filter((line) => !line.toLowerCase().startsWith('table of content'))
 
   buildGuidelineLinksFromLines({ node: rootNode, lines, currentLineIndex: 0 })
   return rootNode
@@ -99,16 +99,30 @@ type ParseTocLineResult = {
   title: string
   href: string
 }
+/**
+ * Txtract title, level and href from line
+ *
+ * Example 1: '- [Project coding standards](#project-coding-standards)'
+ *     level: 1
+ *     title: 'Project coding standards'
+ *     href: 'project-coding-standards'
+ * Example 2: '  - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)'
+ *     level: 2
+ *     title: 'avoid `{renderAbc()}` pattern'
+ *     href: 'avoid-renderabc-pattern'
+ * Example 3: '    - [✅ prefer usage of `[].includes(...)`](#-prefer-usage-of-includes)'
+ *     level: 3
+ *     title: '✅ prefer usage of `[].includes(...)`'
+ *     href: '-prefer-usage-of-includes'
+ */
 export const parseTocLine = (line: string): ParseTocLineResult => {
-  // extract title, level and href from line
-  // Example 1: '- [Project coding standards](#project-coding-standards)' is level 1
-  // Example 2: '  - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)' is level 2
-  const match = line.match(/^( *)(- )?\[([^\]]+)\]\(([^)]+)\)$/)
+  const regex = /^( *)-\s*\[(.*?)\]\(#(.*?)\)$/
+  const match = line.match(regex)
   if (!match) throw new Error(`Invalid TOC line: ${line}`)
 
-  const level = 1 + match[1].length / 2
-  const title = match[3]
-  const href = match[4]
+  const level = match[1].length / 2 + 1
+  const title = match[2]
+  const href = match[3]
 
   return { level, title, href }
 }
@@ -120,7 +134,7 @@ const buildTitleMarkdown = ({ level, title }: BuildTitleMarkdownArgs): string =>
   `${'#'.repeat(level)} ${normalizeTitle(title)}`
 
 type BuildNodeArgs = { parent?: GuidelineNode; level: number; title: string; href: string }
-const buildNode = ({ parent, level, title, href }: BuildNodeArgs) => ({
+export const buildNode = ({ parent, level, title, href }: BuildNodeArgs): GuidelineNode => ({
   parent,
   level,
   title,

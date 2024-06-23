@@ -5,9 +5,8 @@ import debounce from 'debounce'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
 import './app.css'
-import type { GuidelineLink } from './app.types'
 import { Version } from './components/version'
-import { MessageType, PortName } from './models/models'
+import { type GuidelineNode, MessageType, PortName } from './models/models'
 
 const port = chrome.runtime.connect({ name: PortName.POPUP })
 
@@ -18,7 +17,7 @@ const doSearchDebounced = debounce(doSearch, 500)
 
 export const App: FunctionComponent = () => {
   const [search, setSearch] = useState('')
-  const [searchResults, setSearchResults] = useState<GuidelineLink[]>([])
+  const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
   useEffect(() => {
     chrome.runtime
@@ -65,7 +64,7 @@ export const App: FunctionComponent = () => {
         <Flex className="container-full">
           <Collapse
             style={{ minWidth: '100%' }}
-            items={searchResults.map(({ title, href, searchItems }) => ({
+            items={searchResults.map(({ title, href, markdownLines }) => ({
               key: title,
               label: (
                 <Typography.Text>
@@ -82,7 +81,7 @@ export const App: FunctionComponent = () => {
               ),
               children: (
                 <div className="container-full">
-                  <Markdown>{searchItems.join('\n')}</Markdown>
+                  <Markdown>{markdownLines.join('\n')}</Markdown>
                 </div>
               ),
             }))}
