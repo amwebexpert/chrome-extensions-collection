@@ -1,10 +1,10 @@
 export type GuidelineNode = {
-  parent?: GuidelineNode
   level: number
   title: string
   href: string
   searchItems: string[]
   subLinks: GuidelineNode[]
+  parent?: GuidelineNode
 }
 
 export const splitTocAndContent = (markdownText: string) => {
@@ -68,10 +68,10 @@ export const buildGuidelineLinksFromLines = ({
   node,
   lines,
   currentLineIndex = 0,
-}: BuildGuidelineLinksFromLinesArgs): GuidelineNode => {
+}: BuildGuidelineLinksFromLinesArgs): void => {
   const line = lines[currentLineIndex]
 
-  if (!line) return node
+  if (!line) return
 
   const { level, title, href } = parseTocLine(line)
 
@@ -79,15 +79,17 @@ export const buildGuidelineLinksFromLines = ({
     const newNode = buildNode({ parent: node, level, title, href })
     node.subLinks.push(newNode)
 
-    return buildGuidelineLinksFromLines({
+    buildGuidelineLinksFromLines({
       node: newNode,
       lines,
       currentLineIndex: currentLineIndex + 1,
     })
+
+    return
   }
 
   const parentNode = findParentNodeForLevel({ node, level })
-  return buildGuidelineLinksFromLines({ node: parentNode, lines, currentLineIndex })
+  buildGuidelineLinksFromLines({ node: parentNode, lines, currentLineIndex })
 }
 
 export const jsonSerializeReplacer = (key: string, value: unknown) => {

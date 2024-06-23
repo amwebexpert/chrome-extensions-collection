@@ -36,7 +36,6 @@ describe('markdown parser tests suite', () => {
   it('should build guideline links from TOC', () => {
     // arrange
     const { toc } = splitTocAndContent(markdownText)
-    console.info('====>>> toc', toc)
 
     // act
     const tocLinks = buildGuidelineLinksFromTocText(toc)
