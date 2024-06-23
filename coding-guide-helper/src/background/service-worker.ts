@@ -2,6 +2,7 @@ import { type GuidelineNode, MenuItems, MessageType } from '../models/models'
 import { buildOrderedNodes } from './markdown-parser'
 import {
   collectOnlineGuidelines,
+  debugOrderedNodes,
   filterGuidelines,
   menuItemSendSelection,
 } from './service-worker.utils'
@@ -35,14 +36,7 @@ chrome.runtime.onInstalled.addListener((detail) => {
 
   collectOnlineGuidelines().then((node) => {
     rootNode = node
-
-    // debug
-    const allOrderedNodes: GuidelineNode[] = []
-    buildOrderedNodes({ node, allOrderedNodes })
-    console.info(
-      '====>>> guidelines ordered nodes:',
-      allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
-    )
+    debugOrderedNodes(node)
   })
 })
 

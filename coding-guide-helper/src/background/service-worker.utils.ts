@@ -1,5 +1,5 @@
 import { type GuidelineNode, MenuItems } from '../models/models'
-import { buildNode, createGuidelineNodes } from './markdown-parser'
+import { buildNode, buildOrderedNodes, createGuidelineNodes } from './markdown-parser'
 
 type FilterGuidelines = {
   search: string
@@ -21,6 +21,16 @@ export const collectOnlineGuidelines = async (): Promise<GuidelineNode> => {
   const urls = await getGuidelineUrlResources()
 
   return collectAllGuidelinesIntoSingleRoot(urls)
+}
+
+export const debugOrderedNodes = (node: GuidelineNode): void => {
+  const allOrderedNodes: GuidelineNode[] = []
+  buildOrderedNodes({ node, allOrderedNodes })
+
+  console.info(
+    '====>>> debug guidelines ordered nodes:',
+    allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
+  )
 }
 
 export const collectOfflineGuidelines = async (): Promise<GuidelineNode> => {
