@@ -42,7 +42,7 @@ return (
 
 ### ✅ prefer
 
-````typescript
+```typescript
 // define small dumb components with props
 return (
   <View>
@@ -50,7 +50,7 @@ return (
       isSensitiveTextVisible={isSecuredTextEntryEnabled} />
   </View>
 )```
-````
+```
 
 ### ℹ️ :information_source: Explanation
 
