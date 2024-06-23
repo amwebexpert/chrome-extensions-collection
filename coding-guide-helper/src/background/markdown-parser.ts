@@ -7,6 +7,18 @@ export type GuidelineNode = {
   parent?: GuidelineNode
 }
 
+type BuildOrderedNodesArgs = {
+  node: GuidelineNode
+  allOrderedNodes?: GuidelineNode[]
+}
+export const buildOrderedNodes = ({ node, allOrderedNodes = [] }: BuildOrderedNodesArgs): void => {
+  allOrderedNodes.push(node)
+
+  for (const subLink of node.subLinks) {
+    buildOrderedNodes({ node: subLink, allOrderedNodes })
+  }
+}
+
 export const splitTocAndContent = (markdownText: string) => {
   // regex to split at very first level one title line, starting with "# "
   const regex = /^# .*\n/gm
