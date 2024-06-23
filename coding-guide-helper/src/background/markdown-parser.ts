@@ -1,6 +1,7 @@
 export type GuidelineNode = {
   level: number
   title: string
+  titleMarkdown: string
   href: string
   searchItems: string[]
   subLinks: GuidelineNode[]
@@ -66,6 +67,7 @@ const buildNode = ({ parent, level, title, href }: BuildNodeArgs) => ({
   parent,
   level,
   title,
+  titleMarkdown: `${'#'.repeat(level)} ${title}`,
   href,
   searchItems: [],
   subLinks: [],
