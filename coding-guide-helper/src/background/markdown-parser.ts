@@ -206,7 +206,7 @@ export const serializeWitoutParent = (node: GuidelineNode): string => {
 }
 
 export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => {
-  const newNode = { ...node, parent: undefined }
+  const newNode = { ...node, parent: undefined, shouldDisplayNode: false, isMatching: false }
 
   newNode.children = newNode.children.map(cloneAndRemoveAllParents)
 

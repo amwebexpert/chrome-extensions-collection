@@ -8,13 +8,16 @@ import {
   isParentOfAvoidPreferSection,
 } from './markdown-parser'
 
+export const normalizeForSearch = (search: string): string =>
+  search.toLowerCase().replaceAll('`', '')
+
 type FilterGuidelines = {
   search: string
   rootNode: GuidelineNode
 }
 export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): GuidelineNode[] => {
-  const searchLowercase = search.toLowerCase()
-  console.info('====>>> searchLowercase', searchLowercase)
+  const normalizedSearch = normalizeForSearch(search)
+  //console.info(`====>>> "${searchLowercase}"`)
 
   // traverse the tree and mark nodes that match the search inside its markdownLines
   const clonedRoot = cloneAndRemoveAllParents(rootNode)
@@ -22,15 +25,16 @@ export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): Guidel
   buildOrderedNodes({ node: clonedRoot, allOrderedNodes })
 
   for (const node of allOrderedNodes) {
-    node.isMatching = node.markdownLines.some((line) =>
-      line.toLowerCase().includes(searchLowercase),
-    )
+    node.isMatching =
+      normalizeForSearch(node.title).includes(normalizedSearch) ||
+      node.markdownLines.some((line) => normalizeForSearch(line).includes(normalizedSearch))
   }
 
   // traverse the tree and determine which nodes to show
   for (const node of allOrderedNodes) {
-    if (hasDescendentMatching(node) && isParentOfAvoidPreferSection(node))
-      node.shouldDisplayNode = true
+    if (!isParentOfAvoidPreferSection(node)) continue
+
+    node.shouldDisplayNode = node.isMatching || hasDescendentMatching(node)
   }
 
   return allOrderedNodes
