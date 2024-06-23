@@ -10,7 +10,6 @@ import {
   splitTocAndContent,
 } from './markdown-parser'
 
-import { marked } from 'marked'
 import type { GuidelineNode } from '../models/models'
 
 const file = path.join(__dirname, '../../', 'public/markdowns/example-1.md')
@@ -56,16 +55,6 @@ describe('markdown parser tests suite', () => {
       expect(level).toBe(3)
       expect(href).toBe('-prefer-usage-of-includes')
     })
-  })
-
-  it('should extract markdown TOC', () => {
-    // arrange
-
-    // act
-    const markdownTokens = marked.lexer(markdownText)
-
-    // assert
-    expect(markdownTokens.length).toBeGreaterThan(0)
   })
 
   it('should extract markdown TOC and content', () => {
