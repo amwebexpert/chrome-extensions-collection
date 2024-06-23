@@ -35,6 +35,20 @@ export const buildGuidelineLinksFromTocText = (tocText: string): GuidelineNode =
   return rootNode
 }
 
+export const parseTocLine = (line: string) => {
+  // extract title, level and href from line
+  // Example 1: '- [Project coding standards](#project-coding-standards)' is level 1
+  // Example 2: '  - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)' is level 2
+  const match = line.match(/^( *)(- )?\[([^\]]+)\]\(([^)]+)\)$/)
+  if (!match) throw new Error(`Invalid TOC line: ${line}`)
+
+  const level = 1 + match[1].length / 2
+  const title = match[3]
+  const href = match[4]
+
+  return { level, title, href }
+}
+
 type BuildNodeArgs = { parent?: GuidelineNode; level: number; title: string; href: string }
 const buildNode = ({ parent, level, title, href }: BuildNodeArgs) => ({
   parent,
@@ -96,18 +110,4 @@ export const jsonSerializeReplacer = (key: string, value: unknown) => {
   if (['parent', 'level', 'href', 'searchItems'].includes(key)) return undefined
 
   return value
-}
-
-export const parseTocLine = (line: string) => {
-  // extract title, level and href from line
-  // Example 1: '- [Project coding standards](#project-coding-standards)' is level 1
-  // Example 2: '  - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)' is level 2
-  const match = line.match(/^( *)(- )?\[([^\]]+)\]\(([^)]+)\)$/)
-  if (!match) throw new Error(`Invalid TOC line: ${line}`)
-
-  const level = 1 + match[1].length / 2
-  const title = match[3]
-  const href = match[4]
-
-  return { level, title, href }
 }
