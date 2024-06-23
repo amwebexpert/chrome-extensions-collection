@@ -53,7 +53,7 @@ type BuildOrderedNodesArgs = {
 export const buildOrderedNodes = ({ node, allOrderedNodes = [] }: BuildOrderedNodesArgs): void => {
   allOrderedNodes.push(node)
 
-  for (const subLink of node.subLinks) {
+  for (const subLink of node.children) {
     buildOrderedNodes({ node: subLink, allOrderedNodes })
   }
 }
@@ -141,7 +141,7 @@ export const buildNode = ({ parent, level, title, href }: BuildNodeArgs): Guidel
   titleMarkdown: buildTitleMarkdown({ level, title }),
   href,
   markdownLines: [],
-  subLinks: [],
+  children: [],
 })
 
 type FindParentNodeArgs = {
@@ -176,7 +176,7 @@ export const buildGuidelineLinksFromLines = ({
 
   if (level > node.level) {
     const newNode = buildNode({ parent: node, level, title, href })
-    node.subLinks.push(newNode)
+    node.children.push(newNode)
 
     buildGuidelineLinksFromLines({
       node: newNode,
@@ -195,4 +195,20 @@ export const jsonSerializeReplacer = (key: string, value: unknown) => {
   if (['parent', 'level', 'href', 'markdownLines'].includes(key)) return undefined
 
   return value
+}
+
+export const serializeWitoutParent = (node: GuidelineNode): string => {
+  return JSON.stringify(
+    node,
+    (key: string, value: unknown) => (key === 'parent' ? undefined : value),
+    2,
+  )
+}
+
+export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => {
+  const newNode = { ...node, parent: undefined }
+
+  newNode.children = newNode.children.map(cloneAndRemoveAllParents)
+
+  return newNode
 }

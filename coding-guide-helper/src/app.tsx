@@ -1,10 +1,8 @@
-import { CopyOutlined } from '@ant-design/icons'
-import { Collapse, Flex, Input, Space, Typography } from 'antd'
-import copy from 'copy-to-clipboard'
+import { Flex, Input, Space, Typography } from 'antd'
 import debounce from 'debounce'
 import { type FunctionComponent, useEffect, useState } from 'react'
-import Markdown from 'react-markdown'
 import './app.css'
+import { SearchResults } from './components/search-results'
 import { Version } from './components/version'
 import { type GuidelineNode, MessageType, PortName } from './models/models'
 
@@ -43,7 +41,7 @@ export const App: FunctionComponent = () => {
   }, [search])
 
   return (
-    <Flex vertical={true} style={{ minWidth: 400, minHeight: 400 }}>
+    <Flex vertical={true} style={{ minWidth: 600, minHeight: 400 }}>
       <Flex gap="middle" vertical={true} flex={1} align="center">
         <Typography.Text strong={true} type="secondary">
           Coding guidelines helper
@@ -62,30 +60,7 @@ export const App: FunctionComponent = () => {
         </Space>
 
         <Flex className="container-full">
-          <Collapse
-            style={{ minWidth: '100%' }}
-            items={searchResults.map(({ title, href, markdownLines }) => ({
-              key: title,
-              label: (
-                <Typography.Text>
-                  {title}
-                  <CopyOutlined
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      console.info('====>>> copy to clipboard')
-                      copy(`Suggestion:\n- [${title}](${href})`)
-                    }}
-                  />
-                </Typography.Text>
-              ),
-              children: (
-                <div className="container-full">
-                  <Markdown>{markdownLines.join('\n')}</Markdown>
-                </div>
-              ),
-            }))}
-          />
+          <SearchResults nodes={searchResults} />
         </Flex>
       </Flex>
 

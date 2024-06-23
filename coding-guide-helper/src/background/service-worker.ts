@@ -48,12 +48,9 @@ chrome.runtime.onMessage.addListener((message) => {
     case MessageType.SET_SEARCH: {
       const search = payload
       chrome.storage.local.set({ search })
+
       const results = filterGuidelines({ search, rootNode })
-
-      const allOrderedNodes: GuidelineNode[] = []
-      buildOrderedNodes({ node: rootNode, allOrderedNodes })
-
-      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: [] })
+      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
       break
     }
     case MessageType.SET_OPTIONS:

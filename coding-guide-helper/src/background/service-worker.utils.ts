@@ -1,14 +1,31 @@
 import { type GuidelineNode, MenuItems } from '../models/models'
-import { buildNode, buildOrderedNodes, createGuidelineNodes } from './markdown-parser'
+import {
+  buildNode,
+  buildOrderedNodes,
+  cloneAndRemoveAllParents,
+  createGuidelineNodes,
+} from './markdown-parser'
 
 type FilterGuidelines = {
   search: string
   rootNode: GuidelineNode
 }
-export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): GuidelineNode => {
+export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): GuidelineNode[] => {
   const searchLowercase = search.toLowerCase()
   console.info('====>>> searchLowercase', searchLowercase)
-  return rootNode
+
+  // traverse the tree and mark nodes that match the search inside its markdownLines
+  const clonedRoot = cloneAndRemoveAllParents(rootNode)
+  const allOrderedNodes: GuidelineNode[] = []
+  buildOrderedNodes({ node: clonedRoot, allOrderedNodes })
+
+  for (const node of allOrderedNodes) {
+    node.isMatching = node.markdownLines.some((line) =>
+      line.toLowerCase().includes(searchLowercase),
+    )
+  }
+
+  return allOrderedNodes
 }
 
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
@@ -27,7 +44,7 @@ export const debugOrderedNodes = (node: GuidelineNode): void => {
   const allOrderedNodes: GuidelineNode[] = []
   buildOrderedNodes({ node, allOrderedNodes })
 
-  console.info(
+  console.debug(
     '====>>> debug guidelines ordered nodes:',
     allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
   )

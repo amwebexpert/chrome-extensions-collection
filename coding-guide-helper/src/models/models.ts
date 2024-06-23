@@ -9,8 +9,10 @@ export type GuidelineNode = {
   titleMarkdown: string
   href: string
   markdownLines: string[]
-  subLinks: GuidelineNode[]
+  children: GuidelineNode[]
+
   parent?: GuidelineNode
+  isMatching?: boolean
 }
 
 export enum MessageType {
