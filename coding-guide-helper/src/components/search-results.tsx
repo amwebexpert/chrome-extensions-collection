@@ -16,6 +16,7 @@ export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => {
 
   return (
     <Collapse
+      accordion={true}
       style={{ minWidth: '100%' }}
       items={filteredResults.map(({ title, href, markdownLines, children }) => ({
         key: title,
