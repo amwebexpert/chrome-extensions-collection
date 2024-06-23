@@ -5,6 +5,7 @@ import {
   buildGuidelineLinksFromTocText,
   buildOrderedNodes,
   jsonSerializeReplacer,
+  populateMarkdownLinesFromContent,
   splitTocAndContent,
 } from './markdown-parser'
 
@@ -62,5 +63,19 @@ describe('markdown parser tests suite', () => {
       '====>>> tocLinks',
       allOrderedNodes.map((node) => `${node.titleMarkdown}`),
     )
+  })
+
+  it('should populate markdown lines from content', () => {
+    // arrange
+    const { toc, content } = splitTocAndContent(markdownText)
+    const rootNode = buildGuidelineLinksFromTocText(toc)
+    const allOrderedNodes: GuidelineNode[] = []
+    buildOrderedNodes({ node: rootNode, allOrderedNodes })
+
+    // act
+    populateMarkdownLinesFromContent({ allOrderedNodes, content })
+
+    // assert
+    expect(rootNode).toBeDefined()
   })
 })

@@ -3,9 +3,51 @@ export type GuidelineNode = {
   title: string
   titleMarkdown: string
   href: string
-  searchItems: string[]
+  markdownLines: string[]
   subLinks: GuidelineNode[]
   parent?: GuidelineNode
+}
+
+export const createFullGuidelines = (markdownText: string): GuidelineNode => {
+  const { toc, content } = splitTocAndContent(markdownText)
+  const rootNode = buildGuidelineLinksFromTocText(toc)
+
+  const allOrderedNodes: GuidelineNode[] = []
+  buildOrderedNodes({ node: rootNode, allOrderedNodes })
+  populateMarkdownLinesFromContent({ allOrderedNodes, content })
+
+  return rootNode
+}
+
+type PopulateMarkdownLinesFromContentArgs = {
+  allOrderedNodes: GuidelineNode[]
+  content: string
+}
+export const populateMarkdownLinesFromContent = ({
+  allOrderedNodes,
+  content,
+}: PopulateMarkdownLinesFromContentArgs): void => {
+  const allContentLines = content.split('\n')
+  let contentLineIndex = 0
+  const orderedNodes = allOrderedNodes.slice(1) // skip root 'TOC' node level 0
+
+  // traverse all lines and populate markdownLines of each node when line is not a title
+  for (const node of orderedNodes) {
+    let line = allContentLines[contentLineIndex]
+
+    // move to next line if current line is the title of the node
+    if (line === node.titleMarkdown) {
+      contentLineIndex++
+      line = allContentLines[contentLineIndex]
+    }
+
+    // populate markdownLines until next title line
+    while (!line.startsWith('#')) {
+      node.markdownLines.push(line)
+      contentLineIndex++
+      line = allContentLines[contentLineIndex]
+    }
+  }
 }
 
 type BuildOrderedNodesArgs = {
@@ -20,7 +62,11 @@ export const buildOrderedNodes = ({ node, allOrderedNodes = [] }: BuildOrderedNo
   }
 }
 
-export const splitTocAndContent = (markdownText: string) => {
+type SplitTocAndContentResult = {
+  toc: string
+  content: string
+}
+export const splitTocAndContent = (markdownText: string): SplitTocAndContentResult => {
   // regex to split at very first level one title line, starting with "# "
   const regex = /^# .*\n/gm
 
@@ -48,7 +94,12 @@ export const buildGuidelineLinksFromTocText = (tocText: string): GuidelineNode =
   return rootNode
 }
 
-export const parseTocLine = (line: string) => {
+type ParseTocLineResult = {
+  level: number
+  title: string
+  href: string
+}
+export const parseTocLine = (line: string): ParseTocLineResult => {
   // extract title, level and href from line
   // Example 1: '- [Project coding standards](#project-coding-standards)' is level 1
   // Example 2: '  - [avoid `{renderAbc()}` pattern](#avoid-renderabc-pattern)' is level 2
@@ -69,7 +120,7 @@ const buildNode = ({ parent, level, title, href }: BuildNodeArgs) => ({
   title,
   titleMarkdown: `${'#'.repeat(level)} ${title}`,
   href,
-  searchItems: [],
+  markdownLines: [],
   subLinks: [],
 })
 
@@ -121,7 +172,7 @@ export const buildGuidelineLinksFromLines = ({
 }
 
 export const jsonSerializeReplacer = (key: string, value: unknown) => {
-  if (['parent', 'level', 'href', 'searchItems'].includes(key)) return undefined
+  if (['parent', 'level', 'href', 'markdownLines'].includes(key)) return undefined
 
   return value
 }
