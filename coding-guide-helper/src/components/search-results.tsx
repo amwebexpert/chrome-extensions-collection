@@ -5,21 +5,18 @@ import type { FunctionComponent } from 'react'
 import Markdown from 'react-markdown'
 import type { GuidelineNode } from '../models/models'
 
-import { shouldDisplayNode } from './search-results.utils'
-
 interface IProps {
   nodes: GuidelineNode[]
 }
 
 export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => {
-  const filteredResults = nodes.filter(shouldDisplayNode)
-
   return (
     <Collapse
       accordion={true}
+      defaultActiveKey={[0]}
       style={{ minWidth: '100%' }}
-      items={filteredResults.map(({ title, href, markdownLines, children }) => ({
-        key: title,
+      items={nodes.map(({ title, href, markdownLines, children }, index) => ({
+        key: index,
         label: (
           <Typography.Text>
             {title}

@@ -60,7 +60,7 @@ export const App: FunctionComponent = () => {
         </Space>
 
         <Flex className="container-full">
-          <SearchResults nodes={searchResults} />
+          <SearchResults nodes={searchResults.filter((node) => node.shouldDisplayNode)} />
         </Flex>
       </Flex>
 

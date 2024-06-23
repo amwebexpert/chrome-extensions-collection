@@ -13,6 +13,7 @@ export type GuidelineNode = {
 
   parent?: GuidelineNode
   isMatching?: boolean
+  shouldDisplayNode?: boolean
 }
 
 export enum MessageType {

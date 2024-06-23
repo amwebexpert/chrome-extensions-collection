@@ -4,6 +4,8 @@ import {
   buildOrderedNodes,
   cloneAndRemoveAllParents,
   createGuidelineNodes,
+  hasDescendentMatching,
+  isParentOfAvoidPreferSection,
 } from './markdown-parser'
 
 type FilterGuidelines = {
@@ -23,6 +25,12 @@ export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): Guidel
     node.isMatching = node.markdownLines.some((line) =>
       line.toLowerCase().includes(searchLowercase),
     )
+  }
+
+  // traverse the tree and determine which nodes to show
+  for (const node of allOrderedNodes) {
+    if (hasDescendentMatching(node) && isParentOfAvoidPreferSection(node))
+      node.shouldDisplayNode = true
   }
 
   return allOrderedNodes

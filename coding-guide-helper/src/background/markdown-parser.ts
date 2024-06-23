@@ -212,3 +212,19 @@ export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => 
 
   return newNode
 }
+
+export const markAllDescendantAsVisible = (node: GuidelineNode): void => {
+  node.shouldDisplayNode = true
+  node.children.forEach(markAllDescendantAsVisible)
+}
+
+export const isParentOfAvoidPreferSection = (node: GuidelineNode): boolean =>
+  node.children.some(isGuidelineAvoidOrPreferSection)
+
+export const isGuidelineAvoidOrPreferSection = (node: GuidelineNode): boolean =>
+  ['❌ avoid', '✅ prefer'].some((section) => node.title.toLowerCase().includes(section))
+
+export const hasDescendentMatching = (node: GuidelineNode): boolean =>
+  node.isMatching ||
+  node.children.some((child) => child.isMatching) ||
+  node.children.some(hasDescendentMatching)
