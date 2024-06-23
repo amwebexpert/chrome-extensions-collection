@@ -60,7 +60,7 @@ describe('markdown parser tests suite', () => {
     expect(allOrderedNodes).toBeDefined()
     console.info(
       '====>>> tocLinks',
-      allOrderedNodes.map((node) => `${node.level} - ${node.title}`),
+      allOrderedNodes.map((node) => `${node.titleMarkdown}`),
     )
   })
 })
