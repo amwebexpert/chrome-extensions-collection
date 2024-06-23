@@ -42,7 +42,7 @@ export const populateMarkdownLinesFromContent = ({
     }
 
     // populate markdownLines until next title line
-    while (!line.startsWith('#')) {
+    while (line !== undefined && !line.startsWith('#')) {
       node.markdownLines.push(line)
       contentLineIndex++
       line = allContentLines[contentLineIndex]
@@ -113,12 +113,18 @@ export const parseTocLine = (line: string): ParseTocLineResult => {
   return { level, title, href }
 }
 
+const normalizeTitle = (title: string): string => title.replaceAll('\\', '')
+
+type BuildTitleMarkdownArgs = { level: number; title: string }
+const buildTitleMarkdown = ({ level, title }: BuildTitleMarkdownArgs): string =>
+  `${'#'.repeat(level)} ${normalizeTitle(title)}`
+
 type BuildNodeArgs = { parent?: GuidelineNode; level: number; title: string; href: string }
 const buildNode = ({ parent, level, title, href }: BuildNodeArgs) => ({
   parent,
   level,
   title,
-  titleMarkdown: `${'#'.repeat(level)} ${title}`,
+  titleMarkdown: buildTitleMarkdown({ level, title }),
   href,
   markdownLines: [],
   subLinks: [],
