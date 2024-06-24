@@ -10,7 +10,7 @@ type Props = ClassAttributes<HTMLElement> & HTMLAttributes<HTMLElement> & ExtraP
 export const CodeBlock: FunctionComponent<Props> = ({ children, className, ...rest }) => {
   const language = extractLanguageFromClassName(className)
 
-  if (!language) {
+  if (language) {
     return (
       <SyntaxHighlighter {...rest} PreTag="div" language={language} style={style} ref={undefined}>
         {String(children)}
