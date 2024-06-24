@@ -1,5 +1,5 @@
 import debounce from 'debounce'
-import { MessageType } from './models/models'
+import { MessageType } from '../../models/models'
 
 export const doSearch = (payload: string) =>
   chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })

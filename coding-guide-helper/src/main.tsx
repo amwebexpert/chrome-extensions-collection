@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './main.css'
-import App from './app'
 import Options from './app-options'
+import App from './components/app/app'
 
 export enum Page {
   App = 'app',

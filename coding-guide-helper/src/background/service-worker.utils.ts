@@ -9,14 +9,17 @@ import {
 } from './markdown-parser'
 
 export const normalizeForSearch = (search: string): string =>
-  search.toLowerCase().replaceAll('`', '')
+  search.toLowerCase().replaceAll('`', '').trim()
 
 type FilterGuidelines = {
   search: string
   rootNode: GuidelineNode
 }
 export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): GuidelineNode[] => {
+  if (!rootNode) return []
+
   const normalizedSearch = normalizeForSearch(search)
+  if (!normalizedSearch) return []
 
   // traverse the tree and mark nodes that match the search inside its markdownLines
   const clonedRoot = cloneAndRemoveAllParents(rootNode)
