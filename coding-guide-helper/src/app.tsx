@@ -21,12 +21,13 @@ export const App: FunctionComponent = () => {
 
     // listen for worker search results and update the state
     port.onMessage.addListener((message, _port) => {
-      if (message.type === MessageType.ON_SEARCH_COMPLETED) setSearchResults(message.payload)
+      const { type, payload } = message
+      if (type === MessageType.ON_SEARCH_COMPLETED) setSearchResults(payload)
     })
   }, [])
 
   useEffect(() => {
-    setTimeout(() => inputRef.current?.select(), 300) // auto-select input text
+    setTimeout(() => inputRef.current?.select(), 300)
   }, [])
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export const App: FunctionComponent = () => {
   }, [search])
 
   return (
-    <Flex vertical={true} style={{ width: 600, height: 400 }}>
+    <Flex vertical={true} style={{ width: 700, height: 400 }}>
       <Flex gap="middle" vertical={true} flex={1} align="center">
         <Typography.Text strong={true} type="secondary">
           Coding guidelines helper

@@ -1,0 +1,7 @@
+.actionCopy {
+  cursor: pointer;
+  color: #007bff;
+  .anticon {
+       margin-left: 4px;
+  }
+}
