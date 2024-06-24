@@ -6,6 +6,7 @@ import { SearchResults } from './components/search-results'
 import { Version } from './components/version'
 import { type GuidelineNode, MessageType, PortName } from './models/models'
 
+const TITLE = 'Coding guidelines helper'
 const port = chrome.runtime.connect({ name: PortName.POPUP })
 
 export const App: FunctionComponent = () => {
@@ -37,9 +38,7 @@ export const App: FunctionComponent = () => {
   return (
     <Flex vertical={true} style={{ width: 700, height: 400 }}>
       <Flex gap="middle" vertical={true} flex={1} align="center">
-        <Typography.Text strong={true} type="secondary">
-          Coding guidelines helper
-        </Typography.Text>
+        <Typography.Text strong={true}>{TITLE}</Typography.Text>
 
         <Space>
           <Input.Search
