@@ -86,10 +86,9 @@ describe('markdown parser tests suite', () => {
     const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const { toc } = splitTocAndContent(markdownText)
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
-    const allOrderedNodes: GuidelineNode[] = []
 
     // act
-    buildOrderedNodes({ node: rootNode, allOrderedNodes })
+    const allOrderedNodes = buildOrderedNodes({ node: rootNode })
 
     // assert
     expect(allOrderedNodes).toBeDefined()
@@ -100,8 +99,7 @@ describe('markdown parser tests suite', () => {
     const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const { toc, content } = splitTocAndContent(markdownText)
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
-    const allOrderedNodes: GuidelineNode[] = []
-    buildOrderedNodes({ node: rootNode, allOrderedNodes })
+    const allOrderedNodes = buildOrderedNodes({ node: rootNode })
 
     // act
     populateGuidelineNodesSearchableContent({ allOrderedNodes, content })
@@ -113,14 +111,13 @@ describe('markdown parser tests suite', () => {
   it('should create full guidelines', () => {
     // arrange
     const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
-    const allOrderedNodes: GuidelineNode[] = []
 
     // act
     createGuidelineNodes({ rootNode, text: markdownText, baseUrl })
-    buildOrderedNodes({ node: rootNode, allOrderedNodes })
 
     // assert
     expect(rootNode).toBeDefined()
+    const allOrderedNodes = buildOrderedNodes({ node: rootNode })
     console.info(
       '====>>> tocLinks',
       allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),

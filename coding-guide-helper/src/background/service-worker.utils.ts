@@ -21,8 +21,7 @@ export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): Guidel
 
   // traverse the tree and mark nodes that match the search inside its markdownLines
   const clonedRoot = cloneAndRemoveAllParents(rootNode)
-  const allOrderedNodes: GuidelineNode[] = []
-  buildOrderedNodes({ node: clonedRoot, allOrderedNodes })
+  const allOrderedNodes = buildOrderedNodes({ node: clonedRoot })
 
   for (const node of allOrderedNodes) {
     node.isMatching =
@@ -53,8 +52,7 @@ export const collectOnlineGuidelines = async (): Promise<GuidelineNode> => {
 }
 
 export const debugOrderedNodes = (node: GuidelineNode): void => {
-  const allOrderedNodes: GuidelineNode[] = []
-  buildOrderedNodes({ node, allOrderedNodes })
+  const allOrderedNodes = buildOrderedNodes({ node })
 
   console.debug(
     '====>>> debug guidelines ordered nodes:',

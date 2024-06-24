@@ -13,8 +13,7 @@ export const createGuidelineNodes = ({
   const { toc, content } = splitTocAndContent(text)
   buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
-  const allOrderedNodes: GuidelineNode[] = []
-  buildOrderedNodes({ node: rootNode, allOrderedNodes })
+  const allOrderedNodes = buildOrderedNodes({ node: rootNode })
   populateGuidelineNodesSearchableContent({ allOrderedNodes, content })
 
   return rootNode
@@ -55,12 +54,17 @@ type BuildOrderedNodesArgs = {
   node: GuidelineNode
   allOrderedNodes?: GuidelineNode[]
 }
-export const buildOrderedNodes = ({ node, allOrderedNodes = [] }: BuildOrderedNodesArgs): void => {
+export const buildOrderedNodes = ({
+  node,
+  allOrderedNodes = [],
+}: BuildOrderedNodesArgs): GuidelineNode[] => {
   allOrderedNodes.push(node)
 
   for (const subLink of node.children) {
     buildOrderedNodes({ node: subLink, allOrderedNodes })
   }
+
+  return allOrderedNodes
 }
 
 type SplitTocAndContentResult = {
