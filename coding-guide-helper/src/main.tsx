@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './main.css'
-import Options from './app-options'
+import Options from './components/app-options/app-options'
 import App from './components/app/app'
 
 export enum Page {
