@@ -2,7 +2,7 @@ import { CopyOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import copy from 'copy-to-clipboard'
 import type { FunctionComponent } from 'react'
-import { useMessage } from '../hooks/use-message'
+import { useMessage } from '../../hooks/use-message'
 import './search-results-title.css'
 
 interface IProps {

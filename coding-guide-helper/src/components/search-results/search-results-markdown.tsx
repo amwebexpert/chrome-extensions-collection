@@ -1,6 +1,6 @@
 import type { FunctionComponent } from 'react'
 import Markdown from 'react-markdown'
-import { CodeBlock } from './code-block'
+import { CodeBlock } from '../code-block/code-block'
 
 interface IProps {
   markdownLines: string[]

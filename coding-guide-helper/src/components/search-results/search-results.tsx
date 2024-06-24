@@ -1,6 +1,6 @@
 import { Collapse } from 'antd'
 import type { FunctionComponent } from 'react'
-import type { GuidelineNode } from '../models/models'
+import type { GuidelineNode } from '../../models/models'
 
 import { SearchResultsMarkdown } from './search-results-markdown'
 import { SearchResultsTitle } from './search-results-title'

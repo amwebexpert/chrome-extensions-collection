@@ -2,7 +2,7 @@ import { Flex, Input, type InputRef, Space, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useRef, useState } from 'react'
 import './app.css'
 import { doSearch, doSearchDebounced, logPlatformInfo } from './app.utils'
-import { SearchResults } from './components/search-results'
+import { SearchResults } from './components/search-results/search-results'
 import { Version } from './components/version'
 import { type GuidelineNode, MessageType, PortName } from './models/models'
 
