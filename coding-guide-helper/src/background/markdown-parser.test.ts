@@ -15,6 +15,7 @@ import type { GuidelineNode } from '../models/models'
 const file = path.join(__dirname, '../../', 'public/markdowns/example-1.md')
 const markdownText = fs.readFileSync(file, 'utf8')
 const baseUrl = 'https://github.com/org/repo/docs/markdown-1.md'
+const ROOT_NODE_ATTRIBUTES = { level: 0, title: 'TOC', href: '', baseUrl }
 
 describe('markdown parser tests suite', () => {
   describe('parseTocLine', () => {
@@ -71,7 +72,7 @@ describe('markdown parser tests suite', () => {
 
   it('should build guideline links from TOC', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
+    const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
     const { toc } = splitTocAndContent(markdownText)
 
     // act
@@ -83,7 +84,7 @@ describe('markdown parser tests suite', () => {
 
   it('should return all ordered aodes', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
+    const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
     const { toc } = splitTocAndContent(markdownText)
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
@@ -96,7 +97,7 @@ describe('markdown parser tests suite', () => {
 
   it('should populate markdown lines from content', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
+    const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
     const { toc, content } = splitTocAndContent(markdownText)
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
     const allOrderedNodes = buildOrderedNodes({ node: rootNode })
@@ -110,17 +111,19 @@ describe('markdown parser tests suite', () => {
 
   it('should create full guidelines', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
+    const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
 
     // act
     createGuidelineNodes({ rootNode, text: markdownText, baseUrl })
 
     // assert
     expect(rootNode).toBeDefined()
+
+    // debug ordered nodes
     const allOrderedNodes = buildOrderedNodes({ node: rootNode })
-    console.info(
-      '====>>> tocLinks',
-      allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
+    const debugInfo = allOrderedNodes.map(
+      (node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`,
     )
+    //console.info('====>>> nodes', debugInfo)
   })
 })

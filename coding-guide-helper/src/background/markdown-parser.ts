@@ -231,16 +231,16 @@ export const serializeWitoutParent = (node: GuidelineNode): string => {
 }
 
 export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => {
-  const newNode = { ...node, parent: undefined, shouldDisplayNode: false, isMatching: false }
+  const newNode = {
+    ...node,
+    parent: undefined,
+    shouldDisplayNode: undefined,
+    isMatching: undefined,
+  }
 
   newNode.children = newNode.children.map(cloneAndRemoveAllParents)
 
   return newNode
-}
-
-export const markAllDescendantAsVisible = (node: GuidelineNode): void => {
-  node.shouldDisplayNode = true
-  node.children.forEach(markAllDescendantAsVisible)
 }
 
 export const isParentOfAvoidPreferSection = (node: GuidelineNode): boolean =>

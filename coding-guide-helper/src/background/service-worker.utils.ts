@@ -17,12 +17,10 @@ type FilterGuidelines = {
 }
 export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): GuidelineNode[] => {
   const normalizedSearch = normalizeForSearch(search)
-  //console.info(`====>>> "${searchLowercase}"`)
 
   // traverse the tree and mark nodes that match the search inside its markdownLines
   const clonedRoot = cloneAndRemoveAllParents(rootNode)
   const allOrderedNodes = buildOrderedNodes({ node: clonedRoot })
-
   for (const node of allOrderedNodes) {
     node.isMatching =
       normalizeForSearch(node.title).includes(normalizedSearch) ||
@@ -72,7 +70,7 @@ export const collectOfflineGuidelines = async (): Promise<GuidelineNode> => {
 const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<GuidelineNode> => {
   const rootNode: GuidelineNode = buildNode({
     level: 0,
-    title: 'TOC',
+    title: 'Root TOC node grouping all guidelines',
     href: '',
     baseUrl: '',
   })
