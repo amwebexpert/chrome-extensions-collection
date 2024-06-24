@@ -3,7 +3,7 @@ import { type FunctionComponent, useEffect, useRef, useState } from 'react'
 import './app.css'
 import { doSearch, doSearchDebounced, logPlatformInfo } from './app.utils'
 import { SearchResults } from './components/search-results/search-results'
-import { Version } from './components/version'
+import { Version } from './components/version/version'
 import { type GuidelineNode, MessageType, PortName } from './models/models'
 
 const TITLE = 'Coding guidelines helper'

@@ -1,6 +1,6 @@
 import { Flex, Typography } from 'antd'
 import type { FunctionComponent } from 'react'
-import { Environment } from '../models/models'
+import { Environment } from '../../models/models'
 import './version.css'
 
 export const Version: FunctionComponent = () => {
