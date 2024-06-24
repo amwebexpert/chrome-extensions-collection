@@ -1,12 +1,12 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import {
-  buildGuidelineLinksFromTocText,
+  buildGuidelineNodesFromToC,
   buildNode,
   buildOrderedNodes,
   createGuidelineNodes,
   parseTocLine,
-  populateMarkdownLinesFromContent,
+  populateGuidelineNodesSearchableContent,
   splitTocAndContent,
 } from './markdown-parser'
 
@@ -14,6 +14,7 @@ import type { GuidelineNode } from '../models/models'
 
 const file = path.join(__dirname, '../../', 'public/markdowns/example-1.md')
 const markdownText = fs.readFileSync(file, 'utf8')
+const baseUrl = 'https://github.com/org/repo/docs/markdown-1.md'
 
 describe('markdown parser tests suite', () => {
   describe('parseTocLine', () => {
@@ -70,11 +71,11 @@ describe('markdown parser tests suite', () => {
 
   it('should build guideline links from TOC', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const { toc } = splitTocAndContent(markdownText)
 
     // act
-    const tocLinks = buildGuidelineLinksFromTocText({ rootNode, text: toc })
+    const tocLinks = buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
     // assert
     expect(tocLinks).toBeDefined()
@@ -82,9 +83,9 @@ describe('markdown parser tests suite', () => {
 
   it('should return all ordered aodes', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const { toc } = splitTocAndContent(markdownText)
-    buildGuidelineLinksFromTocText({ rootNode, text: toc })
+    buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
     const allOrderedNodes: GuidelineNode[] = []
 
     // act
@@ -96,14 +97,14 @@ describe('markdown parser tests suite', () => {
 
   it('should populate markdown lines from content', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const { toc, content } = splitTocAndContent(markdownText)
-    buildGuidelineLinksFromTocText({ rootNode, text: toc })
+    buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
     const allOrderedNodes: GuidelineNode[] = []
     buildOrderedNodes({ node: rootNode, allOrderedNodes })
 
     // act
-    populateMarkdownLinesFromContent({ allOrderedNodes, content })
+    populateGuidelineNodesSearchableContent({ allOrderedNodes, content })
 
     // assert
     expect(rootNode).toBeDefined()
@@ -111,11 +112,11 @@ describe('markdown parser tests suite', () => {
 
   it('should create full guidelines', () => {
     // arrange
-    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+    const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '', baseUrl })
     const allOrderedNodes: GuidelineNode[] = []
 
     // act
-    createGuidelineNodes({ rootNode, text: markdownText })
+    createGuidelineNodes({ rootNode, text: markdownText, baseUrl })
     buildOrderedNodes({ node: rootNode, allOrderedNodes })
 
     // assert

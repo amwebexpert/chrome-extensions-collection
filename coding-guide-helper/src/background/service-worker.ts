@@ -1,5 +1,4 @@
 import { type GuidelineNode, MenuItems, MessageType } from '../models/models'
-import { buildOrderedNodes } from './markdown-parser'
 import {
   collectOnlineGuidelines,
   debugOrderedNodes,

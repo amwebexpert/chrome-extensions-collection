@@ -1,6 +1,6 @@
-import { Flex, Input, Space, Typography } from 'antd'
+import { Flex, Input, type InputRef, Space, Typography } from 'antd'
 import debounce from 'debounce'
-import { type FunctionComponent, useEffect, useState } from 'react'
+import { type FunctionComponent, useEffect, useRef, useState } from 'react'
 import './app.css'
 import { SearchResults } from './components/search-results'
 import { Version } from './components/version'
@@ -14,6 +14,7 @@ const doSearch = (payload: string) =>
 const doSearchDebounced = debounce(doSearch, 500)
 
 export const App: FunctionComponent = () => {
+  const inputRef = useRef<InputRef>(null)
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
@@ -37,6 +38,10 @@ export const App: FunctionComponent = () => {
   }, [])
 
   useEffect(() => {
+    setTimeout(() => inputRef.current?.select(), 300)
+  }, [])
+
+  useEffect(() => {
     doSearchDebounced(search)
   }, [search])
 
@@ -49,7 +54,9 @@ export const App: FunctionComponent = () => {
 
         <Space>
           <Input.Search
+            ref={inputRef}
             placeholder="input search text"
+            autoFocus={true}
             allowClear
             enterButton
             size="large"

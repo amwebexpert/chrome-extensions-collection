@@ -72,11 +72,16 @@ export const collectOfflineGuidelines = async (): Promise<GuidelineNode> => {
 }
 
 const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<GuidelineNode> => {
-  const rootNode: GuidelineNode = buildNode({ level: 0, title: 'TOC', href: '' })
+  const rootNode: GuidelineNode = buildNode({
+    level: 0,
+    title: 'TOC',
+    href: '',
+    baseUrl: '',
+  })
 
-  for (const resourceUrl of urls) {
-    const markdownText = await fetchCodingGuidelinesText(resourceUrl)
-    createGuidelineNodes({ rootNode, text: markdownText })
+  for (const url of urls) {
+    const markdownText = await fetchCodingGuidelinesText(url)
+    createGuidelineNodes({ rootNode, text: markdownText, baseUrl: url })
   }
 
   return rootNode

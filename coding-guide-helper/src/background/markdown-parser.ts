@@ -3,14 +3,19 @@ import type { GuidelineNode } from '../models/models'
 type GuidelineFromTextArgs = {
   rootNode: GuidelineNode
   text: string
+  baseUrl: string
 }
-export const createGuidelineNodes = ({ rootNode, text }: GuidelineFromTextArgs): GuidelineNode => {
+export const createGuidelineNodes = ({
+  rootNode,
+  text,
+  baseUrl,
+}: GuidelineFromTextArgs): GuidelineNode => {
   const { toc, content } = splitTocAndContent(text)
-  buildGuidelineLinksFromTocText({ rootNode, text: toc })
+  buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
   const allOrderedNodes: GuidelineNode[] = []
   buildOrderedNodes({ node: rootNode, allOrderedNodes })
-  populateMarkdownLinesFromContent({ allOrderedNodes, content })
+  populateGuidelineNodesSearchableContent({ allOrderedNodes, content })
 
   return rootNode
 }
@@ -19,7 +24,7 @@ type PopulateMarkdownLinesFromContentArgs = {
   allOrderedNodes: GuidelineNode[]
   content: string
 }
-export const populateMarkdownLinesFromContent = ({
+export const populateGuidelineNodesSearchableContent = ({
   allOrderedNodes,
   content,
 }: PopulateMarkdownLinesFromContentArgs): void => {
@@ -81,16 +86,17 @@ export const splitTocAndContent = (markdownText: string): SplitTocAndContentResu
   }
 }
 
-export const buildGuidelineLinksFromTocText = ({
+export const buildGuidelineNodesFromToC = ({
   rootNode,
   text,
+  baseUrl,
 }: GuidelineFromTextArgs): GuidelineNode => {
   const lines = text
     .split('\n')
     .filter((line) => line.trim().length > 0)
     .filter((line) => !line.toLowerCase().startsWith('table of content'))
 
-  buildGuidelineLinksFromLines({ node: rootNode, lines, currentLineIndex: 0 })
+  buildGuidelineLinksFromLines({ node: rootNode, lines, currentLineIndex: 0, baseUrl })
   return rootNode
 }
 
@@ -133,13 +139,25 @@ type BuildTitleMarkdownArgs = { level: number; title: string }
 const buildTitleMarkdown = ({ level, title }: BuildTitleMarkdownArgs): string =>
   `${'#'.repeat(level)} ${normalizeTitle(title)}`
 
-type BuildNodeArgs = { parent?: GuidelineNode; level: number; title: string; href: string }
-export const buildNode = ({ parent, level, title, href }: BuildNodeArgs): GuidelineNode => ({
+type BuildNodeArgs = {
+  parent?: GuidelineNode
+  level: number
+  title: string
+  baseUrl: string
+  href: string
+}
+export const buildNode = ({
+  parent,
+  level,
+  title,
+  href,
+  baseUrl,
+}: BuildNodeArgs): GuidelineNode => ({
   parent,
   level,
   title,
   titleMarkdown: buildTitleMarkdown({ level, title }),
-  href,
+  href: `${baseUrl.replace('/raw/', '/blob/')}#${href}`,
   markdownLines: [],
   children: [],
 })
@@ -159,11 +177,13 @@ export const findParentNodeForLevel = ({ node, level }: FindParentNodeArgs): Gui
 }
 
 type BuildGuidelineLinksFromLinesArgs = {
+  baseUrl: string
   node: GuidelineNode
   lines: string[]
   currentLineIndex?: number
 }
 export const buildGuidelineLinksFromLines = ({
+  baseUrl,
   node,
   lines,
   currentLineIndex = 0,
@@ -175,10 +195,11 @@ export const buildGuidelineLinksFromLines = ({
   const { level, title, href } = parseTocLine(line)
 
   if (level > node.level) {
-    const newNode = buildNode({ parent: node, level, title, href })
+    const newNode = buildNode({ parent: node, level, title, href, baseUrl })
     node.children.push(newNode)
 
     buildGuidelineLinksFromLines({
+      baseUrl,
       node: newNode,
       lines,
       currentLineIndex: currentLineIndex + 1,
@@ -188,7 +209,7 @@ export const buildGuidelineLinksFromLines = ({
   }
 
   const parentNode = findParentNodeForLevel({ node, level })
-  buildGuidelineLinksFromLines({ node: parentNode, lines, currentLineIndex })
+  buildGuidelineLinksFromLines({ node: parentNode, lines, currentLineIndex, baseUrl })
 }
 
 export const jsonSerializeReplacer = (key: string, value: unknown) => {
