@@ -1,45 +1,21 @@
 import { Flex, Input, type InputRef, Space, Typography } from 'antd'
-import { type FunctionComponent, useEffect, useRef, useState } from 'react'
-import './app.css'
-import { type GuidelineNode, MessageType, PortName } from '../../models/models'
+import { type FunctionComponent, useEffect, useRef } from 'react'
 import { SearchResults } from '../search-results/search-results'
 import { Version } from '../version/version'
-import { doSearch, doSearchDebounced, logPlatformInfo } from './app.utils'
+import './app.css'
+import { logPlatformInfo } from './app.utils'
+import { useSearch } from './use-search'
 
 const TITLE = 'Coding guidelines helper'
-const port = chrome.runtime.connect({ name: PortName.POPUP })
 
 export const App: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
-  const [search, setSearch] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
-  const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
-
-  useEffect(() => {
-    logPlatformInfo()
-
-    // restore search value
-    chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
-
-    // listen for worker search results and update the state
-    port.onMessage.addListener((message, _port) => {
-      const { type, payload } = message
-      if (type === MessageType.ON_SEARCH_COMPLETED) {
-        setSearchResults(payload)
-        setTimeout(() => setIsSearching(false), 300)
-      }
-      if (type === MessageType.ON_SEARCH_LOADING) setIsSearching(true)
-      if (type === MessageType.ON_SEARCH_ERROR) setTimeout(() => setIsSearching(false), 300)
-    })
-  }, [])
+  const { search, setSearch, isSearching, searchResults, doSearch } = useSearch()
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.select(), 300)
+    logPlatformInfo()
   }, [])
-
-  useEffect(() => {
-    doSearchDebounced(search)
-  }, [search])
 
   return (
     <Flex vertical={true} style={{ width: 700, height: 400 }}>
