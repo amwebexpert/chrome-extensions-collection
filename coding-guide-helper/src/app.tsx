@@ -1,17 +1,12 @@
 import { Flex, Input, type InputRef, Space, Typography } from 'antd'
-import debounce from 'debounce'
 import { type FunctionComponent, useEffect, useRef, useState } from 'react'
 import './app.css'
+import { doSearch, doSearchDebounced, logPlatformInfo } from './app.utils'
 import { SearchResults } from './components/search-results'
 import { Version } from './components/version'
 import { type GuidelineNode, MessageType, PortName } from './models/models'
 
 const port = chrome.runtime.connect({ name: PortName.POPUP })
-
-const doSearch = (payload: string) =>
-  chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
-
-const doSearchDebounced = debounce(doSearch, 500)
 
 export const App: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
@@ -19,26 +14,19 @@ export const App: FunctionComponent = () => {
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
   useEffect(() => {
-    chrome.runtime
-      .getPlatformInfo()
-      .then((info) => console.log('platform info', JSON.stringify(info, null, 2)))
+    logPlatformInfo()
 
     // restore search value
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
     // listen for worker search results and update the state
-    port.onMessage.addListener((message, port) => {
-      if (port.name !== PortName.POPUP) return
-
-      if (message.type === MessageType.ON_SEARCH_COMPLETED) {
-        setSearchResults(message.payload)
-        return
-      }
+    port.onMessage.addListener((message, _port) => {
+      if (message.type === MessageType.ON_SEARCH_COMPLETED) setSearchResults(message.payload)
     })
   }, [])
 
   useEffect(() => {
-    setTimeout(() => inputRef.current?.select(), 300)
+    setTimeout(() => inputRef.current?.select(), 300) // auto-select input text
   }, [])
 
   useEffect(() => {
@@ -46,7 +34,7 @@ export const App: FunctionComponent = () => {
   }, [search])
 
   return (
-    <Flex vertical={true} style={{ minWidth: 600, minHeight: 400 }}>
+    <Flex vertical={true} style={{ width: 600, height: 400 }}>
       <Flex gap="middle" vertical={true} flex={1} align="center">
         <Typography.Text strong={true} type="secondary">
           Coding guidelines helper
@@ -66,7 +54,7 @@ export const App: FunctionComponent = () => {
           />
         </Space>
 
-        <Flex className="container-full">
+        <Flex className="search-results-container">
           <SearchResults nodes={searchResults.filter((node) => node.shouldDisplayNode)} />
         </Flex>
       </Flex>
