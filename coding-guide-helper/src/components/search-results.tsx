@@ -14,7 +14,8 @@ export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => (
   <Collapse
     accordion={true}
     defaultActiveKey={[0]}
-    style={{ minWidth: '100%' }}
+    style={{ width: '100%' }}
+    size="small"
     items={nodes.map(({ title, href, markdownLines, children }, index) => ({
       key: index,
       label: <SearchResultsTitle title={title} href={href} />,

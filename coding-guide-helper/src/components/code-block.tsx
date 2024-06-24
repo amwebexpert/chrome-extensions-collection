@@ -2,7 +2,7 @@ import type { ClassAttributes, FunctionComponent, HTMLAttributes } from 'react'
 import type { ExtraProps } from 'react-markdown'
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { base16AteliersulphurpoolLight as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { coy as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { extractLanguageFromClassName } from './code-block.utils'
 
 type Props = ClassAttributes<HTMLElement> & HTMLAttributes<HTMLElement> & ExtraProps
