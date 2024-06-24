@@ -1,6 +1,6 @@
 import { message } from 'antd'
 
-const style = { marginTop: 80 }
+const style = { marginTop: -12 }
 const duration = 1.5
 
 export const useMessage = () => {

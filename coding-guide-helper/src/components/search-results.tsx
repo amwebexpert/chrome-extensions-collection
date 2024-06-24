@@ -1,9 +1,8 @@
 import { Collapse } from 'antd'
 import type { FunctionComponent } from 'react'
-import Markdown from 'react-markdown'
 import type { GuidelineNode } from '../models/models'
 
-import { CodeBlock } from './code-block'
+import { SearchResultsMarkdown } from './search-results-markdown'
 import { SearchResultsTitle } from './search-results-title'
 
 interface IProps {
@@ -16,17 +15,12 @@ export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => (
     defaultActiveKey={[0]}
     style={{ width: '100%' }}
     size="small"
-    items={nodes.map(({ title, href, markdownLines, children }, index) => ({
-      key: index,
+    items={nodes.map(({ title, href, markdownLines, children }) => ({
+      key: href,
       label: <SearchResultsTitle title={title} href={href} />,
       children: (
         <>
-          <div className="container-full">
-            <Markdown components={{ code: (props) => <CodeBlock {...props} /> }}>
-              {markdownLines.join('\n')}
-            </Markdown>
-          </div>
-
+          <SearchResultsMarkdown markdownLines={markdownLines} />
           {children && <SearchResults nodes={children} />}
         </>
       ),
