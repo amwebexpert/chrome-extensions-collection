@@ -12,6 +12,7 @@ const port = chrome.runtime.connect({ name: PortName.POPUP })
 export const App: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
   const [search, setSearch] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
   useEffect(() => {
@@ -23,7 +24,12 @@ export const App: FunctionComponent = () => {
     // listen for worker search results and update the state
     port.onMessage.addListener((message, _port) => {
       const { type, payload } = message
-      if (type === MessageType.ON_SEARCH_COMPLETED) setSearchResults(payload)
+      if (type === MessageType.ON_SEARCH_COMPLETED) {
+        setSearchResults(payload)
+        setTimeout(() => setIsSearching(false), 300)
+      }
+      if (type === MessageType.ON_SEARCH_LOADING) setIsSearching(true)
+      if (type === MessageType.ON_SEARCH_ERROR) setTimeout(() => setIsSearching(false), 300)
     })
   }, [])
 
@@ -43,6 +49,7 @@ export const App: FunctionComponent = () => {
         <Space>
           <Input.Search
             ref={inputRef}
+            loading={isSearching}
             placeholder="input search text"
             autoFocus={true}
             allowClear

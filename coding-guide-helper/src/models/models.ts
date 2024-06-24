@@ -21,7 +21,10 @@ export enum MessageType {
   SET_SEARCH = 'setSearch',
   SET_OPTIONS = 'setOptions',
   ON_SELECTION_CHANGE = 'onSelectionChange',
+
+  ON_SEARCH_LOADING = 'onSearchLoading',
   ON_SEARCH_COMPLETED = 'onSearchCompleted',
+  ON_SEARCH_ERROR = 'onSearchError',
 }
 
 export enum MenuItems {

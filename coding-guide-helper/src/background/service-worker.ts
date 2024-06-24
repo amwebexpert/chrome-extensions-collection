@@ -45,11 +45,7 @@ chrome.runtime.onMessage.addListener((message) => {
 
   switch (type) {
     case MessageType.SET_SEARCH: {
-      const search = payload
-      chrome.storage.local.set({ search })
-
-      const results = filterGuidelines({ search, rootNode })
-      popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
+      onSearch(payload)
       break
     }
     case MessageType.SET_OPTIONS:
@@ -69,3 +65,17 @@ chrome.runtime.onMessage.addListener((message) => {
       break
   }
 })
+
+const onSearch = (search: string) => {
+  try {
+    popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
+
+    chrome.storage.local.set({ search })
+    const results = filterGuidelines({ search, rootNode })
+
+    popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
+  } catch (e) {
+    console.error('error on search', e)
+    popupPort?.postMessage({ type: MessageType.ON_SEARCH_ERROR, payload: e })
+  }
+}
