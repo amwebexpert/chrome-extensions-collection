@@ -4,7 +4,7 @@ import { SearchResults } from '../search-results/search-results'
 import { Version } from '../version/version'
 import './app.css'
 import { logPlatformInfo } from './app.utils'
-import { useSearch } from './use-search'
+import { useSearch } from './hooks/use-search'
 
 const TITLE = 'Coding guidelines helper'
 

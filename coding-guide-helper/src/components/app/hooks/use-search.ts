@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { type GuidelineNode, MessageType, PortName } from '../../models/models'
-import { doSearch, doSearchDebounced } from './app.utils'
+import { type GuidelineNode, MessageType, PortName } from '../../../models/models'
+import { doSearch, doSearchDebounced } from '../app.utils'
 
 const port = chrome.runtime.connect({ name: PortName.POPUP })
 
