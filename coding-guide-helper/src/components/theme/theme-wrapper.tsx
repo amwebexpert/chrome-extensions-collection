@@ -1,4 +1,4 @@
-import { ConfigProvider, theme } from 'antd'
+import { Card, ConfigProvider, theme } from 'antd'
 import type { FunctionComponent, PropsWithChildren } from 'react'
 import { useDarkTheme } from './use-dark-theme'
 
@@ -10,7 +10,7 @@ export const ThemeWrapper: FunctionComponent<PropsWithChildren> = ({ children })
 
   return (
     <ConfigProvider theme={{ algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm }}>
-      {children}
+      <Card style={{ width: 'max-content' }}>{children}</Card>
     </ConfigProvider>
   )
 }
