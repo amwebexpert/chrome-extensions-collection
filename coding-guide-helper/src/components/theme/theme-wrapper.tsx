@@ -6,11 +6,13 @@ const { defaultAlgorithm, darkAlgorithm } = theme
 
 export const ThemeWrapper: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { isDarkMode } = useDarkTheme()
-  console.info('====>>> info', { isDarkMode, defaultAlgorithm })
+  const backgroundColor = isDarkMode ? 'black' : 'white'
 
   return (
     <ConfigProvider theme={{ algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm }}>
-      <Card style={{ width: 'max-content' }}>{children}</Card>
+      <div style={{ backgroundColor, overflow: 'auto' }}>
+        <Card style={{ width: 'max-content' }}>{children}</Card>
+      </div>
     </ConfigProvider>
   )
 }
