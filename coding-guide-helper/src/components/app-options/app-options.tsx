@@ -1,7 +1,8 @@
 import type { FormProps } from 'antd'
-import { Button, Flex, Form, Input, Typography } from 'antd'
+import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
 import { Environment, MessageType } from '../../models/models'
+import { useDarkTheme } from '../theme/use-dark-theme'
 
 type OptionsType = {
   organizationName?: string
@@ -13,6 +14,7 @@ const { title } = Environment
 
 export const Options: FunctionComponent = () => {
   const [form] = Form.useForm()
+  const { isDarkMode, toggleDarkMode } = useDarkTheme()
 
   useEffect(() => {
     chrome.storage.local.get('options', ({ options }) => form.setFieldsValue(options ?? {}))
@@ -60,6 +62,10 @@ export const Options: FunctionComponent = () => {
             rules={[{ required: true, message: 'Please input the markdown files' }]}
           >
             <Input.TextArea rows={5} />
+          </Form.Item>
+
+          <Form.Item label="Dark mode">
+            <Switch value={isDarkMode} onChange={toggleDarkMode} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
