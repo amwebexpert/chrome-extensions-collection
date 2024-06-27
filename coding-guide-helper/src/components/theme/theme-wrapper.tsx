@@ -9,7 +9,7 @@ export const ThemeWrapper: FunctionComponent<PropsWithChildren> = ({ children })
   const backgroundColor = isDarkMode ? 'black' : 'white'
 
   return (
-    <div style={{ backgroundColor, overflow: 'auto', width: 'max-content', padding: '4px' }}>
+    <div style={{ backgroundColor, overflow: 'auto', width: '100%', padding: '4px' }}>
       <ConfigProvider theme={{ algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm }}>
         {children}
       </ConfigProvider>

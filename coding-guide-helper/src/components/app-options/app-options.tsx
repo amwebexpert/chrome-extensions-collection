@@ -22,7 +22,7 @@ export const Options: FunctionComponent = () => {
     chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
 
   return (
-    <Flex vertical={true}>
+    <Flex vertical={true} style={{ width: '100%' }}>
       <Flex justify="center">
         <Typography.Text>{title} - Options</Typography.Text>
       </Flex>
