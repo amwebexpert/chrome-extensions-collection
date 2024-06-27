@@ -1,4 +1,4 @@
-import { Card, ConfigProvider, theme } from 'antd'
+import { ConfigProvider, theme } from 'antd'
 import type { FunctionComponent, PropsWithChildren } from 'react'
 import { useDarkTheme } from './use-dark-theme'
 
