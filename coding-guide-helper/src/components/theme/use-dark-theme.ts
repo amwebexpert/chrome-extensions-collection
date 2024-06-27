@@ -10,7 +10,7 @@ export const useDarkTheme = () => {
       setIsDarkMode(isDarkMode ?? DEFAULT_VALUE),
     )
     chrome.storage.session.onChanged.addListener((changes) => {
-      if (changes.isDarkMode) setIsDarkMode(changes.isDarkMode.newValue)
+      if (changes.isDarkMode) setIsDarkMode(changes.isDarkMode.newValue ?? DEFAULT_VALUE)
     })
   }, [])
 
