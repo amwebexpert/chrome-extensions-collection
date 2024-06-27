@@ -10,8 +10,8 @@ export const ThemeWrapper: FunctionComponent<PropsWithChildren> = ({ children })
 
   return (
     <ConfigProvider theme={{ algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm }}>
-      <div style={{ backgroundColor, overflow: 'auto' }}>
-        <Card style={{ width: 'max-content' }}>{children}</Card>
+      <div style={{ backgroundColor, overflow: 'auto', width: 'max-content', padding: '4px' }}>
+        {children}
       </div>
     </ConfigProvider>
   )
