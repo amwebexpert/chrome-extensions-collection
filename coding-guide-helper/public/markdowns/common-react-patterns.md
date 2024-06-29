@@ -21,6 +21,10 @@
     - [❌ Avoid Misusing the `use` Prefix for Non-Hook Functions](#-avoid-misusing-the-use-prefix-for-non-hook-functions)
     - [✅ Prefer a More Descriptive Name for Pure Functions](#-prefer-a-more-descriptive-name-for-pure-functions)
     - [ℹ️ Explanation](#ℹ️-explanation-2)
+  - [Avoid Overusing the Ternary Operator](#avoid-overusing-the-ternary-operator)
+    - [❌ Avoid Overusing the Ternary Operator in a Single Expression](#-avoid-overusing-the-ternary-operator-in-a-single-expression)
+    - [✅ Prefer Using Early Returns for Multiple Conditions](#-prefer-using-early-returns-for-multiple-conditions)
+      - [ℹ️ Explanation](#ℹ️-explanation-3)
 
 # Project coding standards
 
@@ -302,4 +306,69 @@ const Component = () => {
 - **Avoid Misleading Names:** The `use` prefix is reserved for React hooks, which are special functions that use React features like state or lifecycle methods. Using `use` for a regular function can be confusing.
 - **Descriptive Names:** Name your functions clearly to indicate their purpose. This helps other developers understand what the function does at a glance.
 - **Developer Expectations**: Seeing the use prefix, a developer might mistakenly think the function can only be used inside a `React` component or another `hook`, not in plain `TypeScript` code like a `service` or a `store`.
-- 
+
+## Avoid Overusing the Ternary Operator
+
+### ❌ Avoid Overusing the Ternary Operator in a Single Expression
+
+```tsx
+// This function uses multiple ternary operators in a single expression, making it hard to read
+enum Status {
+  Loading,
+  Error,
+  NoData,
+  DataLoaded,
+}
+
+const getStatusMessage = (status: Status): string => {
+  return status === Status.Loading
+    ? 'Loading'
+    : status === Status.Error
+    ? 'Error'
+    : status === Status.NoData
+    ? 'No Data'
+    : 'Data Loaded'
+}
+
+// Usage
+const statusMessage = getStatusMessage(Status.Loading)
+console.log(statusMessage) // Output: Loading
+```
+
+### ✅ Prefer Using Early Returns for Multiple Conditions
+
+```tsx
+// This function uses early returns for better readability
+enum Status {
+  Loading,
+  Error,
+  NoData,
+  DataLoaded,
+}
+
+const getStatusMessage = (status: Status): string => {
+  if (status === Status.Loading) {
+    return 'Loading'
+  }
+  if (status === Status.Error) {
+    return 'Error'
+  }
+  if (status === Status.NoData) {
+    return 'No Data'
+  }
+  if (status === Status.DataLoaded) {
+    return 'Data Loaded'
+  }
+  return 'Unknown Status'
+}
+
+// Usage
+const statusMessage = getStatusMessage(Status.Loading)
+console.log(statusMessage) // Output: Loading
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Overcomplicating with Ternary Operators:** Using multiple ternary operators in a single expression can make the code hard to read and understand.
+- **Improved Readability:** Using early returns makes the logic clearer and easier to follow, especially when dealing with more than two conditions.
+- **Maintainability:** Clear and readable code is easier to maintain and debug.
