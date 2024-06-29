@@ -40,15 +40,19 @@
   - [Prefer External Filters and Sorters Over Inline Logic in Rendering](#prefer-external-filters-and-sorters-over-inline-logic-in-rendering)
     - [❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template](#-avoid-using-inline-logic-for-filtering-and-sorting-in-the-rendering-template)
     - [✅ Prefer Using External Filters and Sorters for Better Readability](#-prefer-using-external-filters-and-sorters-for-better-readability)
-      - [ℹ️ Explanation](#ℹ️-explanation-7)
+    - [ℹ️ Explanation](#ℹ️-explanation-7)
   - [Prefer Object Destructuring Over Multiple Positional Parameters](#prefer-object-destructuring-over-multiple-positional-parameters)
     - [❌ Avoid Using Multiple Positional Parameters in Function Arguments](#-avoid-using-multiple-positional-parameters-in-function-arguments)
     - [✅ Prefer Object Destructuring for Function Arguments](#-prefer-object-destructuring-for-function-arguments)
-      - [ℹ️ Explanation](#ℹ️-explanation-8)
+    - [ℹ️ Explanation](#ℹ️-explanation-8)
   - [Prefer External Utility Functions Over Complex Logic in the Rendering Template](#prefer-external-utility-functions-over-complex-logic-in-the-rendering-template)
     - [❌ Avoid Complex Logic in the Rendering Template](#-avoid-complex-logic-in-the-rendering-template)
     - [✅ Prefer Using External Utility Functions for Better Readability](#-prefer-using-external-utility-functions-for-better-readability)
-      - [ℹ️ Explanation](#ℹ️-explanation-9)
+    - [ℹ️ Explanation](#ℹ️-explanation-9)
+  - [Prefer `Array.some()` Over Checking `Array.find()` for Undefined](#prefer-arraysome-over-checking-arrayfind-for-undefined)
+    - [❌ Avoid Checking `Array.find()` for Undefined](#-avoid-checking-arrayfind-for-undefined)
+    - [✅ Prefer Using `Array.some()` for Better Readability](#-prefer-using-arraysome-for-better-readability)
+    - [ℹ️ Explanation](#ℹ️-explanation-10)
 
 # Project coding standards
 
@@ -597,7 +601,7 @@ const items = [
 <Component items={items} />
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Inline Logic:** Using inline logic for filtering and sorting in the rendering method can make the component difficult to read and understand.
 - **Use External Functions:** Moving filtering and sorting logic to separate functions makes the component cleaner and easier to read.
@@ -650,7 +654,7 @@ const user = createUser({ firstName: 'John', lastName: 'Doe', age: 30, email: 'j
 console.log(user) // Output: { firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' }
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Multiple Positional Parameters:** Using multiple positional parameters, especially with optional ones, can make the function call less readable and more error-prone. You may need to pass `undefined` explicitly to skip the optional parameter, which is not intuitive.
 - **Use Object Destructuring:** Using object destructuring for function parameters improves readability by clearly naming each parameter. This makes the function call more intuitive and less prone to errors.
@@ -736,10 +740,69 @@ const items = [
 <Component items={items} />
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Complex Logic in the Rendering Template:** Placing complex filtering, sorting, and formatting logic directly in the render method can make the component hard to read and maintain.
 - **Use External Utility Functions:** Moving this logic to external utility functions makes the component cleaner and more focused on rendering.
 - **Early Return for Conditional Rendering:** Using an early return for cases where there are no items to display simplifies the component structure and avoids nested conditions.
 - **Readability and Maintainability:** Using external functions improves readability by breaking down the logic into manageable, reusable pieces. This also makes the code easier to test and maintain.
+
+## Prefer `Array.some()` Over Checking `Array.find()` for Undefined
+
+### ❌ Avoid Checking `Array.find()` for Undefined
+
+```tsx
+const Component = ({ items }) => {
+  // This code uses Array.find() and checks for undefined, making it less readable
+  const activeItems = items.find(item => item.isActive) !== undefined
+
+  return (
+    <div>
+      {activeItems ? <p>There are active items</p> : <p>No active items</p>}
+    </div>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: false },
+  { id: 2, name: 'Bob', isActive: false },
+  { id: 3, name: 'Charlie', isActive: true }
+]
+
+<Component items={items} />
+```
+
+### ✅ Prefer Using `Array.some()` for Better Readability
+
+```tsx
+// This code uses Array.some() for a more readable and concise solution
+export const hasActiveItems = (items) => items.some(item => item.isActive)
+
+// Usage in a component (once imported)
+const Component = ({ items }) => {
+  const hasActiveItemsToShow = hasActiveItems(items)
+
+  return (
+    <div>
+      {hasActiveItemsToShow ? <p>There are active items</p> : <p>No active items</p>}
+    </div>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: false },
+  { id: 2, name: 'Bob', isActive: false },
+  { id: 3, name: 'Charlie', isActive: true }
+]
+
+<Component items={items} />
+```
+
+### ℹ️ Explanation
+
+- **Avoid Using `Array.find()` for Existence Checks:** Using `Array.find()` to check for the presence of an item and then comparing the result to `undefined` can be verbose and less readable.
+- **Use `Array.some()` for Existence Checks:** `Array.some()` is specifically designed to check if at least one element in the array meets the condition, making the code more concise and readable.
+- **Readability and Efficiency:** `Array.some()` directly returns a boolean value, which makes the code cleaner and easier to understand. It also avoids the need for an explicit comparison with `undefined`, improving both readability and efficiency.
 
