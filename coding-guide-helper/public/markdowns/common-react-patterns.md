@@ -33,6 +33,10 @@
     - [❌ Avoid Using `let` When `const` Can Be Used](#-avoid-using-let-when-const-can-be-used)
     - [✅ Prefer Using `const` To Promote Values That Do Not Change](#-prefer-using-const-to-promote-values-that-do-not-change)
     - [ℹ️ Explanation](#ℹ️-explanation-5)
+  - [Prefer `Array.includes()` Over Multiple Comparisons](#prefer-arrayincludes-over-multiple-comparisons)
+    - [❌ Avoid Using Multiple Comparisons in Conditional Statements](#-avoid-using-multiple-comparisons-in-conditional-statements)
+    - [✅ Prefer Using `Array.includes()` for Multiple Comparisons](#-prefer-using-arrayincludes-for-multiple-comparisons)
+    - [ℹ️ Explanation](#ℹ️-explanation-6)
 
 # Project coding standards
 
@@ -484,3 +488,39 @@ console.log(total) // Output: 15
 - **Use `const` for Immutable Values:** `const` should be used for variables that are not going to be reassigned. This makes it clear that the variable is intended to remain constant throughout its scope.
 - **Use `reduce()` for Aggregation:** The `reduce()` method is a concise way to aggregate values in an array, enhancing readability and reducing the likelihood of errors.
 - **Readability and Maintainability:** Using `const` and array methods like `reduce()` makes the code more readable and maintainable by signaling to developers that the variable's value will not change and providing a clear, functional approach to computation.
+
+## Prefer `Array.includes()` Over Multiple Comparisons
+
+### ❌ Avoid Using Multiple Comparisons in Conditional Statements
+
+```tsx
+// This code uses multiple comparisons in a single if statement
+const value = 'b'
+
+if (value === 'a' || value === 'b' || value === 'c') {
+  console.log('Value is a, b, or c')
+} else {
+  console.log('Value is something else')
+}
+```
+
+### ✅ Prefer Using `Array.includes()` for Multiple Comparisons
+
+```tsx
+// This code uses Array.includes() for a cleaner conditional statement
+const value = 'b'
+const VALID_VALUES = ['a', 'b', 'c']
+
+if (VALID_VALUES.includes(value)) {
+  console.log('Value is a, b, or c')
+} else {
+  console.log('Value is something else')
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid Multiple Comparisons:** Using multiple comparisons (e.g., `if (x === 'a' || x === 'b' || x === 'c')`) can make the code harder to read and maintain.
+- **Use `Array.includes()`:** The `Array.includes()` method provides a cleaner and more readable way to check if a value is present in an array.
+- **Readability and Maintainability:** Using `Array.includes()` enhances code readability and makes it easier to add or remove values from the condition, improving maintainability.
+
