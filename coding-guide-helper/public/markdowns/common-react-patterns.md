@@ -24,7 +24,15 @@
   - [Avoid Overusing the Ternary Operator](#avoid-overusing-the-ternary-operator)
     - [❌ Avoid Overusing the Ternary Operator in a Single Expression](#-avoid-overusing-the-ternary-operator-in-a-single-expression)
     - [✅ Prefer Using Early Returns for Multiple Conditions](#-prefer-using-early-returns-for-multiple-conditions)
-      - [ℹ️ Explanation](#ℹ️-explanation-3)
+    - [ℹ️ Explanation](#ℹ️-explanation-3)
+  - [Avoid Simple Assignment in State Update Functions](#avoid-simple-assignment-in-state-update-functions)
+    - [❌ Avoid Simple Assignment for State Updates Dependent on Current State](#-avoid-simple-assignment-for-state-updates-dependent-on-current-state)
+    - [✅ Prefer Using Setter Function for State Updates Dependent on Current State](#-prefer-using-setter-function-for-state-updates-dependent-on-current-state)
+    - [ℹ️ Explanation](#ℹ️-explanation-4)
+  - [Prefer `const` Over `let` for Variable Declarations](#prefer-const-over-let-for-variable-declarations)
+    - [❌ Avoid Using `let` When `const` Can Be Used](#-avoid-using-let-when-const-can-be-used)
+    - [✅ Prefer Using `const` To Promote Values That Do Not Change](#-prefer-using-const-to-promote-values-that-do-not-change)
+    - [ℹ️ Explanation](#ℹ️-explanation-5)
 
 # Project coding standards
 
@@ -367,8 +375,112 @@ const statusMessage = getStatusMessage(Status.Loading)
 console.log(statusMessage) // Output: Loading
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Overcomplicating with Ternary Operators:** Using multiple ternary operators in a single expression can make the code hard to read and understand.
 - **Improved Readability:** Using early returns makes the logic clearer and easier to follow, especially when dealing with more than two conditions.
 - **Maintainability:** Clear and readable code is easier to maintain and debug.
+
+## Avoid Simple Assignment in State Update Functions
+
+### ❌ Avoid Simple Assignment for State Updates Dependent on Current State
+
+```tsx
+// This code uses a simple assignment for state update which can lead to issues
+const addNumber = () => {
+  const newNumber = numbers.length + 1
+  setNumbers([...numbers, newNumber])
+}
+
+// Usage in a component
+const Component = () => {
+  const [numbers, setNumbers] = useState<number[]>([])
+
+  return (
+    <div>
+      <button onClick={addNumber}>Add Number</button>
+      <div>{numbers.join(', ')}</div>
+    </div>
+  )
+}
+```
+
+### ✅ Prefer Using Setter Function for State Updates Dependent on Current State
+
+```tsx
+// This code uses the setter function for state update which ensures correctness
+const addNumber = () => {
+  setNumbers((currentNumbers) => [...currentNumbers, currentNumbers.length + 1])
+}
+
+// Usage in a component
+const Component = () => {
+  const [numbers, setNumbers] = useState<number[]>([])
+
+  return (
+    <div>
+      <button onClick={addNumber}>Add Number</button>
+      <div>{numbers.join(', ')}</div>
+    </div>
+  )
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid Simple Assignment:** Using a simple assignment (`setNumbers([...numbers, newNumber])`) can lead to issues because it relies on the current value of `numbers`. If the state is updated concurrently, the result might be incorrect.
+- **Use Setter Function:** Using the setter function (`setNumbers((currentNumbers) => [...currentNumbers, currentNumbers.length + 1])`) ensures that the update is based on the latest state. This approach prevents potential bugs related to state being updated concurrently.
+- **Correctness:** Using the setter function makes sure that the new state is computed correctly, even when multiple updates occur at the same time.
+- **Maintainability:** This pattern is more robust and easier to understand, making the codebase more maintainable.
+
+## Prefer `const` Over `let` for Variable Declarations
+
+### ❌ Avoid Using `let` When `const` Can Be Used
+
+```tsx
+// This code uses `let` even though the variable is never reassigned
+let total = 0
+const numbers = [1, 2, 3, 4, 5]
+
+for (let i = 0; i < numbers.length; i++) {
+  total += numbers[i]
+}
+
+const isAuthenticated = true
+let greeting
+
+if (isAuthenticated) {
+  greeting = 'Welcome back!'
+} else {
+  greeting = 'Hello, guest!'
+}
+
+console.log(greeting) // Output: Welcome back!
+console.log(total) // Output: 15
+```
+
+### ✅ Prefer Using `const` To Promote Values That Do Not Change
+
+```tsx
+// This code correctly uses `const` and the reduce() method for immutability and readability
+const numbers = [1, 2, 3, 4, 5]
+const total = numbers.reduce((acc, num) => acc + num, 0)
+
+// This code uses a pure function to avoid the use of `let`
+const getGreeting = (isAuthenticated: boolean): string => {
+  return isAuthenticated ? 'Welcome back!' : 'Hello, guest!'
+}
+
+const isAuthenticated = true
+const greeting = getGreeting(isAuthenticated)
+
+console.log(greeting) // Output: Welcome back!
+console.log(total) // Output: 15
+```
+
+### ℹ️ Explanation
+
+- **Avoid Using `let` Unnecessarily:** Using `let` for variables that are not reassigned can be misleading. It implies that the value might change, which can cause confusion for other developers reading the code.
+- **Use `const` for Immutable Values:** `const` should be used for variables that are not going to be reassigned. This makes it clear that the variable is intended to remain constant throughout its scope.
+- **Use `reduce()` for Aggregation:** The `reduce()` method is a concise way to aggregate values in an array, enhancing readability and reducing the likelihood of errors.
+- **Readability and Maintainability:** Using `const` and array methods like `reduce()` makes the code more readable and maintainable by signaling to developers that the variable's value will not change and providing a clear, functional approach to computation.
