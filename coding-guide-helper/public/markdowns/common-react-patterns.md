@@ -13,6 +13,10 @@
     - [❌ avoid double arrows functions](#-avoid-double-arrows-functions)
     - [✅ prefer single arrow functions](#-prefer-single-arrow-functions)
     - [ℹ️ Explanation](#ℹ️-explanation)
+  - [Promote pure typescript functions](#promote-pure-typescript-functions)
+    - [❌ avoid inline unsharable code](#-avoid-inline-unsharable-code)
+    - [✅ prefer pure typescript extracted logic](#-prefer-pure-typescript-extracted-logic)
+      - [ℹ️ Explanation](#ℹ️-explanation-1)
 
 # Project coding standards
 
@@ -167,3 +171,78 @@ return (
 - Naming the handler `onNameOfEventPress` clearly indicates when the event is triggered.
 - Passing a function factory (a function that returns another function) to `onPress` can be confusing because it’s not immediately clear that a factory is being passed instead of the actual event handler.
 - Using a factory pattern makes the code harder to read and maintain, adding unnecessary complexity.
+
+## Promote pure typescript functions
+
+The most we can reduce the responsibilities of a function the most it becomes maintainable and this is also promoting potential re-usability.
+
+### ❌ avoid inline unsharable code
+
+```tsx
+// a lot of code written directly inside a component becomes invisible from the outside
+const total = useMemo(() => {
+  return numbers.reduce((acc, value) => acc + value, 0)
+}, [numbers])
+
+const onMultiplyBy = useCallback((by: number) => {
+  setNumbers(numbers.map((value) => value * by))
+}, [numbers])
+
+const fullName = useMemo(
+  () => ({
+      firstName,
+      lastName,
+      fullName: `${firstName} ${lastName} (${age} years old)`,
+  }),
+  [firstName, lastName, age]
+)
+
+return (...)
+```
+
+### ✅ prefer pure typescript extracted logic
+
+- inside `my-component.utils.ts` helpers file:
+
+```tsx
+//...
+export const computeTotal = (numbers: number[] = []) =>
+  numbers.reduce((acc, value) => acc + value, 0)
+
+export const multiplyBy = (numbers: number[] = [], by: number = 1) =>
+  numbers.map((value) => value * by)
+
+type BuildPersonArgs = { firstName: string, lastName: string, age: number }
+export const buildPersonFullName = (person: BuildPersonArgs) =>
+  `${firstName} ${lastName} (${age} years old)`
+```
+
+- inside `my-component.tsx` component file:
+
+```tsx
+import { computeTotal, multiplyBy, buildPersonFullName } from 'my-component.utils.ts'
+//...
+
+const total = useMemo(() => computeTotal(numbers), [numbers])
+
+const fullName = buildPersonFullName({ firstName, lastName, age })
+
+const onMultiplyBy = useCallback(
+  (by: number) => setNumbers(multiplyBy(numbers, by)),
+  [numbers]
+)
+
+return (...)
+```
+
+#### ℹ️ Explanation
+
+Creating small, pure typescript functions:
+
+- **Reduces Complexity:** Breaking down code into smaller, reusable functions makes your components easier to understand and manage.
+- **Increases Reusability:** The functions you create can be used in different parts of your project, not just in the component where they were originally written. For example, you can use them in:
+  - Other components
+  - Custom hooks
+  - Classes
+  - Other utility functions
+- **Separation of Concerns:** By separating the logic from the component, each part of your code has a single responsibility, making it easier to maintain and test.
