@@ -1,6 +1,6 @@
-# Table of Contents
+# Coding Guidelines Table Of Contents
 
-1. [Common Naming Patterns](common-naming-patterns.md)
-2. [Common Coding Patterns](common-coding-patterns.md)
-3. [Common React Patterns](common-react-patterns.md)
-4. [Common Unit Testing](common-unit-testing.md)
+- [Typescript & React Naming Convention](common-naming-patterns.md)
+- [Typescript Coding Guidelines](common-coding-patterns.md)
+- [React & ReactNative Coding Guidelines](common-react-patterns.md)
+- [Jest & Testing-Library Guidelines](common-unit-testing.md)
