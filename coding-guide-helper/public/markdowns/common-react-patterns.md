@@ -1200,7 +1200,7 @@ const Component = () => {
   //...
 
   return (
-    <HookGeneratedComponent
+    <ClassicFonctionComponentHere
       value={theValue}
       onMessage={onMessage}
       onUpdate={onUpdate}
