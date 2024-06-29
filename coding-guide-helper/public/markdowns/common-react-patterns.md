@@ -56,32 +56,36 @@
   - [Prefer Logging Errors Over Silencing Them in `try-catch` Blocks](#prefer-logging-errors-over-silencing-them-in-try-catch-blocks)
     - [❌ Avoid Silencing Errors in `try-catch` Blocks](#-avoid-silencing-errors-in-try-catch-blocks)
     - [✅ Prefer Logging Errors in `try-catch` Blocks](#-prefer-logging-errors-in-try-catch-blocks)
-      - [ℹ️ Explanation](#ℹ️-explanation-11)
+    - [ℹ️ Explanation](#ℹ️-explanation-11)
   - [Prefer Flattening `try-catch` Blocks Over Using Nested `try-catch`](#prefer-flattening-try-catch-blocks-over-using-nested-try-catch)
     - [❌ Avoid Using Nested `try-catch` Blocks](#-avoid-using-nested-try-catch-blocks)
     - [✅ Prefer Flattening `try-catch` Blocks](#-prefer-flattening-try-catch-blocks)
-      - [ℹ️ Explanation](#ℹ️-explanation-12)
+    - [ℹ️ Explanation](#ℹ️-explanation-12)
   - [Avoid Re-throwing the Same Exception in `try-catch`](#avoid-re-throwing-the-same-exception-in-try-catch)
     - [❌ Avoid Using `try-catch` to Simply Re-throw the Same Exception](#-avoid-using-try-catch-to-simply-re-throw-the-same-exception)
     - [✅ Prefer Handling or Logging the Exception Instead of Re-throwing](#-prefer-handling-or-logging-the-exception-instead-of-re-throwing)
     - [✅ Prefer Letting the Exception Propagate Naturally](#-prefer-letting-the-exception-propagate-naturally)
-      - [ℹ️ Explanation](#ℹ️-explanation-13)
+    - [ℹ️ Explanation](#ℹ️-explanation-13)
   - [Prefer Using `??` Over `||` for Handling `null` and `undefined`](#prefer-using--over--for-handling-null-and-undefined)
     - [❌ Avoid Using `||` to Handle `null` and `undefined` Exclusively](#-avoid-using--to-handle-null-and-undefined-exclusively)
     - [✅ Prefer Using `??` to Handle `null` and `undefined`](#-prefer-using--to-handle-null-and-undefined)
-      - [ℹ️ Explanation](#ℹ️-explanation-14)
+    - [ℹ️ Explanation](#ℹ️-explanation-14)
   - [Prefer Using Optional Parameters Over `Type | undefined`](#prefer-using-optional-parameters-over-type--undefined)
     - [❌ Avoid Using `param: Type | undefined` for Optional Parameters](#-avoid-using-param-type--undefined-for-optional-parameters)
     - [✅ Prefer Using Optional Parameters with `param?: Type`](#-prefer-using-optional-parameters-with-param-type)
-      - [ℹ️ Explanation](#ℹ️-explanation-15)
+    - [ℹ️ Explanation](#ℹ️-explanation-15)
   - [Prefer Using Explicit Numeric Values for TypeScript Enums](#prefer-using-explicit-numeric-values-for-typescript-enums)
     - [❌ Avoid Using Implicit Ordinal Values for Enums](#-avoid-using-implicit-ordinal-values-for-enums)
     - [✅ Prefer Using Explicit Numeric Values for Enums](#-prefer-using-explicit-numeric-values-for-enums)
-      - [ℹ️ Explanation](#ℹ️-explanation-16)
+    - [ℹ️ Explanation](#ℹ️-explanation-16)
   - [Prefer Using Hooks for Business Logic Over Returning React Components](#prefer-using-hooks-for-business-logic-over-returning-react-components)
     - [❌ Avoid Using Hooks to Return React Components](#-avoid-using-hooks-to-return-react-components)
     - [✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate](#-prefer-using-hooks-for-business-logic-and-keep-rendering-separate)
-      - [ℹ️ Explanation](#ℹ️-explanation-17)
+    - [ℹ️ Explanation](#ℹ️-explanation-17)
+  - [Prefer Using `gap`, `rowGap`, and `columnGap` Over `margin` or `padding` in React Native](#prefer-using-gap-rowgap-and-columngap-over-margin-or-padding-in-react-native)
+    - [❌ Avoid Using `margin` or `padding` for Spacing Between Elements](#-avoid-using-margin-or-padding-for-spacing-between-elements)
+    - [✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements](#-prefer-using-gap-rowgap-and-columngap-for-spacing-between-elements)
+    - [ℹ️ Explanation](#ℹ️-explanation-18)
 
 # Project coding standards
 
@@ -865,7 +869,7 @@ const storeDataSync = (data: string) => {
 }
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Silencing Errors:** Silencing errors by catching them without any logging makes debugging and error tracking extremely difficult. Developers won't be aware that an error occurred.
 - **Log Errors:** Always log errors to the console or, preferably, to an external monitoring service like Sentry. This helps in diagnosing issues and understanding the context of failures.
@@ -918,7 +922,7 @@ const processData = (data: string) => {
 processData('')
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Nested `try-catch` Blocks:** Using nested `try-catch` blocks can make the code difficult to read and maintain. It can also lead to confusion about which catch block handles which error.
 - **Flatten `try-catch` Blocks:** Flattening the `try-catch` structure improves readability by reducing the nesting level and making the error handling logic clearer.
@@ -997,7 +1001,7 @@ try {
 }
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Redundant Re-throwing:** Catching an exception only to re-throw it without any additional handling or logging is redundant and adds unnecessary complexity to the code.
 - **Handle or Log Exceptions:** Instead of re-throwing, handle the exception by logging it or taking appropriate action (e.g., returning a default value, cleaning up resources). This ensures that the error is properly managed and provides useful information for debugging.
@@ -1036,7 +1040,7 @@ console.log(getDefault(0)) // Output: 0 (intended)
 console.log(getDefault('')) // Output: '' (intended)
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Using `||` for Default Values:** Using the `||` operator to handle `null` and `undefined` can lead to incorrect handling of other falsy values like `0`, `''`, and `false`.
 - **Use `??` for Nullish Coalescing:** The `??` operator (nullish coalescing) is designed to handle only `null` and `undefined` values, providing a more precise and intended behavior.
@@ -1073,7 +1077,7 @@ console.log(greet()) // Output: 'Hello!'
 console.log(greet('Alice')) // Output: 'Hello, Alice!'
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Using `param: Type | undefined` for Optional Parameters:** Declaring parameters as `Type | undefined` is verbose and less readable. It also makes the function signature more complex than necessary.
 - **Use Optional Parameters with `param?: Type`:** Using the `param?: Type` syntax is more concise and directly indicates that the parameter is optional.
@@ -1136,7 +1140,7 @@ const getUserRole = (role: UserRole): string => {
 console.log(getUserRole(UserRole.Admin)) // Output: 'Admin'
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Using Implicit Ordinal Values:** Implicit ordinal values can lead to problems, especially when the enum is serialized and deserialized. If the enum definition changes (e.g., new values are added), the ordinal values can shift, causing inconsistencies and bugs.
 - **Use Explicit Numeric Values:** Using explicit numeric values for enums ensures stability and clarity. Each enum member has a fixed value, which doesn't change when new members are added.
@@ -1211,10 +1215,79 @@ const Component = () => {
 export default Component;
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Using Hooks to Return Components:** Mixing business logic with rendering inside a hook breaks the separation of concerns. Hooks should manage reusable logic, not return components.
 - **Use Hooks for Business Logic:** Hooks should handle business logic, such as state management or side effects, and return data that can be used by components.
 - **Keep Rendering Separate:** Define rendering logic in React components. This keeps the concerns of data handling and UI rendering separate, making the codebase more maintainable and easier to understand.
 - **Simpler Unit Testing:** Keeping hooks focused on logic and components focused on rendering makes unit testing simpler. You can test the hook's logic independently from the UI, leading to clearer and more maintainable tests.
+
+## Prefer Using `gap`, `rowGap`, and `columnGap` Over `margin` or `padding` in React Native
+
+### ❌ Avoid Using `margin` or `padding` for Spacing Between Elements
+
+```tsx
+// This code uses margin and padding for spacing, which can be less efficient and harder to maintain
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+const Component = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.item}>Item 1</Text>
+      <Text style={styles.item}>Item 2</Text>
+      <Text style={styles.item}>Item 3</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  item: {
+    margin: 10,
+  },
+});
+
+export default Component;
+```
+
+### ✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements
+
+```tsx
+// This code uses gap for spacing, which is more efficient and easier to maintain
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+const Component = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.item}>Item 1</Text>
+      <Text style={styles.item}>Item 2</Text>
+      <Text style={styles.item}>Item 3</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 10, // Using gap for spacing between elements
+  },
+  item: {
+    // No need for margin or padding for spacing
+  },
+});
+
+export default Component;
+```
+
+### ℹ️ Explanation
+
+- **Avoid Using `margin` or `padding` for Spacing:** Using `margin` or `padding` for spacing between elements can make the layout harder to maintain and adjust, especially when the spacing needs to be consistent across multiple elements.
+- **Use `gap`, `rowGap`, and `columnGap`:** These properties are designed specifically for spacing between items in a flex container, making the code more efficient and easier to maintain.
+- **Readability and Maintenance:** Using `gap`, `rowGap`, and `columnGap` improves readability by clearly indicating that the spacing is between items, not around them. This also simplifies the styles and makes the layout easier to adjust.
+- **Consistent Spacing:** `gap`, `rowGap`, and `columnGap` ensure consistent spacing between elements without needing to adjust individual `margin` or `padding` values, leading to a more cohesive and maintainable layout.
 
