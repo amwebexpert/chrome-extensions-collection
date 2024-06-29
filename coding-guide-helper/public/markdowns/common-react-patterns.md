@@ -16,11 +16,11 @@
   - [Promote pure typescript functions](#promote-pure-typescript-functions)
     - [❌ avoid inline unsharable code](#-avoid-inline-unsharable-code)
     - [✅ prefer pure typescript extracted logic](#-prefer-pure-typescript-extracted-logic)
-      - [ℹ️ Explanation](#ℹ️-explanation-1)
+    - [ℹ️ Explanation](#ℹ️-explanation-1)
   - [Avoid Misusing the `use` Prefix](#avoid-misusing-the-use-prefix)
     - [❌ Avoid Misusing the `use` Prefix for Non-Hook Functions](#-avoid-misusing-the-use-prefix-for-non-hook-functions)
     - [✅ Prefer a More Descriptive Name for Pure Functions](#-prefer-a-more-descriptive-name-for-pure-functions)
-      - [ℹ️ Explanation](#ℹ️-explanation-2)
+    - [ℹ️ Explanation](#ℹ️-explanation-2)
 
 # Project coding standards
 
@@ -239,7 +239,7 @@ const onMultiplyBy = useCallback(
 return (...)
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 Creating small, pure typescript functions:
 
@@ -297,7 +297,7 @@ const Component = () => {
 }
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Misleading Names:** The `use` prefix is reserved for React hooks, which are special functions that use React features like state or lifecycle methods. Using `use` for a regular function can be confusing.
 - **Descriptive Names:** Name your functions clearly to indicate their purpose. This helps other developers understand what the function does at a glance.
