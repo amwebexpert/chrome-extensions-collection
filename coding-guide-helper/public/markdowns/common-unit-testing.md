@@ -16,11 +16,12 @@
   - [Prefer Using `it.each` for Parametrized Tests Over Multiple Individual `it` Blocks](#prefer-using-iteach-for-parametrized-tests-over-multiple-individual-it-blocks)
     - [❌ Avoid Using Multiple Individual `it` Blocks for Similar Tests](#-avoid-using-multiple-individual-it-blocks-for-similar-tests)
     - [✅ Prefer Using `it.each` for Parametrized Tests](#-prefer-using-iteach-for-parametrized-tests)
-      - [ℹ️ Explanation](#ℹ️-explanation-3)
+    - [ℹ️ Explanation](#ℹ️-explanation-3)
   - [Prefer Using `getByRole` Over `getByTestId` for Finding Elements in React Native](#prefer-using-getbyrole-over-getbytestid-for-finding-elements-in-react-native)
     - [❌ Avoid Using `getByTestId` for Finding All Elements](#-avoid-using-getbytestid-for-finding-all-elements)
     - [✅ Prefer Using `getByRole` for Finding Elements](#-prefer-using-getbyrole-for-finding-elements)
-      - [ℹ️ Explanation](#ℹ️-explanation-4)
+    - [ℹ️ Explanation](#ℹ️-explanation-4)
+    - [📚 References](#-references-1)
 
 # Unit testing coding standards
 
@@ -282,7 +283,7 @@ describe('MyComponent', () => {
 });
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Multiple Individual `it` Blocks:** Using multiple `it` blocks for similar tests can lead to repetitive code and makes the test suite harder to maintain. Each test block often contains similar setup and assertion logic, which can be consolidated.
 - **Use `it.each` for Parametrized Tests:** The `it.each` function allows you to run the same test logic with different parameters. This makes the tests more concise and easier to read, reducing redundancy.
@@ -373,7 +374,7 @@ describe('MyComponent', () => {
 });
 ```
 
-#### ℹ️ Explanation
+### ℹ️ Explanation
 
 - **Avoid Using `getByTestId` for All Elements:** Using `getByTestId` can be less semantic and makes the tests more brittle. It relies on custom attributes that can be easily removed or changed, making tests harder to maintain.
 - **Use `getByRole`:** Prefer `getByRole` for finding elements. It queries elements based on their semantic role (e.g., button, header), making tests more robust and maintainable. It also aligns better with how users interact with the application, improving accessibility.
@@ -381,4 +382,8 @@ describe('MyComponent', () => {
 - **Accessibility:** `getByRole` promotes accessibility by encouraging developers to use semantic roles, which are essential for assistive technologies.
 
 By following these best practices and using `getByRole` for finding elements, you can create tests that are more readable, maintainable, and aligned with best practices for accessibility and semantic roles in React Native.
+
+### 📚 References
+
+- [The test should resemble how users interact with your code](https://testing-library.com/docs/queries/about/#priority)
 
