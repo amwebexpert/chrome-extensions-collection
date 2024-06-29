@@ -37,6 +37,10 @@
     - [❌ Avoid Using Multiple Comparisons in Conditional Statements](#-avoid-using-multiple-comparisons-in-conditional-statements)
     - [✅ Prefer Using `Array.includes()` for Multiple Comparisons](#-prefer-using-arrayincludes-for-multiple-comparisons)
     - [ℹ️ Explanation](#ℹ️-explanation-6)
+  - [Prefer External Filters and Sorters Over Inline Logic in Rendering](#prefer-external-filters-and-sorters-over-inline-logic-in-rendering)
+    - [❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template](#-avoid-using-inline-logic-for-filtering-and-sorting-in-the-rendering-template)
+    - [✅ Prefer Using External Filters and Sorters for Better Readability](#-prefer-using-external-filters-and-sorters-for-better-readability)
+      - [ℹ️ Explanation](#ℹ️-explanation-7)
 
 # Project coding standards
 
@@ -523,4 +527,71 @@ if (VALID_VALUES.includes(value)) {
 - **Avoid Multiple Comparisons:** Using multiple comparisons (e.g., `if (x === 'a' || x === 'b' || x === 'c')`) can make the code harder to read and maintain.
 - **Use `Array.includes()`:** The `Array.includes()` method provides a cleaner and more readable way to check if a value is present in an array.
 - **Readability and Maintainability:** Using `Array.includes()` enhances code readability and makes it easier to add or remove values from the condition, improving maintainability.
+
+## Prefer External Filters and Sorters Over Inline Logic in Rendering
+
+### ❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template
+
+```tsx
+// This code uses inline logic for filtering and sorting in the render method
+const Component = ({ items }) => {
+  return (
+    <ul>
+      {items
+        .filter(item => item.isActive && item.isAvailable)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+    </ul>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: true },
+  { id: 2, name: 'Bob', isActive: false },
+  { id: 3, name: 'Charlie', isActive: true }
+]
+
+<Component items={items} />
+```
+
+### ✅ Prefer Using External Filters and Sorters for Better Readability
+
+```tsx
+// This code uses external functions for filtering and sorting (inside external pure .ts file)
+export const canDisplayFilter = (item: MyItemType) => item.isActive && item.isAvailable
+export const itemComparator = (a: MyItemType, b: MyItemType) => a.name.localeCompare(b.name)
+
+// import the helpers above inside the component then use it
+const Component = ({ items }) => {
+  const displayItems = items
+    .filter(canDisplayFilter)
+    .sort(itemComparator)
+  
+  return (
+    <ul>
+      {displayItems.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: true },
+  { id: 2, name: 'Bob', isActive: false },
+  { id: 3, name: 'Charlie', isActive: true }
+]
+
+<Component items={items} />
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Inline Logic:** Using inline logic for filtering and sorting in the rendering method can make the component difficult to read and understand.
+- **Use External Functions:** Moving filtering and sorting logic to separate functions makes the component cleaner and easier to read.
+- **Readability and Maintainability:** Externalizing logic improves readability by keeping the rendering method focused on rendering, and it enhances maintainability by making the filtering and sorting logic reusable and testable.
 
