@@ -12,7 +12,7 @@ import {
 
 import type { GuidelineNode } from '../models/models'
 
-const file = path.join(__dirname, '../../', 'public/markdowns/example-1.md')
+const file = path.join(__dirname, '../../', 'public/markdowns/common-coding-patterns.md')
 const markdownText = fs.readFileSync(file, 'utf8')
 const baseUrl = 'https://github.com/org/repo/docs/markdown-1.md'
 const ROOT_NODE_ATTRIBUTES = { level: 0, title: 'TOC', href: '', baseUrl }
