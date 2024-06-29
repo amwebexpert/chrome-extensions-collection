@@ -53,6 +53,19 @@
     - [❌ Avoid Checking `Array.find()` for Undefined](#-avoid-checking-arrayfind-for-undefined)
     - [✅ Prefer Using `Array.some()` for Better Readability](#-prefer-using-arraysome-for-better-readability)
     - [ℹ️ Explanation](#ℹ️-explanation-10)
+  - [Prefer Logging Errors Over Silencing Them in `try-catch` Blocks](#prefer-logging-errors-over-silencing-them-in-try-catch-blocks)
+    - [❌ Avoid Silencing Errors in `try-catch` Blocks](#-avoid-silencing-errors-in-try-catch-blocks)
+    - [✅ Prefer Logging Errors in `try-catch` Blocks](#-prefer-logging-errors-in-try-catch-blocks)
+      - [ℹ️ Explanation](#ℹ️-explanation-11)
+  - [Prefer Flattening `try-catch` Blocks Over Using Nested `try-catch`](#prefer-flattening-try-catch-blocks-over-using-nested-try-catch)
+    - [❌ Avoid Using Nested `try-catch` Blocks](#-avoid-using-nested-try-catch-blocks)
+    - [✅ Prefer Flattening `try-catch` Blocks](#-prefer-flattening-try-catch-blocks)
+      - [ℹ️ Explanation](#ℹ️-explanation-12)
+  - [Avoid Re-throwing the Same Exception in `try-catch`](#avoid-re-throwing-the-same-exception-in-try-catch)
+    - [❌ Avoid Using `try-catch` to Simply Re-throw the Same Exception](#-avoid-using-try-catch-to-simply-re-throw-the-same-exception)
+    - [✅ Prefer Handling or Logging the Exception Instead of Re-throwing](#-prefer-handling-or-logging-the-exception-instead-of-re-throwing)
+    - [✅ Prefer Letting the Exception Propagate Naturally](#-prefer-letting-the-exception-propagate-naturally)
+      - [ℹ️ Explanation](#ℹ️-explanation-13)
 
 # Project coding standards
 
@@ -805,4 +818,173 @@ const items = [
 - **Avoid Using `Array.find()` for Existence Checks:** Using `Array.find()` to check for the presence of an item and then comparing the result to `undefined` can be verbose and less readable.
 - **Use `Array.some()` for Existence Checks:** `Array.some()` is specifically designed to check if at least one element in the array meets the condition, making the code more concise and readable.
 - **Readability and Efficiency:** `Array.some()` directly returns a boolean value, which makes the code cleaner and easier to understand. It also avoids the need for an explicit comparison with `undefined`, improving both readability and efficiency.
+
+## Prefer Logging Errors Over Silencing Them in `try-catch` Blocks
+
+### ❌ Avoid Silencing Errors in `try-catch` Blocks
+
+```tsx
+// This code catches errors but does nothing with them, making debugging difficult
+const storeDataSync = (data: string) => {
+    try {
+      mySuperLocalApi(data)
+    } catch (error: unknown) {
+      // Error is silently caught
+    }
+}
+```
+
+### ✅ Prefer Logging Errors in `try-catch` Blocks
+
+```tsx
+// This code logs errors to the console and can be easily extended to log to external services like Sentry
+const storeDataSync = (data: string) => {
+    try {
+      mySuperLocalApi(data)
+    } catch (error: unknown) {
+      console.error('Error storing data', error)
+      // Optionally, log the error to an external service like Sentry
+      // Sentry.captureException(error)
+    }
+}
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Silencing Errors:** Silencing errors by catching them without any logging makes debugging and error tracking extremely difficult. Developers won't be aware that an error occurred.
+- **Log Errors:** Always log errors to the console or, preferably, to an external monitoring service like Sentry. This helps in diagnosing issues and understanding the context of failures.
+- **Readability and Maintainability:** Logging errors improves code readability and maintainability by making it clear where and why failures occur. This is especially important in production environments where silent failures can lead to critical issues being unnoticed.
+
+## Prefer Flattening `try-catch` Blocks Over Using Nested `try-catch`
+
+### ❌ Avoid Using Nested `try-catch` Blocks
+
+```ts
+// This code uses nested try-catch blocks, making it hard to read and maintain
+const processData = (data: string) => {
+  try {
+    try {
+      if (!data) {
+        throw new Error('Data is required')
+      }
+      // Process data...
+    } catch (innerError) {
+      console.error('Inner error:', innerError)
+      // Handle inner error...
+    }
+  } catch (outerError) {
+    console.error('Outer error:', outerError)
+    // Handle outer error...
+  }
+}
+
+// Usage
+processData('')
+```
+
+### ✅ Prefer Flattening `try-catch` Blocks
+
+```ts
+// This code flattens the try-catch blocks for better readability and maintainability
+const processData = (data: string) => {
+  try {
+    if (!data) {
+      throw new Error('Data is required')
+    }
+    // Process data...
+  } catch (error) {
+    console.error('Error:', error)
+    // Handle error...
+  }
+}
+
+// Usage
+processData('')
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Nested `try-catch` Blocks:** Using nested `try-catch` blocks can make the code difficult to read and maintain. It can also lead to confusion about which catch block handles which error.
+- **Flatten `try-catch` Blocks:** Flattening the `try-catch` structure improves readability by reducing the nesting level and making the error handling logic clearer.
+- **Readability and Maintainability:** A flatter structure is easier to understand and maintain. It ensures that errors are handled in a straightforward manner, reducing the complexity of the code.
+
+## Avoid Re-throwing the Same Exception in `try-catch`
+
+### ❌ Avoid Using `try-catch` to Simply Re-throw the Same Exception
+
+```ts
+const internalDataProcessing = (data?: string) => {
+    if (!data) {
+      throw new Error('Data is required')
+    }
+}
+
+// This code catches an exception only to re-throw it, which is redundant
+const processData = (data?: string) => {
+  try {
+    internalDataProcessing(data)
+  } catch (error) {
+    throw error // Re-throwing the same exception
+  }
+}
+
+// Usage
+try {
+  processData('')
+} catch (error) {
+  console.error('Caught error:', error)
+}
+```
+
+### ✅ Prefer Handling or Logging the Exception Instead of Re-throwing
+
+```ts
+const internalDataProcessing = (data?: string) => {
+    if (!data) {
+      throw new Error('Data is required')
+    }
+}
+
+// This code handles the exception by logging it
+const processData = (data: string) => {
+  try {
+    internalDataProcessing(data)
+  } catch (error) {
+    console.error('Error processing data:', error)
+    // Handle the error appropriately, e.g., return a default value, clean up resources or call external system like Sentry
+  }
+}
+
+// Usage
+processData('')
+```
+
+### ✅ Prefer Letting the Exception Propagate Naturally
+
+```ts
+const internalDataProcessing = (data?: string) => {
+    if (!data) {
+      throw new Error('Data is required')
+    }
+}
+
+// This code lets the exception propagate naturally without catching it
+const processData = (data: string) => {
+    internalDataProcessing(data)
+}
+
+// Usage
+try {
+  processData('')
+} catch (error) {
+  console.error('Caught error:', error)
+}
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Redundant Re-throwing:** Catching an exception only to re-throw it without any additional handling or logging is redundant and adds unnecessary complexity to the code.
+- **Handle or Log Exceptions:** Instead of re-throwing, handle the exception by logging it or taking appropriate action (e.g., returning a default value, cleaning up resources). This ensures that the error is properly managed and provides useful information for debugging.
+- **Let Exceptions Propagate:** In some cases, it is better to let exceptions propagate naturally. This approach simplifies the code and allows higher-level functions to handle the exceptions, possibly with more context or additional error handling logic.
+- **Readability and Maintainability:** Proper error handling improves readability by making it clear how errors are managed. It also enhances maintainability by ensuring that exceptions are logged or handled in a consistent manner, making the codebase more robust and easier to debug.
 
