@@ -1,4 +1,4 @@
-- [Project coding standards](#project-coding-standards)
+- [Typescript coding guidelines](#typescript-coding-guidelines)
   - [Avoid Overusing the Ternary Operator](#avoid-overusing-the-ternary-operator)
     - [❌ Avoid Overusing the Ternary Operator in a Single Expression](#-avoid-overusing-the-ternary-operator-in-a-single-expression)
     - [✅ Prefer Using Early Returns for Multiple Conditions](#-prefer-using-early-returns-for-multiple-conditions)
@@ -45,7 +45,7 @@
     - [✅ Prefer Using Explicit Numeric Values for Enums](#-prefer-using-explicit-numeric-values-for-enums)
     - [ℹ️ Explanation](#ℹ️-explanation-10)
 
-# Project coding standards
+# Typescript coding guidelines
 
 This section list coding patterns promoted in the project. `React` and pure `Typescript` patterns like:
   - apply the do not repeat yourself rule (DRY)

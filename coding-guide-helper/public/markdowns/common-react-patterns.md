@@ -1,4 +1,4 @@
-- [Project coding standards](#project-coding-standards)
+- [Project React coding standards](#project-react-coding-standards)
   - [the `useMemo` overusage](#the-usememo-overusage)
     - [❌ avoid premature memoizations through `useMemo`](#-avoid-premature-memoizations-through-usememo)
     - [✅ prefer simple computations](#-prefer-simple-computations)
@@ -42,7 +42,7 @@
     - [✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements](#-prefer-using-gap-rowgap-and-columngap-for-spacing-between-elements)
     - [ℹ️ Explanation](#ℹ️-explanation-7)
 
-# Project coding standards
+# Project React coding standards
 
 This section outlines the coding patterns recommended for the project, focusing on both `React` and pure `TypeScript` practices:
 
