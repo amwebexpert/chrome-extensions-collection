@@ -66,6 +66,14 @@
     - [✅ Prefer Handling or Logging the Exception Instead of Re-throwing](#-prefer-handling-or-logging-the-exception-instead-of-re-throwing)
     - [✅ Prefer Letting the Exception Propagate Naturally](#-prefer-letting-the-exception-propagate-naturally)
       - [ℹ️ Explanation](#ℹ️-explanation-13)
+  - [Prefer Using `??` Over `||` for Handling `null` and `undefined`](#prefer-using--over--for-handling-null-and-undefined)
+    - [❌ Avoid Using `||` to Handle `null` and `undefined` Exclusively](#-avoid-using--to-handle-null-and-undefined-exclusively)
+    - [✅ Prefer Using `??` to Handle `null` and `undefined`](#-prefer-using--to-handle-null-and-undefined)
+      - [ℹ️ Explanation](#ℹ️-explanation-14)
+  - [Prefer Using Optional Parameters Over `Type | undefined`](#prefer-using-optional-parameters-over-type--undefined)
+    - [❌ Avoid Using `param: Type | undefined` for Optional Parameters](#-avoid-using-param-type--undefined-for-optional-parameters)
+    - [✅ Prefer Using Optional Parameters with `param?: Type`](#-prefer-using-optional-parameters-with-param-type)
+      - [ℹ️ Explanation](#ℹ️-explanation-15)
 
 # Project coding standards
 
@@ -987,4 +995,80 @@ try {
 - **Handle or Log Exceptions:** Instead of re-throwing, handle the exception by logging it or taking appropriate action (e.g., returning a default value, cleaning up resources). This ensures that the error is properly managed and provides useful information for debugging.
 - **Let Exceptions Propagate:** In some cases, it is better to let exceptions propagate naturally. This approach simplifies the code and allows higher-level functions to handle the exceptions, possibly with more context or additional error handling logic.
 - **Readability and Maintainability:** Proper error handling improves readability by making it clear how errors are managed. It also enhances maintainability by ensuring that exceptions are logged or handled in a consistent manner, making the codebase more robust and easier to debug.
+
+## Prefer Using `??` Over `||` for Handling `null` and `undefined`
+
+### ❌ Avoid Using `||` to Handle `null` and `undefined` Exclusively
+
+```ts
+// This code uses || which can incorrectly handle falsy values like 0 or ''
+const getDefault = (value?: number | string | null) => {
+  return value || 'default'
+}
+
+// Usage
+console.log(getDefault(null)) // Output: 'default'
+console.log(getDefault(undefined)) // Output: 'default'
+console.log(getDefault(0)) // Output: 'default' (unintended)
+console.log(getDefault('')) // Output: 'default' (unintended)
+```
+
+### ✅ Prefer Using `??` to Handle `null` and `undefined`
+
+```ts
+// This code uses ?? which correctly handles only null or undefined
+const getDefault = (value?: number | string | null) => {
+  return value ?? 'default'
+}
+
+// Usage
+console.log(getDefault(null)) // Output: 'default'
+console.log(getDefault(undefined)) // Output: 'default'
+console.log(getDefault(0)) // Output: 0 (intended)
+console.log(getDefault('')) // Output: '' (intended)
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Using `||` for Default Values:** Using the `||` operator to handle `null` and `undefined` can lead to incorrect handling of other falsy values like `0`, `''`, and `false`.
+- **Use `??` for Nullish Coalescing:** The `??` operator (nullish coalescing) is designed to handle only `null` and `undefined` values, providing a more precise and intended behavior.
+- **Correctness:** `??` ensures that only `null` and `undefined` are treated as needing a default value, whereas `||` would incorrectly replace valid falsy values.
+- **Readability and Intent:** Using `??` makes the code more readable and clearly conveys the intent to handle only `null` and `undefined`, leading to fewer bugs and more maintainable code.
+
+## Prefer Using Optional Parameters Over `Type | undefined`
+
+### ❌ Avoid Using `param: Type | undefined` for Optional Parameters
+
+```ts
+// This code uses param: Type | undefined, making it less readable and more verbose
+const greet = (name: string | undefined) => {
+  const greeting = name !== undefined ? `Hello, ${name}!` : 'Hello!'
+  return greeting
+}
+
+// Usage
+console.log(greet(undefined)) // Output: 'Hello!'
+console.log(greet('Alice')) // Output: 'Hello, Alice!'
+```
+
+### ✅ Prefer Using Optional Parameters with `param?: Type`
+
+```ts
+// This code uses param?: Type for a more concise and readable approach
+const greet = (name?: string) => {
+  const greeting = name ? `Hello, ${name}!` : 'Hello!'
+  return greeting
+}
+
+// Usage
+console.log(greet()) // Output: 'Hello!'
+console.log(greet('Alice')) // Output: 'Hello, Alice!'
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Using `param: Type | undefined` for Optional Parameters:** Declaring parameters as `Type | undefined` is verbose and less readable. It also makes the function signature more complex than necessary.
+- **Use Optional Parameters with `param?: Type`:** Using the `param?: Type` syntax is more concise and directly indicates that the parameter is optional.
+- **Readability and Simplicity:** The optional parameter syntax (`param?: Type`) is more readable and simpler, making the function signature clear and easy to understand.
+- **Default Handling:** Optional parameters implicitly handle the `undefined` case, which reduces boilerplate code and potential errors.
 
