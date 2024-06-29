@@ -41,6 +41,10 @@
     - [❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template](#-avoid-using-inline-logic-for-filtering-and-sorting-in-the-rendering-template)
     - [✅ Prefer Using External Filters and Sorters for Better Readability](#-prefer-using-external-filters-and-sorters-for-better-readability)
       - [ℹ️ Explanation](#ℹ️-explanation-7)
+  - [Prefer Object Destructuring Over Multiple Positional Parameters](#prefer-object-destructuring-over-multiple-positional-parameters)
+    - [❌ Avoid Using Multiple Positional Parameters in Function Arguments](#-avoid-using-multiple-positional-parameters-in-function-arguments)
+    - [✅ Prefer Object Destructuring for Function Arguments](#-prefer-object-destructuring-for-function-arguments)
+      - [ℹ️ Explanation](#ℹ️-explanation-8)
 
 # Project coding standards
 
@@ -595,3 +599,55 @@ const items = [
 - **Use External Functions:** Moving filtering and sorting logic to separate functions makes the component cleaner and easier to read.
 - **Readability and Maintainability:** Externalizing logic improves readability by keeping the rendering method focused on rendering, and it enhances maintainability by making the filtering and sorting logic reusable and testable.
 
+
+## Prefer Object Destructuring Over Multiple Positional Parameters
+
+### ❌ Avoid Using Multiple Positional Parameters in Function Arguments
+
+```tsx
+// This code uses multiple positional parameters, including an optional one, making it less readable
+const createUser = (firstName: string, middleNameÉ: string, lastName: string, age: number, email: string) => {
+  return {
+    firstName,
+    middleName,
+    lastName,
+    age,
+    email
+  }
+}
+
+// Usage
+const user = createUser('John', undefined, 'Doe', 30, 'john.doe@example.com')
+console.log(user) // Output: { firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' }
+```
+
+### ✅ Prefer Object Destructuring for Function Arguments
+
+```tsx
+// This code uses object destructuring for better readability and flexibility
+type CreateUserArgs = {
+  firstName: string,
+  lastName: string,
+  age: number,
+  email: string,
+  middleName?: string // Optional parameter
+}
+
+const createUser = ({ firstName, middleName, lastName, age, email }: CreateUserArgs) => ({
+    firstName,
+    middleName,
+    lastName,
+    age,
+    email
+  })
+
+// Usage
+const user = createUser({ firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' })
+console.log(user) // Output: { firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' }
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Multiple Positional Parameters:** Using multiple positional parameters, especially with optional ones, can make the function call less readable and more error-prone. You may need to pass `undefined` explicitly to skip the optional parameter, which is not intuitive.
+- **Use Object Destructuring:** Using object destructuring for function parameters improves readability by clearly naming each parameter. This makes the function call more intuitive and less prone to errors.
+- **Readability and Flexibility:** Destructuring enhances readability and allows for more flexibility in function calls, especially when dealing with optional parameters. It also makes the code easier to maintain and extend.
