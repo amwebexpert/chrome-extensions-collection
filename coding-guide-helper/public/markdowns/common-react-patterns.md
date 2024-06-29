@@ -44,11 +44,14 @@
 
 # Project coding standards
 
-This section list coding patterns promoted in the project. `React` and pure `Typescript` patterns like:
-  - apply the do not repeat yourself rule (DRY)
-  - divide to conquer rule a.k.a. promote small responsibility functions
-  - promote reusability
-  - encourage long term maintainable code
+This section outlines the coding patterns recommended for the project, focusing on both `React` and pure `TypeScript` practices:
+
+- **Apply the DRY Principle (Don't Repeat Yourself)**: Strive to reduce code duplication by creating reusable components and functions.  
+- **Divide and Conquer**: Break down complex problems into smaller, more manageable functions, each with a single responsibility.
+- **Promote Reusability**: Develop components and functions that can be reused across different parts of the application, enhancing consistency and reducing redundancy.
+- **Encourage Maintainability**: Write code that is easy to understand, modify, and extend, ensuring long-term maintainability and reducing technical debt.
+
+By adhering to these principles, the project will benefit from cleaner, more efficient, and more sustainable code.
 
 ## the `useMemo` overusage
 
