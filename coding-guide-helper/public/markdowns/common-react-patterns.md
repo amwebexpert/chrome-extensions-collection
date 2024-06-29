@@ -45,6 +45,10 @@
     - [❌ Avoid Using Multiple Positional Parameters in Function Arguments](#-avoid-using-multiple-positional-parameters-in-function-arguments)
     - [✅ Prefer Object Destructuring for Function Arguments](#-prefer-object-destructuring-for-function-arguments)
       - [ℹ️ Explanation](#ℹ️-explanation-8)
+  - [Prefer External Utility Functions Over Complex Logic in the Rendering Template](#prefer-external-utility-functions-over-complex-logic-in-the-rendering-template)
+    - [❌ Avoid Complex Logic in the Rendering Template](#-avoid-complex-logic-in-the-rendering-template)
+    - [✅ Prefer Using External Utility Functions for Better Readability](#-prefer-using-external-utility-functions-for-better-readability)
+      - [ℹ️ Explanation](#ℹ️-explanation-9)
 
 # Project coding standards
 
@@ -651,3 +655,91 @@ console.log(user) // Output: { firstName: 'John', lastName: 'Doe', age: 30, emai
 - **Avoid Multiple Positional Parameters:** Using multiple positional parameters, especially with optional ones, can make the function call less readable and more error-prone. You may need to pass `undefined` explicitly to skip the optional parameter, which is not intuitive.
 - **Use Object Destructuring:** Using object destructuring for function parameters improves readability by clearly naming each parameter. This makes the function call more intuitive and less prone to errors.
 - **Readability and Flexibility:** Destructuring enhances readability and allows for more flexibility in function calls, especially when dealing with optional parameters. It also makes the code easier to maintain and extend.
+
+## Prefer External Utility Functions Over Complex Logic in the Rendering Template
+
+### ❌ Avoid Complex Logic in the Rendering Template
+
+```tsx
+// This code uses complex logic directly in the render method, making it hard to read and maintain
+const Component = ({ items }) => {
+  return (
+    <>
+      {items?.length > 0 ? (
+        <ul>
+          {items
+            .filter(item => item.isActive && item.isAvailable && item.name.startsWith('A'))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(item => (
+              <li key={item.id}>{`${item.name} (${item.age} years old)`}</li>
+            ))}
+        </ul>
+      ) : (
+        <p>No active items starting with "A"</p>
+      )}
+    </>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: true, isAvailable: true, age: 25 },
+  { id: 2, name: 'Bob', isActive: false, isAvailable: true, age: 30 },
+  { id: 3, name: 'Alex', isActive: true, isAvailable: false, age: 22 }
+]
+
+<Component items={items} />
+```
+
+### ✅ Prefer Using External Utility Functions for Better Readability
+
+```tsx
+// This code uses external utility functions for better readability and maintainability
+type MyItemType = {
+  id: number,
+  name: string,
+  isActive: boolean,
+  isAvailable: boolean,
+  age: number
+}
+
+export const canDisplayFilter = (item: MyItemType) => item.isActive && item.isAvailable && item.name.startsWith('A')
+export const itemComparator = (a: MyItemType, b: MyItemType) => a.name.localeCompare(b.name)
+export const formatItem = (item: MyItemType) => `${item.name} (${item.age} years old)`
+
+// then inside the component (once the above functions have been imported)
+type Props = { items: MyItemType[] }
+const Component: FunctionComponent<Props> = ({ items }) => {
+  const filteredAndSortedItems = items.filter(canDisplayFilter).sort(itemComparator)
+  const hasItems = filteredAndSortedItems.length > 0
+
+  if (!hasItems) {
+    return <p>No active and available items</p>
+  }
+
+  return (
+    <ul>
+      {filteredAndSortedItems.map(item => (
+        <li key={item.id}>{formatItem(item)}</li>
+      ))}
+    </ul>
+  )
+}
+
+// Usage
+const items = [
+  { id: 1, name: 'Alice', isActive: true, isAvailable: true, age: 25 },
+  { id: 2, name: 'Bob', isActive: false, isAvailable: true, age: 30 },
+  { id: 3, name: 'Alex', isActive: true, isAvailable: false, age: 22 }
+]
+
+<Component items={items} />
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Complex Logic in the Rendering Template:** Placing complex filtering, sorting, and formatting logic directly in the render method can make the component hard to read and maintain.
+- **Use External Utility Functions:** Moving this logic to external utility functions makes the component cleaner and more focused on rendering.
+- **Early Return for Conditional Rendering:** Using an early return for cases where there are no items to display simplifies the component structure and avoids nested conditions.
+- **Readability and Maintainability:** Using external functions improves readability by breaking down the logic into manageable, reusable pieces. This also makes the code easier to test and maintain.
+
