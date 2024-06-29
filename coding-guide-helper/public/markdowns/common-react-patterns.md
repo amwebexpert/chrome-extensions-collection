@@ -17,6 +17,10 @@
     - [❌ avoid inline unsharable code](#-avoid-inline-unsharable-code)
     - [✅ prefer pure typescript extracted logic](#-prefer-pure-typescript-extracted-logic)
       - [ℹ️ Explanation](#ℹ️-explanation-1)
+  - [Avoid Misusing the `use` Prefix](#avoid-misusing-the-use-prefix)
+    - [❌ Avoid Misusing the `use` Prefix for Non-Hook Functions](#-avoid-misusing-the-use-prefix-for-non-hook-functions)
+    - [✅ Prefer a More Descriptive Name for Pure Functions](#-prefer-a-more-descriptive-name-for-pure-functions)
+      - [ℹ️ Explanation](#ℹ️-explanation-2)
 
 # Project coding standards
 
@@ -246,3 +250,56 @@ Creating small, pure typescript functions:
   - Classes
   - Other utility functions
 - **Separation of Concerns:** By separating the logic from the component, each part of your code has a single responsibility, making it easier to maintain and test.
+
+## Avoid Misusing the `use` Prefix
+
+### ❌ Avoid Misusing the `use` Prefix for Non-Hook Functions
+
+```tsx
+// This function is named like a React hook but does not use any hooks internally
+const useCalculateDiscount = (price: number, discount: number) => {
+  return price - (price * discount)
+}
+
+// Usage in a component
+const Component = () => {
+  const price = 100
+  const discount = 0.1
+  const discountedPrice = useCalculateDiscount(price, discount)
+
+  return <TextView>Discounted Price: {discountedPrice}</TextView>
+}
+```
+
+### ✅ Prefer a More Descriptive Name for Pure Functions
+
+- inside `my-component.utils.ts` helpers file:
+
+```tsx
+// This function is correctly named to reflect that it's a pure utility function
+export const calculateDiscount = (price: number, discount: number) => {
+  return price - (price * discount)
+}
+```
+
+- inside `my-component.tsx` component file:
+
+```tsx
+import { calculateDiscount } from 'my-component.utils.ts'
+
+// Usage in a component
+const Component = () => {
+  const price = 100
+  const discount = 0.1
+  const discountedPrice = calculateDiscount(price, discount)
+
+  return <TextView>Discounted Price: {discountedPrice}</TextView>
+}
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Misleading Names:** The `use` prefix is reserved for React hooks, which are special functions that use React features like state or lifecycle methods. Using `use` for a regular function can be confusing.
+- **Descriptive Names:** Name your functions clearly to indicate their purpose. This helps other developers understand what the function does at a glance.
+- **Developer Expectations**: Seeing the use prefix, a developer might mistakenly think the function can only be used inside a `React` component or another `hook`, not in plain `TypeScript` code like a `service` or a `store`.
+- 
