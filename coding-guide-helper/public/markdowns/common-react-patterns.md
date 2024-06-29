@@ -1,0 +1,169 @@
+- [Project coding standards](#project-coding-standards)
+  - [the `useMemo` overusage](#the-usememo-overusage)
+    - [❌ avoid premature memoizations through `useMemo`](#-avoid-premature-memoizations-through-usememo)
+    - [✅ prefer simple computations](#-prefer-simple-computations)
+    - [ℹ️ Explanations:](#ℹ️-explanations)
+    - [📚 References](#-references)
+  - [avoid `{renderThisOrThat()}` pattern](#avoid-renderthisorthat-pattern)
+    - [❌ avoid inline template private renderers](#-avoid-inline-template-private-renderers)
+    - [✅ prefer divide to conquer rule through small sub-components](#-prefer-divide-to-conquer-rule-through-small-sub-components)
+    - [ℹ️ :information\_source: Explanation](#ℹ️-information_source-explanation)
+    - [📚 References](#-references-1)
+  - [single arrow function event handler](#single-arrow-function-event-handler)
+    - [❌ avoid double arrows functions](#-avoid-double-arrows-functions)
+    - [✅ prefer single arrow functions](#-prefer-single-arrow-functions)
+    - [ℹ️ Explanation](#ℹ️-explanation)
+
+# Project coding standards
+
+This section list coding patterns promoted in the project. `React` and pure `Typescript` patterns like:
+  - apply the do not repeat yourself rule (DRY)
+  - divide to conquer rule a.k.a. promote small responsibility functions
+  - promote reusability
+  - encourage long term maintainable code
+
+## the `useMemo` overusage
+
+Memoizing primitive values in `React` is redundant as they are cheap to compare and `React` efficiently handles their updates without additional optimization. Also, most computed and derived values are fast: unless you’re creating or looping over thousands of objects, it’s probably not expensive.
+
+### ❌ avoid premature memoizations through `useMemo`
+
+```tsx
+const productName = useMemo(() => route.params?.productName, [route.params?.productName])
+
+const fullName = useMemo(
+  () => `${firstName} ${lastName} (${age} years old)`,
+  [firstName, lastName, age]
+)
+```
+
+### ✅ prefer simple computations
+
+```tsx
+const productName = route.params?.productName
+
+const fullName = `${firstName} ${lastName} (${age} years old)`
+```
+
+### ℹ️ Explanations:
+
+Re-renders will cause recomputations of the code above the final return but usually, this isn’t a problem because most calculations are very fast. You should only rely on `useMemo` as a performance optimization. If your code doesn’t work without it, find the underlying problem and fix it first.
+
+### 📚 References
+
+- [Don’t worry about re-renders (too much)](https://www.youtube.com/watch?v=4FhJkX18fS8&t=722s)
+- [How to tell if a calculation is expensive?](https://react.dev/reference/react/useMemo#how-to-tell-if-a-calculation-is-expensive)
+
+
+## avoid `{renderThisOrThat()}` pattern
+
+### ❌ avoid inline template private renderers
+
+```typescript
+const renderTextInputIcon = useCallback(() => {
+      if (isPassword) {
+        return (
+          <TouchableWithoutFeedback onPress={onIconPressed}>
+            <View style={styles.containerIcon}>
+              {isSecuredTextEntryEnabled ? <EyeSlash ... /> : <Eye ... />}
+            </View>
+          </TouchableWithoutFeedback>
+        )
+      }
+
+      return null
+    }, [isPassword, isSecuredTextEntryEnabled, onIconPressed])
+
+...
+
+return (
+  <View>
+    {/** ... */}
+    {renderTextInputIcon()}
+    {/** ... */}
+  </View>
+)
+```
+
+### ✅ prefer divide to conquer rule through small sub-components
+
+```typescript
+return (
+  <View>
+    {/** ... */}
+    <PressableToggleIcon isPassword={isPassword} onPress={onIconPressed}
+      isSensitiveTextVisible={isSecuredTextEntryEnabled} />
+    {/** ... */}
+  </View>
+)```
+```
+
+### ℹ️ :information_source: Explanation
+
+- `useCallback` hook is meant to be used around _user interactions_ and not as a _divide to conquer_ pattern
+- creating small dumb components:
+  - removes template complexity
+  - promotes potential re-usability
+  - promotes separation of concerns
+
+### 📚 References
+
+- [3 React Mistakes, 1 App Killer](https://youtube.com/watch?v=QuLfCUh-iwI&si=JofynxnU-J58sA53)
+
+## single arrow function event handler
+
+### ❌ avoid double arrows functions
+
+```tsx
+// Note the double arrow functions (a.k.a. function factories)
+// those are "function returning a function"
+const onEditPress = (id: string) => () => {
+   // ...
+}
+const onSharePress = (id: string) => () => {
+   //...
+}
+
+//...
+
+return (
+  <>
+    <View onPress={onEditPress(id)}>
+      {/** ... */}
+    </View>
+    <View onPress={onSharePress(id)}>
+      {/** ... */}
+    </View>
+  </>
+)
+```
+
+### ✅ prefer single arrow functions
+
+```tsx
+const onEditPress = (id: string) => {
+   //...
+}
+const onSharePress = (id: string) => {
+   //...
+}
+
+// ...
+
+return (
+  <>
+    <View onPress={() => onEditPress(id)}>
+      {/** ... */}
+    </View>
+    <View onPress={() => onSharePress(id)}>
+      {/** ... */}
+    </View>
+  </>
+)
+```
+
+### ℹ️ Explanation
+
+- Naming the handler `onNameOfEventPress` clearly indicates when the event is triggered.
+- Passing a function factory (a function that returns another function) to `onPress` can be confusing because it’s not immediately clear that a factory is being passed instead of the actual event handler.
+- Using a factory pattern makes the code harder to read and maintain, adding unnecessary complexity.
