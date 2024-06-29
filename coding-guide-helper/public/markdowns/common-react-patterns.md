@@ -74,6 +74,14 @@
     - [❌ Avoid Using `param: Type | undefined` for Optional Parameters](#-avoid-using-param-type--undefined-for-optional-parameters)
     - [✅ Prefer Using Optional Parameters with `param?: Type`](#-prefer-using-optional-parameters-with-param-type)
       - [ℹ️ Explanation](#ℹ️-explanation-15)
+  - [Prefer Using Explicit Numeric Values for TypeScript Enums](#prefer-using-explicit-numeric-values-for-typescript-enums)
+    - [❌ Avoid Using Implicit Ordinal Values for Enums](#-avoid-using-implicit-ordinal-values-for-enums)
+    - [✅ Prefer Using Explicit Numeric Values for Enums](#-prefer-using-explicit-numeric-values-for-enums)
+      - [ℹ️ Explanation](#ℹ️-explanation-16)
+  - [Prefer Using Hooks for Business Logic Over Returning React Components](#prefer-using-hooks-for-business-logic-over-returning-react-components)
+    - [❌ Avoid Using Hooks to Return React Components](#-avoid-using-hooks-to-return-react-components)
+    - [✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate](#-prefer-using-hooks-for-business-logic-and-keep-rendering-separate)
+      - [ℹ️ Explanation](#ℹ️-explanation-17)
 
 # Project coding standards
 
@@ -1071,4 +1079,142 @@ console.log(greet('Alice')) // Output: 'Hello, Alice!'
 - **Use Optional Parameters with `param?: Type`:** Using the `param?: Type` syntax is more concise and directly indicates that the parameter is optional.
 - **Readability and Simplicity:** The optional parameter syntax (`param?: Type`) is more readable and simpler, making the function signature clear and easy to understand.
 - **Default Handling:** Optional parameters implicitly handle the `undefined` case, which reduces boilerplate code and potential errors.
+
+## Prefer Using Explicit Numeric Values for TypeScript Enums
+
+### ❌ Avoid Using Implicit Ordinal Values for Enums
+
+```ts
+// This code uses enums with implicit ordinal values
+enum UserRole {
+  Admin,  // 0
+  User,   // 1
+  Guest   // 2
+}
+
+const getUserRole = (role: UserRole): string => {
+  switch (role) {
+    case UserRole.Admin:
+      return 'Admin'
+    case UserRole.User:
+      return 'User'
+    case UserRole.Guest:
+      return 'Guest'
+    default:
+      return 'Unknown'
+  }
+}
+
+// Usage
+console.log(getUserRole(UserRole.Admin)) // Output: 'Admin'
+```
+
+### ✅ Prefer Using Explicit Numeric Values for Enums
+
+```ts
+// This code uses enums with explicit numeric values for better clarity and stability
+enum UserRole {
+  Admin = 1,
+  User = 2,
+  Guest = 3
+}
+
+const getUserRole = (role: UserRole): string => {
+  switch (role) {
+    case UserRole.Admin:
+      return 'Admin'
+    case UserRole.User:
+      return 'User'
+    case UserRole.Guest:
+      return 'Guest'
+    default:
+      return 'Unknown'
+  }
+}
+
+// Usage
+console.log(getUserRole(UserRole.Admin)) // Output: 'Admin'
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Using Implicit Ordinal Values:** Implicit ordinal values can lead to problems, especially when the enum is serialized and deserialized. If the enum definition changes (e.g., new values are added), the ordinal values can shift, causing inconsistencies and bugs.
+- **Use Explicit Numeric Values:** Using explicit numeric values for enums ensures stability and clarity. Each enum member has a fixed value, which doesn't change when new members are added.
+- **Serialization and Deserialization:** Explicit numeric values are more robust for serialization and deserialization. They remain consistent even if the enum is extended or modified over time, preventing potential data corruption or misinterpretation.
+- **Readability and Maintainability:** Explicit values make the code more readable and maintainable by clearly indicating the intended value of each enum member. This reduces confusion and enhances code clarity.
+
+
+## Prefer Using Hooks for Business Logic Over Returning React Components
+
+### ❌ Avoid Using Hooks to Return React Components
+
+```tsx
+const useMySuperBoostedHook = () => {
+  const [theValue, setTheValue] = useState('')
+
+  const onUpdate = (data: DataStructure) => {
+    // ...
+  }
+
+  //...
+
+  const onMessage = (message: Message) => {
+    // ...  
+  }
+
+  const MyReturnedComponentFromHook = (
+    <HookGeneratedComponent
+      value={theValue}
+      onMessage={onMessage}
+      onUpdate={onUpdate}
+    />
+  )
+
+  return { MyReturnedComponentFromHook }
+}
+```
+
+### ✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate
+
+```tsx
+const useMySuperBoostedHook = () => {
+  const [theValue, setTheValue] = useState('')
+
+  const onUpdate = (data: DataStructure) => {
+    // ...
+  }
+
+  //...
+
+  const onMessage = (message: Message) => {
+    // ...  
+  }
+
+  return { theValue, onUpdate, onMessage }
+}
+
+// then inside the component
+const Component = () => {
+  const { theValue, onUpdate, onMessage } = useMySuperBoostedHook();
+
+  //...
+
+  return (
+    <HookGeneratedComponent
+      value={theValue}
+      onMessage={onMessage}
+      onUpdate={onUpdate}
+    />
+  );
+};
+
+export default Component;
+```
+
+#### ℹ️ Explanation
+
+- **Avoid Using Hooks to Return Components:** Mixing business logic with rendering inside a hook breaks the separation of concerns. Hooks should manage reusable logic, not return components.
+- **Use Hooks for Business Logic:** Hooks should handle business logic, such as state management or side effects, and return data that can be used by components.
+- **Keep Rendering Separate:** Define rendering logic in React components. This keeps the concerns of data handling and UI rendering separate, making the codebase more maintainable and easier to understand.
+- **Simpler Unit Testing:** Keeping hooks focused on logic and components focused on rendering makes unit testing simpler. You can test the hook's logic independently from the UI, leading to clearer and more maintainable tests.
 
