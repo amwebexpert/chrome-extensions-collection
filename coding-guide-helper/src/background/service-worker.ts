@@ -1,4 +1,4 @@
-import { type GuidelineNode, MenuItems, MessageType } from '../models/models'
+import { type GuidelineNode, MenuItems, MessageType, PortName } from '../models/models'
 import {
   collectOnlineGuidelines,
   debugOrderedNodes,
@@ -9,7 +9,7 @@ import {
 // communications with popup
 let popupPort: chrome.runtime.Port | null = null
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name !== 'popup') return
+  if (port.name !== PortName.POPUP) return
 
   popupPort = port
   popupPort.onDisconnect.addListener(() => {

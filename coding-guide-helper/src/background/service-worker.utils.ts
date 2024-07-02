@@ -89,8 +89,7 @@ const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<Guide
 const getGuidelineUrlResources = async (): Promise<string[]> => {
   return new Promise((resolve) => {
     chrome.storage.local.get('options', ({ options }) => {
-      const organizationName: string = options?.organizationName ?? ''
-      const repoName: string = options?.repoName ?? ''
+      const markdownFilesUrlPrefix: string = options?.markdownFilesUrlPrefix ?? ''
       const filesString: string = options?.files ?? ''
       const filenames = filesString
         .split('\n')
@@ -98,7 +97,9 @@ const getGuidelineUrlResources = async (): Promise<string[]> => {
         .filter(Boolean)
 
       const fullFilenames = filenames.map(
-        (filename) => `https://github.com/${organizationName}/${repoName}/raw/main/${filename}`,
+        // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
+        // Pattern 2: https://github.com/${organizationName}/${repoName}/raw/main/${filename}
+        (filename) => `${markdownFilesUrlPrefix}/${filename}`,
       )
 
       resolve(fullFilenames)

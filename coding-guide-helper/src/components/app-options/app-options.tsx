@@ -5,8 +5,7 @@ import { Environment, MessageType } from '../../models/models'
 import { useDarkTheme } from '../theme/use-dark-theme'
 
 type OptionsType = {
-  organizationName?: string
-  repoName?: string
+  markdownFilesUrlPrefix?: string
   files?: string
 }
 
@@ -40,26 +39,14 @@ export const Options: FunctionComponent = () => {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Form.Item<OptionsType>
-            label="Organization"
-            name="organizationName"
-            rules={[{ required: true, message: 'Please input the organization name' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item<OptionsType>
-            label="Repository"
-            name="repoName"
-            rules={[{ required: true, message: 'Please input the repo name' }]}
-          >
-            <Input />
+          <Form.Item<OptionsType> label="URL Prefix" name="markdownFilesUrlPrefix">
+            <Input title="The url prefix for all markdown files composing the guidelines" />
           </Form.Item>
 
           <Form.Item<OptionsType>
             label="Files"
             name="files"
-            rules={[{ required: true, message: 'Please input the markdown files' }]}
+            rules={[{ required: true, message: 'Please input the markdown filenames' }]}
           >
             <Input.TextArea rows={5} />
           </Form.Item>
