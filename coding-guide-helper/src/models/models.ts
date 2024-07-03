@@ -17,14 +17,24 @@ export type GuidelineNode = {
 }
 
 export enum MessageType {
+  // from content script
   CONTENT_SCRIPT_STARTED = 'contentScriptStarted',
-  SET_SEARCH = 'setSearch',
-  SET_OPTIONS = 'setOptions',
   ON_SELECTION_CHANGE = 'onSelectionChange',
 
+  // from popup(s)
+  SET_SEARCH = 'setSearch',
+  SET_OPTIONS = 'setOptions',
+  ON_LINK_GUIDELINES_ITEM_SELECTED = 'onLinkGuidelinesItemSelected',
+
+  // from background
   ON_SEARCH_LOADING = 'onSearchLoading',
   ON_SEARCH_COMPLETED = 'onSearchCompleted',
   ON_SEARCH_ERROR = 'onSearchError',
+}
+
+export type Message<PayloadType> = {
+  type: MessageType
+  payload: PayloadType
 }
 
 export enum MenuItems {
@@ -33,4 +43,9 @@ export enum MenuItems {
 
 export enum PortName {
   POPUP = 'popup',
+}
+
+export type TocLink = {
+  title: string
+  href: string
 }

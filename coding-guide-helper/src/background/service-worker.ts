@@ -39,9 +39,12 @@ chrome.runtime.onInstalled.addListener((detail) => {
   })
 })
 
+const getSenderInfo = (sender: chrome.runtime.MessageSender): string =>
+  sender.tab?.id ? `tab ${sender.tab.id}` : 'extension'
+
 // message handling
-chrome.runtime.onMessage.addListener((message) => {
-  const { type, payload } = message
+chrome.runtime.onMessage.addListener((request, sender) => {
+  const { type, payload } = request
 
   switch (type) {
     case MessageType.SET_SEARCH: {
@@ -61,7 +64,7 @@ chrome.runtime.onMessage.addListener((message) => {
       break
 
     default:
-      console.warn('unhandled message', type)
+      console.warn(`unhandled message from ${getSenderInfo(sender)}`, type)
       break
   }
 })
