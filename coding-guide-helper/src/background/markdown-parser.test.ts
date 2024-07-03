@@ -63,7 +63,7 @@ describe('markdown parser tests suite', () => {
     // arrange
 
     // act
-    const { toc, content } = splitTocAndContent(markdownText)
+    const { toc, content } = splitTocAndContent({ text: markdownText, baseUrl })
 
     // assert
     expect(toc).toBeDefined()
@@ -73,7 +73,7 @@ describe('markdown parser tests suite', () => {
   it('should build guideline links from TOC', () => {
     // arrange
     const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
-    const { toc } = splitTocAndContent(markdownText)
+    const { toc } = splitTocAndContent({ text: markdownText, baseUrl })
 
     // act
     const tocLinks = buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
@@ -85,7 +85,7 @@ describe('markdown parser tests suite', () => {
   it('should return all ordered aodes', () => {
     // arrange
     const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
-    const { toc } = splitTocAndContent(markdownText)
+    const { toc } = splitTocAndContent({ text: markdownText, baseUrl })
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
     // act
@@ -98,7 +98,7 @@ describe('markdown parser tests suite', () => {
   it('should populate markdown lines from content', () => {
     // arrange
     const rootNode: GuidelineNode = buildNode(ROOT_NODE_ATTRIBUTES)
-    const { toc, content } = splitTocAndContent(markdownText)
+    const { toc, content } = splitTocAndContent({ text: markdownText, baseUrl })
     buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
     const allOrderedNodes = buildOrderedNodes({ node: rootNode })
 

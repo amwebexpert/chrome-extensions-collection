@@ -10,7 +10,7 @@ export const createGuidelineNodes = ({
   text,
   baseUrl,
 }: GuidelineFromTextArgs): GuidelineNode => {
-  const { toc, content } = splitTocAndContent(text)
+  const { toc, content } = splitTocAndContent({ text, baseUrl })
   buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
   const allOrderedNodes = buildOrderedNodes({ node: rootNode })
@@ -71,18 +71,24 @@ type SplitTocAndContentResult = {
   toc: string
   content: string
 }
-export const splitTocAndContent = (markdownText: string): SplitTocAndContentResult => {
-  // regex to split at very first level one title line, starting with "# "
-  const regex = /^# .*\n/gm
-
-  const match = regex.exec(markdownText)
-
+type SplitTocAndContentArgs = {
+  text: string
+  baseUrl: string
+}
+export const splitTocAndContent = ({
+  text,
+  baseUrl,
+}: SplitTocAndContentArgs): SplitTocAndContentResult => {
+  const regex = /^# .*\n/gm // split at very first level one title line, starting with "# "
+  const match = regex.exec(text)
   if (!match) {
-    throw new Error('No title found in markdown')
+    const message = `No title found in markdown for ${baseUrl}`
+    console.error(message, text)
+    throw new Error(message)
   }
 
-  const toc = markdownText.slice(0, match.index)
-  const content = markdownText.slice(match.index)
+  const toc = text.slice(0, match.index)
+  const content = text.slice(match.index)
 
   return {
     toc,
@@ -161,7 +167,10 @@ export const buildNode = ({
   level,
   title,
   titleMarkdown: buildTitleMarkdown({ level, title }),
-  href: `${baseUrl.replace('/raw/', '/blob/')}#${href}`,
+  href: `${baseUrl
+    .replace(/raw\.githubusercontent/, 'github')
+    .replace('/master/', '/blob/master/')
+    .replace('/raw/', '/blob/')}#${href}`,
   markdownLines: [],
   children: [],
 })
