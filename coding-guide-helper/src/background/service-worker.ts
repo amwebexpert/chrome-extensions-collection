@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener((request, sender) => {
       break
     case MessageType.CONTENT_SCRIPT_STARTED:
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        console.info('content script started', tabs)
+        console.info(`content script started for url: ${tabs[0]?.url}`)
       })
       break
     case MessageType.ON_SELECTION_CHANGE:
@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener((request, sender) => {
       break
 
     default:
-      console.warn(`unhandled message from ${getSenderInfo(sender)}`, type)
+      console.warn(`unhandled message received from "${getSenderInfo(sender)}"`, type)
       break
   }
 })
