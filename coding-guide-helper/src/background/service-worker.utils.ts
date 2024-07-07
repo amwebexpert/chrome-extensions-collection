@@ -44,12 +44,7 @@ export const getFullOrderedNodes = (rootNode: GuidelineNode): GuidelineNode[] =>
   if (!rootNode) return []
 
   const clonedRoot = cloneAndRemoveAllParents(rootNode)
-  const allOrderedNodes = buildOrderedNodes({ node: clonedRoot }).map((node) => ({
-    ...node,
-    shouldDisplayNode: true,
-  }))
-
-  return allOrderedNodes
+  return buildOrderedNodes({ node: clonedRoot })
 }
 
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {

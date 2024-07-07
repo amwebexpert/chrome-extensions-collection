@@ -1,20 +1,20 @@
-import { Flex, Input, type InputRef, Space, Typography } from 'antd'
-import { type FunctionComponent, useEffect, useRef } from 'react'
-import { SearchResults } from '../search-results/search-results'
+import { BookOutlined, SearchOutlined } from '@ant-design/icons'
+import { Flex, Tabs, Typography } from 'antd'
+import { type FunctionComponent, useEffect } from 'react'
+import { SearchPanel } from '../search-panel/search-panel'
 import { Version } from '../version/version'
 import './app.css'
 import { logPlatformInfo } from './app.utils'
-import { useSearch } from './hooks/use-search'
 
 const TITLE = 'Coding guidelines helper'
 
 export const App: FunctionComponent = () => {
-  const inputRef = useRef<InputRef>(null)
-  const { search, setSearch, isSearching, searchResults, doSearch } = useSearch()
-
   useEffect(() => {
-    setTimeout(() => inputRef.current?.select(), 300)
     logPlatformInfo()
+
+    chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {
+      console.info('====>>> allOrderedNodes', allOrderedNodes)
+    })
   }, [])
 
   return (
@@ -22,24 +22,25 @@ export const App: FunctionComponent = () => {
       <Flex gap="middle" vertical={true} flex={1} align="center">
         <Typography.Text strong={true}>{TITLE}</Typography.Text>
 
-        <Space>
-          <Input.Search
-            ref={inputRef}
-            loading={isSearching}
-            placeholder="input search text"
-            autoFocus={true}
-            allowClear
-            enterButton
-            size="large"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onSearch={() => doSearch(search)}
-          />
-        </Space>
-
-        <Flex className="search-results-container">
-          <SearchResults nodes={searchResults.filter((node) => node.shouldDisplayNode)} />
-        </Flex>
+        <Tabs
+          centered={true}
+          className="tabs-container"
+          defaultActiveKey="1"
+          items={[
+            {
+              key: 'search',
+              label: 'Search',
+              icon: <SearchOutlined />,
+              children: <SearchPanel />,
+            },
+            {
+              key: 'full-guidelines',
+              label: 'Guidelines',
+              icon: <BookOutlined />,
+              children: 'Content of Tab Pane 2',
+            },
+          ]}
+        />
       </Flex>
 
       <Version />
