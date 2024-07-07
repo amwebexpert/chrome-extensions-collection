@@ -1,6 +1,6 @@
 # coding-guide-helper
 
-Coding guide helper is a chrome extension to help doing pull requests review process or just to easily browse your coding standards
+Coding guide helper is a chrome extension to help doing pull requests review process or just to easily browse your coding standards.
 
 This open-source Chrome extension is designed to help the development workflow. This tool allows you to seamlessly integrate your project's development guide and recommended practices directly into your browser, making it easier than ever to maintain high standards and avoid common pitfalls.
 
@@ -15,18 +15,24 @@ This open-source Chrome extension is designed to help the development workflow. 
 - **One-Click Copy**: Clicking on a link within the guide copies the relevant information to your clipboard instantly.
 - **Streamlined Pull Request Reviews**: In review mode, if you're inside a text input for a comment, clicking on a link automatically inserts the correct explanation and best practice link into your comment, making the review process smoother and more efficient.
 
+## Built-In Rules and Customization
+
+Our tool comes preloaded with rules applicable to **Typescript**, **React**, and **Testing-Library**. These default rules ensure that you have a solid foundation to start with. However, we understand that every project and company has its unique standards. 
+
+- **Custom Standards**: Each company can easily reinforce its own rules and point to its specific standards in markdown format, using the `avoid` and `prefer` approach.
+- **Community Contributions**: Any developer interested in adding rules can simply submit pull requests to add new markdown files or enhance the existing ones. This collaborative approach ensures that the tool evolves with the community's needs.
+
 ## Why
 
 Keeping up with best practices and avoiding anti-patterns can be challenging, especially in complex projects. This extension ensures that your development guide is always at your fingertips, helping you and your team stay on track with minimal effort.
 
 Download (or install it from this current project) the extension today and take the first step towards a more efficient and consistent development process.
 
-
 ## Installing from source
 
 Instructions to install the Chrome extension from the source.
 
-- cd `coding-guide-helper`
+- `cd coding-guide-helper`
 - `yarn install`
 - `yarn build`
 - from Google Chrome, install the extension from the generated `coding-guide-helper/dist` folder.
