@@ -1,23 +1,45 @@
 import debounce from 'debounce'
 import { type Message, MessageType } from '../models/models'
 
+type SendResponse = (response?: unknown) => void
+
 const onMessageReceived = (
-  message: Message<unknown>,
+  message: Message,
   _sender: chrome.runtime.MessageSender,
-  sendResponse: (response?: unknown) => void,
+  sendResponse: SendResponse,
 ) => {
-  const { type, payload } = message
+  const { type } = message
 
   switch (type) {
-    case MessageType.ON_LINK_GUIDELINES_ITEM_SELECTED: {
-      sendResponse(`message ${type} handled: ${payload}`)
+    case MessageType.ON_LINK_GUIDELINES_ITEM_SELECTED:
+      onLinkGuidelinesItemSelected({ message, sendResponse })
       break
-    }
 
     default:
       console.warn('unhandled message', type)
       break
   }
+}
+
+type OnLinkGuidelinesItemSelected = {
+  message: Message<string>
+  sendResponse: SendResponse
+}
+
+const onLinkGuidelinesItemSelected = ({ message, sendResponse }: OnLinkGuidelinesItemSelected) => {
+  const activeElement = document.activeElement as HTMLElement
+  if (!activeElement || activeElement === document.body) return sendResponse('no active element')
+
+  const activeElementTagName = activeElement.tagName.toLowerCase()
+  activeElement.innerHTML += message.payload
+
+  const submitButtons = document.querySelectorAll('button[type=submit]')
+  for (const input of submitButtons) {
+    const button = input as HTMLButtonElement
+    button.disabled = false
+  }
+
+  sendResponse(`payload of ${message.type} event handled within <${activeElementTagName}> tag`)
 }
 
 const onSelectionChange = () => {
@@ -37,6 +59,3 @@ const init = () => {
 }
 
 init()
-
-// const element = document.querySelector("body");
-// element.style.color = "red";

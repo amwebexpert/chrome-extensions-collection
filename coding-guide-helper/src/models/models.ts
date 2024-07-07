@@ -32,7 +32,7 @@ export enum MessageType {
   ON_SEARCH_ERROR = 'onSearchError',
 }
 
-export type Message<PayloadType> = {
+export type Message<PayloadType = string> = {
   type: MessageType
   payload: PayloadType
 }
