@@ -4,6 +4,7 @@ import { type FunctionComponent, useEffect } from 'react'
 import { SearchPanel } from '../panels/search-panel/search-panel'
 import { Version } from '../version/version'
 import './app.css'
+import { GuidelinesPanel } from '../panels/guidelines-panel/guidelines-panel'
 import { logPlatformInfo } from './app.utils'
 
 const TITLE = 'Coding guidelines helper'
@@ -37,7 +38,7 @@ export const App: FunctionComponent = () => {
               key: 'guidelines',
               label: 'Guidelines',
               icon: <BookOutlined />,
-              children: 'Content of Tab Pane 2',
+              children: <GuidelinesPanel />,
             },
           ]}
         />
