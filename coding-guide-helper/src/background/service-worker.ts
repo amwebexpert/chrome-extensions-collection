@@ -1,9 +1,9 @@
 import { type GuidelineNode, MenuItems, MessageType, PortName } from '../models/models'
 import {
   collectOnlineGuidelines,
-  debugOrderedNodes,
   filterGuidelines,
   menuItemSendSelection,
+  storeOrderedNodes,
 } from './service-worker.utils'
 
 // communications with popup
@@ -35,7 +35,7 @@ chrome.runtime.onInstalled.addListener((detail) => {
 
   collectOnlineGuidelines().then((node) => {
     rootNode = node
-    debugOrderedNodes(node)
+    storeOrderedNodes(node)
   })
 })
 

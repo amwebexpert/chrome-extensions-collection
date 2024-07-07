@@ -40,6 +40,18 @@ export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): Guidel
   return allOrderedNodes
 }
 
+export const getFullOrderedNodes = (rootNode: GuidelineNode): GuidelineNode[] => {
+  if (!rootNode) return []
+
+  const clonedRoot = cloneAndRemoveAllParents(rootNode)
+  const allOrderedNodes = buildOrderedNodes({ node: clonedRoot }).map((node) => ({
+    ...node,
+    shouldDisplayNode: true,
+  }))
+
+  return allOrderedNodes
+}
+
 export const menuItemSendSelection: chrome.contextMenus.CreateProperties = {
   id: MenuItems.SEND_SELECTION,
   title: 'Search in Coding Guidelines',
@@ -52,13 +64,14 @@ export const collectOnlineGuidelines = async (): Promise<GuidelineNode> => {
   return collectAllGuidelinesIntoSingleRoot(urls)
 }
 
-export const debugOrderedNodes = (node: GuidelineNode): void => {
-  const allOrderedNodes = buildOrderedNodes({ node })
+export const storeOrderedNodes = (node: GuidelineNode): void => {
+  const allOrderedNodes = getFullOrderedNodes(node)
 
   console.debug(
     '====>>> debug guidelines ordered nodes:',
     allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`),
   )
+  chrome.storage.local.set({ allOrderedNodes })
 }
 
 export const collectOfflineGuidelines = async (): Promise<GuidelineNode> => {
