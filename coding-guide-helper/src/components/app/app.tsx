@@ -34,7 +34,7 @@ export const App: FunctionComponent = () => {
               children: <SearchPanel />,
             },
             {
-              key: 'full-guidelines',
+              key: 'guidelines',
               label: 'Guidelines',
               icon: <BookOutlined />,
               children: 'Content of Tab Pane 2',
