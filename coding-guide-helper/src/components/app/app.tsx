@@ -1,7 +1,7 @@
 import { BookOutlined, SearchOutlined } from '@ant-design/icons'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
-import { SearchPanel } from '../search-panel/search-panel'
+import { SearchPanel } from '../panels/search-panel/search-panel'
 import { Version } from '../version/version'
 import './app.css'
 import { logPlatformInfo } from './app.utils'
