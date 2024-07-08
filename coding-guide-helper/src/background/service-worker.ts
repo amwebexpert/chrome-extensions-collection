@@ -30,13 +30,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 // service worker startup and guidelines parsing
 let rootNode: GuidelineNode
+const loadGuidelines = async () => {
+  rootNode = await collectOnlineGuidelines()
+  storeOrderedNodes(rootNode)
+  console.info('====>>> guidelines loaded')
+}
 chrome.runtime.onInstalled.addListener((detail) => {
   console.info(`service-worker ${detail.reason}`)
-
-  collectOnlineGuidelines().then((node) => {
-    rootNode = node
-    storeOrderedNodes(node)
-  })
+  loadGuidelines()
 })
 
 const getSenderInfo = (sender: chrome.runtime.MessageSender): string =>
@@ -53,6 +54,7 @@ chrome.runtime.onMessage.addListener((request, sender) => {
     }
     case MessageType.SET_OPTIONS:
       chrome.storage.local.set({ options: payload })
+      loadGuidelines()
       break
     case MessageType.CONTENT_SCRIPT_STARTED:
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

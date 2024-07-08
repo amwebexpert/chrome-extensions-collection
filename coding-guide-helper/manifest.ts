@@ -30,7 +30,6 @@ export const manifest: ManifestV3Export = {
     'activeTab',
     'declarativeNetRequest',
     'declarativeNetRequestWithHostAccess', // for http redirections
-    'tabs',
     'contextMenus',
     'unlimitedStorage',
     'storage',
@@ -38,10 +37,9 @@ export const manifest: ManifestV3Export = {
   content_scripts: [
     {
       js: ['src/content/content-script.ts'],
-      matches: ['https://*/*', 'http://*/*'],
+      matches: ['https://github.com/*'],
     },
   ],
-  host_permissions: ['<all_urls>'],
   commands: {
     _execute_action: {
       suggested_key: {
