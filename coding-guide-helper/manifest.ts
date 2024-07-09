@@ -28,8 +28,6 @@ export const manifest: ManifestV3Export = {
   ],
   permissions: [
     'activeTab',
-    'declarativeNetRequest',
-    'declarativeNetRequestWithHostAccess', // for http redirections
     'contextMenus',
     'unlimitedStorage',
     'storage',
