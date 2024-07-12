@@ -44,3 +44,7 @@ Instructions to install the Chrome extension from the source.
 - add UI feedbacks for the "options" validations
   - test the provided links (try to fetch)
   - add a ✅ for success and a ❌ for Http 404
+- add a wider search filter inside the TOC Tab
+- add a review tools TAB
+  - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
+  - any other ideas welcome
