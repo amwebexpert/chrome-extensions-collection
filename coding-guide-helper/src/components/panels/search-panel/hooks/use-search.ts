@@ -1,6 +1,11 @@
+import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
-import { doSearch, doSearchDebounced } from './use-search.utils'
+
+const doSearch = (payload: string) =>
+  chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
+
+const doSearchDebounced = debounce(doSearch, 500)
 
 export const useSearch = () => {
   const portRef = useRef<chrome.runtime.Port>()
