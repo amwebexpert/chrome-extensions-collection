@@ -1,16 +1,19 @@
 import { BookOutlined, SearchOutlined } from '@ant-design/icons'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
+import { MessageType } from '../../models/models'
+import { GuidelinesPanel } from '../panels/guidelines-panel/guidelines-panel'
 import { SearchPanel } from '../panels/search-panel/search-panel'
 import { Version } from '../version/version'
 import './app.css'
-import { GuidelinesPanel } from '../panels/guidelines-panel/guidelines-panel'
 import { logPlatformInfo } from './app.utils'
 
 const TITLE = 'Coding guidelines helper'
 
 export const App: FunctionComponent = () => {
   useEffect(() => {
+    chrome.runtime.sendMessage({ type: MessageType.ON_POPUP__OPEN })
+
     logPlatformInfo()
 
     chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {

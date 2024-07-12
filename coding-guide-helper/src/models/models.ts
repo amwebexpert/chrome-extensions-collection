@@ -22,6 +22,7 @@ export enum MessageType {
   ON_SELECTION_CHANGE = 'onSelectionChange',
 
   // from popup(s)
+  ON_POPUP__OPEN = 'onPopupOpen',
   SET_SEARCH = 'setSearch',
   SET_OPTIONS = 'setOptions',
   ON_LINK_GUIDELINES_ITEM_SELECTED = 'onLinkGuidelinesItemSelected',

@@ -61,6 +61,9 @@ chrome.runtime.onMessage.addListener((request, sender) => {
         console.info(`content script started for url: ${tabs[0]?.url}`)
       })
       break
+    case MessageType.ON_POPUP__OPEN:
+      if (!rootNode) loadGuidelines()
+      break
     case MessageType.ON_SELECTION_CHANGE:
       console.info(`====>>> selection changed: ${payload}`)
       break
@@ -75,7 +78,7 @@ const onSearch = async (search: string) => {
   try {
     popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
 
-    if (!rootNode) await loadGuidelines()    
+    if (!rootNode) await loadGuidelines()
 
     chrome.storage.local.set({ search })
     const results = filterGuidelines({ search, rootNode })
