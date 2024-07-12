@@ -36,3 +36,11 @@ Instructions to install the Chrome extension from the source.
 - `yarn install`
 - `yarn build`
 - from Google Chrome, install the extension from the generated `coding-guide-helper/dist` folder.
+
+
+## TODOs
+
+- cache markdown files retrieval http requests results
+- add UI feedbacks for the "options" validations
+  - test the provided links (try to fetch)
+  - add a ✅ for success and a ❌ for Http 404

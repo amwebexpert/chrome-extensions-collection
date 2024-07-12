@@ -19,8 +19,10 @@ export const Options: FunctionComponent = () => {
     chrome.storage.local.get('options', ({ options }) => form.setFieldsValue(options ?? {}))
   }, [form])
 
-  const onFinish: FormProps<OptionsType>['onFinish'] = (options: OptionsType) =>
+  const onFinish: FormProps<OptionsType>['onFinish'] = (options: OptionsType) => {
     chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
+    window.close()
+  }
 
   return (
     <Flex vertical={true} style={{ width: '100vw', height: '100vh' }}>
@@ -57,7 +59,7 @@ export const Options: FunctionComponent = () => {
 
           <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
             <Button type="primary" htmlType="submit">
-              Save
+              Save and close
             </Button>
           </Form.Item>
         </Form>
