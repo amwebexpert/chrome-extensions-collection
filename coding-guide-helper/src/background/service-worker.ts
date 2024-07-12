@@ -71,9 +71,11 @@ chrome.runtime.onMessage.addListener((request, sender) => {
   }
 })
 
-const onSearch = (search: string) => {
+const onSearch = async (search: string) => {
   try {
     popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
+
+    if (!rootNode) await loadGuidelines()    
 
     chrome.storage.local.set({ search })
     const results = filterGuidelines({ search, rootNode })
