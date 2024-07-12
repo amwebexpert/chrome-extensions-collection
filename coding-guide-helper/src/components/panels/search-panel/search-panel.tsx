@@ -1,7 +1,7 @@
 import { Flex, Input, type InputRef, Space } from 'antd'
 import { type FunctionComponent, useEffect, useRef } from 'react'
-import { useSearch } from '../../app/hooks/use-search'
 import { SearchResults } from '../../search-results/search-results'
+import { useSearch } from './hooks/use-search'
 import './search-panel.css'
 
 export const SearchPanel: FunctionComponent = () => {
