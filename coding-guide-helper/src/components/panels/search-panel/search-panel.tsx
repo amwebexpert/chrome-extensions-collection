@@ -20,9 +20,9 @@ export const SearchPanel: FunctionComponent = () => {
           loading={isSearching}
           placeholder="input search text"
           autoFocus={true}
-          allowClear
-          enterButton
-          size="large"
+          allowClear={true}
+          enterButton={false}
+          size="middle"
           value={search}
           onKeyDown={(e) => console.debug(`onKeyDown ${e.key}`)}
           onChange={(e) => setSearch(e.target.value)}

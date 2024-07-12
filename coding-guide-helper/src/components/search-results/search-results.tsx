@@ -5,15 +5,17 @@ import type { GuidelineNode } from '../../models/models'
 import { SearchResultsMarkdown } from './search-results-markdown'
 import { SearchResultsTitle } from './search-results-title'
 
+import './search-results.css'
+
 interface IProps {
   nodes: GuidelineNode[]
 }
 
 export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => (
   <Collapse
-    accordion={true}
+    className="search-results"
+    accordion={false}
     defaultActiveKey={[0]}
-    style={{ width: '100%' }}
     size="small"
     items={nodes.map(({ title, href, markdownLines, children }) => ({
       key: href,
