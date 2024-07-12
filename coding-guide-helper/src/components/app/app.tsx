@@ -12,7 +12,7 @@ const TITLE = 'Coding guidelines helper'
 
 export const App: FunctionComponent = () => {
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: MessageType.ON_POPUP__OPEN })
+    chrome.runtime.sendMessage({ type: MessageType.ON_POPUP_OPEN })
 
     logPlatformInfo()
 

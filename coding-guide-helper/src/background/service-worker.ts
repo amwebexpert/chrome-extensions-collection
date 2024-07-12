@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener((request, sender) => {
         console.info(`content script started for url: ${tabs[0]?.url}`)
       })
       break
-    case MessageType.ON_POPUP__OPEN:
+    case MessageType.ON_POPUP_OPEN:
       if (!rootNode) loadGuidelines()
       break
     case MessageType.ON_SELECTION_CHANGE:
