@@ -24,6 +24,7 @@ export const SearchPanel: FunctionComponent = () => {
           enterButton
           size="large"
           value={search}
+          onKeyDown={(e) => console.debug(`onKeyDown ${e.key}`)}
           onChange={(e) => setSearch(e.target.value)}
           onSearch={() => doSearch(search)}
         />
