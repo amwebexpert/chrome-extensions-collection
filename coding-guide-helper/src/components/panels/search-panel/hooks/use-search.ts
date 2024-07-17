@@ -25,10 +25,10 @@ export const useSearch = () => {
       const { type, payload } = message
       if (type === MessageType.ON_SEARCH_COMPLETED) {
         setSearchResults(payload)
-        setTimeout(() => setIsSearching(false), 300)
+        setIsSearching(false)
       }
       if (type === MessageType.ON_SEARCH_LOADING) setIsSearching(true)
-      if (type === MessageType.ON_SEARCH_ERROR) setTimeout(() => setIsSearching(false), 300)
+      if (type === MessageType.ON_SEARCH_ERROR) setIsSearching(false)
     })
   }, [])
 

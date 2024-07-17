@@ -1,6 +1,6 @@
 import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
-import { type FunctionComponent, useEffect } from 'react'
+import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment, MessageType } from '../../models/models'
 import { useDarkTheme } from '../theme/use-dark-theme'
 
@@ -14,14 +14,16 @@ const { title } = Environment
 export const Options: FunctionComponent = () => {
   const [form] = Form.useForm()
   const { isDarkMode, toggleDarkMode } = useDarkTheme()
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     chrome.storage.local.get('options', ({ options }) => form.setFieldsValue(options ?? {}))
   }, [form])
 
   const onFinish: FormProps<OptionsType>['onFinish'] = (options: OptionsType) => {
+    setIsLoading(true)
     chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
-    window.close()
+    setTimeout(() => window.close(), 700)
   }
 
   return (
@@ -58,7 +60,7 @@ export const Options: FunctionComponent = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={isLoading}>
               Save and close
             </Button>
           </Form.Item>

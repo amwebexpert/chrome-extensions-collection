@@ -56,6 +56,12 @@ const init = () => {
   document.addEventListener('selectionchange', debounce(onSelectionChange, 600))
 
   chrome.runtime.onMessage.addListener(onMessageReceived)
+  chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
+    port.onDisconnect.addListener(() => {
+      console.info('port disconnected. Reconnecting...')
+      chrome.runtime.onMessage.addListener(onMessageReceived)
+    })
+  })
 }
 
 init()
