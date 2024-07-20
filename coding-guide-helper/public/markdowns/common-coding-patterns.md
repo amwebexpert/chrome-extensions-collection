@@ -53,6 +53,10 @@
     - [❌ Avoid Using `Dimensions.get` for Getting Window Dimensions](#-avoid-using-dimensionsget-for-getting-window-dimensions)
     - [✅ Prefer Using `useWindowDimensions` Hook for Getting Window Dimensions](#-prefer-using-usewindowdimensions-hook-for-getting-window-dimensions)
     - [ℹ️ Explanation](#ℹ️-explanation-11)
+  - [Prefer Using Early Returns Over Multiple Nested If-Then-Else](#prefer-using-early-returns-over-multiple-nested-if-then-else)
+    - [❌ Avoid Multiple Nested If-Then-Else Statements](#-avoid-multiple-nested-if-then-else-statements)
+    - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
+    - [ℹ️ Explanation](#ℹ️-explanation-12)
 
 # Typescript coding guidelines
 
@@ -775,3 +779,76 @@ const useStyles = () => {
   - **Recommended by React Native:** React Native recommends using the `useWindowDimensions` hook for handling responsive layouts, as it provides a more seamless and reactive way to manage dimension changes.
 
 By following these best practices and using the `useWindowDimensions` hook, you can create components that are more responsive, readable, and maintainable.
+
+## Prefer Using Early Returns Over Multiple Nested If-Then-Else
+
+### ❌ Avoid Multiple Nested If-Then-Else Statements
+
+```ts
+// This code uses multiple nested if-then-else statements, making it harder to read and maintain
+const updateUser = async (userId: string) => {
+  if (userId) {
+    const user = await getUserById(userId)
+    if (user) {
+      if (user.isActive) {
+        if (user.hasPermissions) {
+          user.lastUpdated = new Date()
+          await saveUser(user)
+        } else {
+          console.log('User does not have permissions')
+        }
+      } else {
+        console.log('User is not active')
+      }
+    } else {
+      console.log('User not found')
+    }
+  } else {
+    console.log('Invalid user ID')
+  }
+}
+```
+
+### ✅ Prefer Using Early Returns for Improved Readability and Maintainability
+
+```ts
+// This code uses early returns, making it more readable and easier to maintain
+const updateUser = async (userId: string) => {
+  if (!userId) {
+    console.log('Invalid user ID')
+    return
+  }
+
+  const user = await getUserById(userId)
+  if (!user) {
+    console.log('User not found')
+    return
+  }
+
+  if (!user.isActive) {
+    console.log('User is not active')
+    return
+  }
+
+  if (!user.hasPermissions) {
+    console.log('User does not have permissions')
+    return
+  }
+
+  user.lastUpdated = new Date()
+  await saveUser(user)
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid Multiple Nested If-Then-Else Statements:**
+  - **Complexity:** Deeply nested if-else blocks make the code harder to read, understand, and maintain.
+  - **Indentation Levels:** More levels of indentation can make the code visually cluttered and harder to follow.
+
+- **Use Early Returns:**
+  - **Readability:** Early returns simplify the logic by handling edge cases and exiting early, making the main flow of the function more straightforward.
+  - **Maintainability:** By reducing the nesting level, the code becomes easier to understand and modify. It’s clear at a glance what conditions cause the function to exit early.
+  - **Less Cluttered:** Early returns keep the main logic of the function at the same indentation level, making it easier to follow.
+
+By following these best practices and using early returns, you can create code that is more readable, maintainable, and easier to understand.
