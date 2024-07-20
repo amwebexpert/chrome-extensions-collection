@@ -49,3 +49,4 @@ Instructions to install the Chrome extension from the source.
   - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
   - any other ideas welcome
 - add a reset button for the default original guidelines
+- manage a list of stored guidelines specifications
