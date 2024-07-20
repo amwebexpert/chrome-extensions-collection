@@ -57,6 +57,7 @@
     - [❌ Avoid Multiple Nested If-Then-Else Statements](#-avoid-multiple-nested-if-then-else-statements)
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
     - [ℹ️ Explanation](#ℹ️-explanation-12)
+    - [📚 References:](#references)
 
 # Typescript coding guidelines
 
@@ -852,3 +853,8 @@ const updateUser = async (userId: string) => {
   - **Less Cluttered:** Early returns keep the main logic of the function at the same indentation level, making it easier to follow.
 
 By following these best practices and using early returns, you can create code that is more readable, maintainable, and easier to understand.
+
+### 📚 References:
+
+- [The Return Early Pattern](https://www.linkedin.com/pulse/return-early-pattern-marny-lopez-eq6je/)
+- [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
