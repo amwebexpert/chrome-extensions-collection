@@ -44,6 +44,10 @@
     - [❌ Avoid Using Implicit Ordinal Values for Enums](#-avoid-using-implicit-ordinal-values-for-enums)
     - [✅ Prefer Using Explicit Numeric Values for Enums](#-prefer-using-explicit-numeric-values-for-enums)
     - [ℹ️ Explanation](#ℹ️-explanation-10)
+  - [Prefer Using `useWindowDimensions` Hook Over `Dimensions.get` in React Native](#prefer-using-usewindowdimensions-hook-over-dimensionsget-in-react-native)
+    - [❌ Avoid Using `Dimensions.get` for Getting Window Dimensions](#-avoid-using-dimensionsget-for-getting-window-dimensions)
+    - [✅ Prefer Using `useWindowDimensions` Hook for Getting Window Dimensions](#-prefer-using-usewindowdimensions-hook-for-getting-window-dimensions)
+    - [ℹ️ Explanation](#ℹ️-explanation-11)
 
 # Typescript coding guidelines
 
@@ -601,3 +605,76 @@ console.log(getUserRole(UserRole.Admin)) // Output: 'Admin'
 - **Readability and Maintainability:** Explicit values make the code more readable and maintainable by clearly indicating the intended value of each enum member. This reduces confusion and enhances code clarity.
 
 
+## Prefer Using `useWindowDimensions` Hook Over `Dimensions.get` in React Native
+
+### ❌ Avoid Using `Dimensions.get` for Getting Window Dimensions
+
+```tsx
+// this code uses Dimensions.get to get window dimensions, which can lead to issues with updates and readability
+import React from 'react'
+import { View, Text, StyleSheet, Dimensions } from 'react-native'
+
+export const DimensionInfoPanel = () => {
+  const { width } = Dimensions.get('window') // width retrieved using Dimensions.get
+
+  return (
+    <View style={[styles.container, { width }]}>
+      <Text>Width: {width}</Text>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: Dimensions.get('window').width, // width set using Dimensions.get
+  },
+})
+```
+
+### ✅ Prefer Using `useWindowDimensions` Hook for Getting Window Dimensions
+
+```tsx
+// this code uses the useWindowDimensions hook for getting window dimensions, making it more responsive and readable
+import React from 'react'
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native'
+
+export const DimensionInfoPanel = () => {
+  const styles = useStyles()
+  const { width } = useWindowDimensions()
+
+  return (
+    <View style={styles.container}>
+      <Text>Width: {width}</Text>
+    </View>
+  )
+}
+
+const useStyles = () => {
+  const { width } = useWindowDimensions()
+
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width, // width set using dynamic values from useWindowDimensions
+    },
+  })
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid Using `Dimensions.get`:** 
+  - **Static Values:** `Dimensions.get` provides static values that are not updated automatically when the screen orientation changes or when the window is resized. This can lead to issues where the component does not re-render with the correct dimensions.
+  - **Readability:** Using `Dimensions.get` can make the code less readable and maintainable, as the dimensions are obtained outside of the component's render method and used globally.
+
+- **Use `useWindowDimensions` Hook:** 
+  - **Dynamic Updates:** The `useWindowDimensions` hook provides updated dimensions dynamically. This means that whenever the window dimensions change (e.g., due to screen rotation), the component will re-render with the correct dimensions.
+  - **Readability and Maintainability:** Using the hook makes the code cleaner and more maintainable. The dimensions are directly obtained within the component's render method, making it clear where they are being used.
+  - **Recommended by React Native:** React Native recommends using the `useWindowDimensions` hook for handling responsive layouts, as it provides a more seamless and reactive way to manage dimension changes.
+
+By following these best practices and using the `useWindowDimensions` hook, you can create components that are more responsive, readable, and maintainable.
