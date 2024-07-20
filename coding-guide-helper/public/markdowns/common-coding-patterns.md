@@ -1,4 +1,9 @@
 - [Typescript coding guidelines](#typescript-coding-guidelines)
+  - [Prefer Type and Interface over usage of `any`](#prefer-type-and-interface-over-usage-of-any)
+    - [❌ Avoid Using `any` for Type Definitions](#-avoid-using-any-for-type-definitions)
+    - [✅ Prefer Using Type or Interface for Type Definitions](#-prefer-using-type-or-interface-for-type-definitions)
+    - [Explanation](#explanation)
+    - [Additional Resources](#additional-resources)
   - [Avoid Overusing the Ternary Operator](#avoid-overusing-the-ternary-operator)
     - [❌ Avoid Overusing the Ternary Operator in a Single Expression](#-avoid-overusing-the-ternary-operator-in-a-single-expression)
     - [✅ Prefer Using Early Returns for Multiple Conditions](#-prefer-using-early-returns-for-multiple-conditions)
@@ -56,6 +61,98 @@ This section list coding patterns promoted in the project. `React` and pure `Typ
   - divide to conquer rule a.k.a. promote small responsibility functions
   - promote reusability
   - encourage long term maintainable code
+
+## Prefer Type and Interface over usage of `any`
+
+Using `any` in TypeScript can be problematic for several reasons. Here are some insights and recommendations:
+
+### ❌ Avoid Using `any` for Type Definitions
+
+```ts
+// This code uses `any` for type definitions, which defeats the purpose of TypeScript
+const fetchUser = async (): Promise<any> => {
+  return await fetch('https://api.users.com/1122').then(response => response.json())
+}
+
+const processData = (data: any) => {
+  console.log(data.name) // No type checking
+  console.log(data.age) // No type checking
+  // No intellisense support, high chance of runtime errors
+}
+
+const result: any = await fetchUser()
+processData(result)
+
+// Unclear structure of objects and functions
+const user: any = { name: 'Alice', age: 30 }
+console.log(user.address) // No type checking, may cause runtime error
+```
+
+### ✅ Prefer Using Type or Interface for Type Definitions
+
+```ts
+// This code uses Type and Interface for type definitions, making it more readable and maintainable
+
+// Using Interface for objects
+interface User {
+  name: string
+  age: number
+  address?: string // Optional property
+}
+
+// Using Type for more complex types
+type ApiResponse<T> = {
+  data: T
+  status: number
+  error?: string // Optional property
+}
+
+const fetchUser = async (): Promise<ApiResponse<User>> => {
+  const response = await fetch('https://api.example.com/data')
+  const data: User = await response.json()
+  return { data, status: response.status }
+}
+
+const processData = (response: ApiResponse<User>) => {
+  if (response.error) {
+    console.error(response.error)
+    return
+  }
+  
+  const data = response.data
+  console.log(data.name) // Type checking
+  console.log(data.age) // Type checking
+  // Intellisense support, reducing the chance of runtime errors
+}
+
+const result: ApiResponse<User> = await fetchUser()
+processData(result)
+
+// Clear structure of objects and functions
+const user: User = { name: 'Alice', age: 30 }
+console.log(user.address) // Type checking, avoids runtime errors
+```
+
+### Explanation
+
+- **Avoid Using `any`:** Using `any` bypasses TypeScript's type-checking features, which can lead to several issues:
+  - **Lack of Type Safety:** Without type-checking, errors related to incorrect types can go unnoticed until runtime, making debugging more difficult.
+  - **Reduced Readability:** `any` makes it hard to understand what kind of data a variable is supposed to hold, reducing code clarity.
+  - **Poor Maintainability:** As projects grow, the use of `any` can lead to more bugs and make the code harder to maintain.
+  - **No Intellisense Support:** Development tools provide better support (like autocomplete and suggestions) when specific types are used.
+
+- **Use Type or Interface:** Defining types using `type` or `interface` ensures:
+  - **Type Safety:** Helps catch errors at compile time, improving reliability.
+  - **Readability:** Makes the code easier to understand and reason about.
+  - **Maintainability:** Easier to manage and refactor the code with clear type definitions.
+  - **Intellisense Support:** Provides better development experience with autocompletion and type hints.
+
+### Additional Resources
+
+For more detailed information on why you should avoid using `any` in TypeScript and how to use more specific types instead, you can refer to these resources:
+- [The Problem with Using 'Any' in TypeScript and What to Use Instead](https://upmostly.com/typescript/the-problem-with-using-any-in-typescript-and-what-to-use-instead)
+- [Why You Should Avoid Using 'any' in TypeScript and How to Do It](https://dev.to/yatinchoudhary/why-you-should-avoid-using-any-in-typescript-and-how-to-do-it-3b5)
+- [TypeScript: Avoid the Type Any](https://www.codiga.io/blog/typescript-avoid-type-any/)
 
 ## Avoid Overusing the Ternary Operator
 
