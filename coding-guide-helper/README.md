@@ -48,3 +48,4 @@ Instructions to install the Chrome extension from the source.
 - add a review tools TAB
   - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
   - any other ideas welcome
+- add a reset button for the default original guidelines
