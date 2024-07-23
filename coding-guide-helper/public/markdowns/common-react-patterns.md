@@ -41,6 +41,11 @@
     - [❌ Avoid Using `margin` or `padding` for Spacing Between Elements](#-avoid-using-margin-or-padding-for-spacing-between-elements)
     - [✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements](#-prefer-using-gap-rowgap-and-columngap-for-spacing-between-elements)
     - [ℹ️ Explanation](#ℹ️-explanation-7)
+  - [Prefer Using Early Returns for Simplified Rendering in React Components](#prefer-using-early-returns-for-simplified-rendering-in-react-components)
+    - [❌ Avoid Complex Conditional Rendering with Nested Ternaries](#-avoid-complex-conditional-rendering-with-nested-ternaries)
+    - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
+    - [ℹ️ Explanation](#ℹ️-explanation-8)
+    - [📚 Additional Resources](#-additional-resources)
 
 # Project React coding standards
 
@@ -676,3 +681,123 @@ export default Component;
 - **Readability and Maintenance:** Using `gap`, `rowGap`, and `columnGap` improves readability by clearly indicating that the spacing is between items, not around them. This also simplifies the styles and makes the layout easier to adjust.
 - **Consistent Spacing:** `gap`, `rowGap`, and `columnGap` ensure consistent spacing between elements without needing to adjust individual `margin` or `padding` values, leading to a more cohesive and maintainable layout.
 
+## Prefer Using Early Returns for Simplified Rendering in React Components
+
+### ❌ Avoid Complex Conditional Rendering with Nested Ternaries
+
+```tsx
+// This code uses nested ternary operators, making it harder to read and maintain
+import React, { useState, useEffect } from 'react'
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+
+export const MyComponent = ({ userId }) => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await getUserById(userId)
+        setUser(response)
+      } catch (err) {
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUser()
+  }, [userId])
+
+  return (
+    <View style={styles.container}>
+      {loading ? (
+        <ActivityIndicator />
+      ) : error ? (
+        <Text>Error occurred: {error.message}</Text>
+      ) : (
+        user && (
+          <View>
+            <Text>User Name: {user.name}</Text>
+            <Text>User Email: {user.email}</Text>
+          </View>
+        )
+      )}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
+```
+
+### ✅ Prefer Using Early Returns for Improved Readability and Maintainability
+
+```tsx
+// This code uses early returns, making it more readable and easier to maintain
+import React, { useState, useEffect } from 'react'
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+
+export const MyComponent = ({ userId }) => {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await getUserById(userId)
+        setUser(response)
+      } catch (err) {
+        setError(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUser()
+  }, [userId])
+
+  if (loading) return <ActivityIndicator />
+  if (error) return <Text>Error occurred: {error.message}</Text>
+  if (!user) return null
+
+  return (
+    <View style={styles.container}>
+      <Text>User Name: {user.name}</Text>
+      <Text>User Email: {user.email}</Text>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
+```
+
+### ℹ️ Explanation
+
+- **Avoid Complex Conditional Rendering:**
+  - **Readability:** Nesting multiple conditional renderings (ternary operators) can make the JSX hard to read and understand.
+  - **Maintainability:** Deeply nested conditional logic can become difficult to maintain and debug, especially as the component grows in complexity.
+
+- **Use Early Returns:**
+  - **Readability:** Early returns simplify the component’s render method by handling different states (loading, error, no user) at the beginning, allowing the main rendering logic to focus on the primary use case.
+  - **Maintainability:** By keeping the main rendering logic clean and straightforward, early returns make the component easier to maintain and extend.
+
+By following these best practices and using early returns, you can create React components that are more readable, maintainable, and easier to understand.
+
+### 📚 Additional Resources
+
+For more detailed information on the benefits of using early returns in your code, you can refer to these resources:
+- [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
