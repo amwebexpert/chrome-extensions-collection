@@ -1,13 +1,9 @@
 import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
-import { Environment, MessageType } from '../../models/models'
+import { Environment, MessageType, type OptionsType } from '../../models/models'
+import { getOptions } from '../../utils/options'
 import { useDarkTheme } from '../theme/use-dark-theme'
-
-type OptionsType = {
-  markdownFilesUrlPrefix?: string
-  files?: string
-}
 
 const { title } = Environment
 
@@ -17,10 +13,10 @@ export const Options: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    chrome.storage.local.get('options', ({ options }) => form.setFieldsValue(options ?? {}))
+    getOptions().then(form.setFieldsValue)
   }, [form])
 
-  const onFinish: FormProps<OptionsType>['onFinish'] = (options: OptionsType) => {
+  const onFinish: FormProps<OptionsType>['onFinish'] = (options) => {
     setIsLoading(true)
     chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
     setTimeout(() => window.close(), 700)

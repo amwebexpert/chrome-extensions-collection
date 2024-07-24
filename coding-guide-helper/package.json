@@ -1,7 +1,7 @@
 {
   "name": "coding-guide-helper",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "scripts": {
     "clean:node": "rm -rf node_modules & rm -rf yarn.lock",

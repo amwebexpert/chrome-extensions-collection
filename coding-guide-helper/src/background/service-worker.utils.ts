@@ -1,4 +1,5 @@
 import { type GuidelineNode, MenuItems } from '../models/models'
+import { getOptions } from '../utils/options'
 import {
   buildNode,
   buildOrderedNodes,
@@ -95,24 +96,20 @@ const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<Guide
 }
 
 const getGuidelineUrlResources = async (): Promise<string[]> => {
-  return new Promise((resolve) => {
-    chrome.storage.local.get('options', ({ options }) => {
-      const markdownFilesUrlPrefix: string = options?.markdownFilesUrlPrefix ?? ''
-      const filesString: string = options?.files ?? ''
-      const filenames = filesString
-        .split('\n')
-        .map((filename) => filename.trim())
-        .filter(Boolean)
+  const { markdownFilesUrlPrefix, files } = await getOptions()
 
-      const fullFilenames = filenames.map(
-        // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
-        // Pattern 2: https://github.com/${organizationName}/${repoName}/raw/main/${filename}
-        (filename) => `${markdownFilesUrlPrefix}/${filename}`,
-      )
+  const filenames = files
+    .split('\n')
+    .map((filename) => filename.trim())
+    .filter(Boolean)
 
-      resolve(fullFilenames)
-    })
-  })
+  const fullFilenames = filenames.map(
+    // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
+    // Pattern 2: https://github.com/${organizationName}/${repoName}/raw/main/${filename}
+    (filename) => `${markdownFilesUrlPrefix}/${filename}`,
+  )
+
+  return fullFilenames
 }
 
 export const fetchCodingGuidelinesText = async (url: string): Promise<string> => {

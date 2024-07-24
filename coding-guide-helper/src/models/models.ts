@@ -3,6 +3,11 @@ export const Environment = Object.freeze({
   version: import.meta.env.PACKAGE_VERSION, // https://www.npmjs.com/package/vite-plugin-package-version
 })
 
+export type OptionsType = {
+  markdownFilesUrlPrefix: string
+  files: string
+}
+
 export type GuidelineNode = {
   level: number
   title: string
