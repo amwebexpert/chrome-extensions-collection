@@ -47,6 +47,7 @@ Instructions to install the Chrome extension from the source.
 - add a wider search filter inside the TOC Tab
 - add a review tools TAB
   - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
+  - toggle all panels `document.querySelectorAll('[aria-label="Toggle diff contents"]').forEach(e => e.click())`
   - any other ideas welcome
 - add a reset button for the default original guidelines
 - manage a list of stored guidelines specifications
