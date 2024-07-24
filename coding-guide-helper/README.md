@@ -41,6 +41,8 @@ Instructions to install the Chrome extension from the source.
 ## TODOs
 
 - cache markdown files retrieval http requests results
+- add option to remove that cache from within options page
+- add classic hyperlink icon (beside the clipboard icon) to open a browser tab with the given link
 - add UI feedbacks for the "options" validations
   - test the provided links (try to fetch)
   - add a ✅ for success and a ❌ for Http 404
