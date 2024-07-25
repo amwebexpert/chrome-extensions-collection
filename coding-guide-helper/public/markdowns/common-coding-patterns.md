@@ -63,6 +63,10 @@
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability-1)
     - [ℹ️ Explanation](#ℹ️-explanation-13)
     - [📚 References:](#references-1)
+  - [Prefer Using Object Destructuring for String Interpolation in TypeScript](#prefer-using-object-destructuring-for-string-interpolation-in-typescript)
+    - [❌ Avoid Complex Interpolation Without Destructuring](#-avoid-complex-interpolation-without-destructuring)
+    - [✅ Prefer Using Object Destructuring for Clarity](#-prefer-using-object-destructuring-for-clarity)
+    - [Explanation](#explanation-1)
 
 # Typescript coding guidelines
 
@@ -987,3 +991,70 @@ By following these best practices and using early returns, you can create React 
 
 - [The Return Early Pattern](https://www.linkedin.com/pulse/return-early-pattern-marny-lopez-eq6je/)
 - [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
+
+## Prefer Using Object Destructuring for String Interpolation in TypeScript
+
+### ❌ Avoid Complex Interpolation Without Destructuring
+
+```ts
+// this code uses complex interpolation without destructuring, making it harder to read
+const AddArgs = { a: number, b: number }
+add({ a, b }: AddArgs) => a + b
+
+double(n: number) => n * 2
+
+const obj = {
+  level1: {
+    level2: {
+      level3: {
+        value: null
+      }
+    }
+  }
+};
+
+const a = 5
+const b = 10
+
+const badInterpolationExample = `The sum of ${a} and ${b} is ${add({ a, b })}, the double of the sum is ${double(add({ a, b }))}, and the deep object value is ${obj?.level1?.level2?.level3?.value ?? 'NA'}.`
+```
+
+### ✅ Prefer Using Object Destructuring for Clarity
+
+```ts
+const AddArgs = { a: number, b: number }
+add({ a, b }: AddArgs) => a + b
+
+double(n: number) => n * 2
+
+const obj = {
+  level1: {
+    level2: {
+      level3: {
+        value: null
+      }
+    }
+  }
+};
+
+const a = 5
+const b = 10
+
+const sum = add({ a, b })
+const doubledSum = double(sum)
+const deepObjectValue = obj?.level1?.level2?.level3?.value ?? 'NA'
+
+const goodInterpolationExample = `The sum of ${a} and ${b} is ${sum}, the double of the sum is ${doubledSum}, and the deep object value is ${deepObjectValue}.`
+```
+
+### Explanation
+
+- **Avoid Complex Interpolation Without Destructuring:**
+  - **Readability:** Directly accessing nested properties within a string interpolation can make the code difficult to read and understand, especially when the nested structure is complex.
+  - **Maintainability:** If the structure of the object changes, updating all references within the string interpolation can be error-prone and time-consuming.
+
+- **Use Object Destructuring:**
+  - **Readability:** Destructuring simplifies the code by extracting nested properties into individual variables, making the string interpolation cleaner and more readable.
+  - **Maintainability:** With destructuring, you only need to update the destructuring assignment if the object structure changes, which is easier to manage and reduces the risk of errors.
+
+By following these best practices and using object destructuring, you can create code that is more readable, maintainable, and easier to understand.
