@@ -75,9 +75,9 @@
     - [❌ Avoid Custom Index Signatures for Object Types](#-avoid-custom-index-signatures-for-object-types)
     - [✅ Prefer Using TypeScript `Record` Utility Type for Simplicity and Clarity](#-prefer-using-typescript-record-utility-type-for-simplicity-and-clarity)
     - [ℹ️ Explanation](#ℹ️-explanation-17)
-  - [Prefer Adding a Jira Ticket Number to `TODO` Comments for Better Task Tracking](#prefer-adding-a-jira-ticket-number-to-todo-comments-for-better-task-tracking)
-    - [❌ Avoid Using `TODO` Comments Without a Jira Ticket Reference](#-avoid-using-todo-comments-without-a-jira-ticket-reference)
-    - [✅ Prefer Adding a Jira Ticket Number to `TODO` Comments for Better Traceability](#-prefer-adding-a-jira-ticket-number-to-todo-comments-for-better-traceability)
+  - [Prefer Adding a Task Ticket ID to `TODO` Comments for Better Tracking](#prefer-adding-a-task-ticket-id-to-todo-comments-for-better-tracking)
+    - [❌ Avoid Using `TODO` Comments Without a Ticket Reference](#-avoid-using-todo-comments-without-a-ticket-reference)
+    - [✅ Prefer Adding a Task Management Ticket ID to `TODO` Comments for Better Traceability](#-prefer-adding-a-task-management-ticket-id-to-todo-comments-for-better-traceability)
     - [ℹ️ Explanation](#ℹ️-explanation-18)
 
 # Typescript coding guidelines
@@ -1194,12 +1194,12 @@ Here’s a new rule based on the provided bad example, following the same templa
 
 ---
 
-## Prefer Adding a Jira Ticket Number to `TODO` Comments for Better Task Tracking
+## Prefer Adding a Task Ticket ID to `TODO` Comments for Better Tracking
 
-### ❌ Avoid Using `TODO` Comments Without a Jira Ticket Reference
+### ❌ Avoid Using `TODO` Comments Without a Ticket Reference
 
 ```tsx
-// This code uses a TODO comment without referencing a Jira ticket, making it harder to track the task's progress and follow up.
+// This code uses a TODO comment without referencing a ticket, making it harder to track the task's progress and follow up.
 
 export const logBookViewItem = ({
   viewedItem,
@@ -1221,10 +1221,10 @@ export const logBookViewItem = ({
 }
 ```
 
-### ✅ Prefer Adding a Jira Ticket Number to `TODO` Comments for Better Traceability
+### ✅ Prefer Adding a Task Management Ticket ID to `TODO` Comments for Better Traceability
 
 ```tsx
-// This code adds a Jira ticket number to the TODO comment, improving traceability and making it easier to track the task's progress.
+// This code adds a project management software ticket number to the TODO comment, improving traceability and making it easier to track the task's progress.
 
 export const logBookViewItem = ({
   viewedItem,
@@ -1249,12 +1249,12 @@ export const logBookViewItem = ({
 ### ℹ️ Explanation
 
 - **Avoid TODO Comments Without References:**
-  - **Traceability:** `TODO` comments without a Jira ticket number are harder to track, making it easy for tasks to be forgotten or overlooked. This can lead to incomplete features or hidden technical debt in your codebase.
-  - **Accountability:** Without a clear reference to a Jira ticket, it’s difficult to assign responsibility for addressing the TODO or follow up on its progress.
+  - **Traceability:** `TODO` comments without a ticket number are harder to track, making it easy for tasks to be forgotten or overlooked. This can lead to incomplete features or hidden technical debt in your codebase.
+  - **Accountability:** Without a clear reference to a ticket, it’s difficult to assign responsibility for addressing the TODO or follow up on its progress.
 
-- **Prefer Adding Jira Ticket Numbers:**
-  - **Traceability:** By adding a Jira ticket number to your `TODO` comments, you ensure that every incomplete task is linked to a specific, trackable item in your project management system. This makes it easier to manage and prioritize tasks.
-  - **Accountability:** With a Jira ticket number, it’s clear who is responsible for completing the task, and it’s easier to follow up during code reviews or project status meetings.
+- **Prefer Adding Ticket ID:**
+  - **Traceability:** By adding a ticket number to your `TODO` comments, you ensure that every incomplete task is linked to a specific, trackable item in your project management system. This makes it easier to manage and prioritize tasks.
+  - **Accountability:** With a ticket number, it’s clear who is responsible for completing the task, and it’s easier to follow up during code reviews or project status meetings.
   - **Documentation:** Adding a ticket number also serves as documentation for why the `TODO` exists, making it clear to others (or your future self) what needs to be done and why.
 
 By following these practices, you ensure that your codebase remains organized and that tasks don’t fall through the cracks, leading to better project management and smoother development workflows.
