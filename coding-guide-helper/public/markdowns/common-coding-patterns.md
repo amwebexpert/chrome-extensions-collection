@@ -63,7 +63,7 @@
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability-1)
     - [ℹ️ Explanation](#ℹ️-explanation-14)
     - [📚 References:](#references-1)
-  - [Prefer Using Object Destructuring for String Interpolation in TypeScript](#prefer-using-object-destructuring-for-string-interpolation-in-typescript)
+  - [Prefer Using Object Destructuring for readability and clarity](#prefer-using-object-destructuring-for-readability-and-clarity)
     - [❌ Avoid Complex Interpolation Without Destructuring](#-avoid-complex-interpolation-without-destructuring)
     - [✅ Prefer Using Object Destructuring for Clarity](#-prefer-using-object-destructuring-for-clarity)
     - [ℹ️ Explanation](#ℹ️-explanation-15)
@@ -992,7 +992,7 @@ By following these best practices and using early returns, you can create React 
 - [The Return Early Pattern](https://www.linkedin.com/pulse/return-early-pattern-marny-lopez-eq6je/)
 - [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
 
-## Prefer Using Object Destructuring for String Interpolation in TypeScript
+## Prefer Using Object Destructuring for readability and clarity
 
 ### ❌ Avoid Complex Interpolation Without Destructuring
 
