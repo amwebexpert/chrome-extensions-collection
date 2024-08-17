@@ -1,8 +1,8 @@
 import { type Message, MessageType } from '../../models/models'
+import { getFirstActiveTab } from '../../utils/tabs.utils'
 
 export const sendMessageToContentScript = async (info: string) => {
-  const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
-  const tabId = tabs[0].id
+  const tabId = await getFirstActiveTab()
   if (!tabId) return
 
   const message: Message<string> = {

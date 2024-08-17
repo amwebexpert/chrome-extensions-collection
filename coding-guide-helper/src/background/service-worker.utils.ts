@@ -87,10 +87,9 @@ const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<Guide
     baseUrl: '',
   })
 
-  for (const url of urls) {
-    const markdownText = await fetchCodingGuidelinesText(url)
-    createGuidelineNodes({ rootNode, text: markdownText, baseUrl: url })
-  }
+  const results = await Promise.all(urls.map(fetchCodingGuidelinesText))
+
+  results.map((text, index) => createGuidelineNodes({ rootNode, text, baseUrl: urls[index] }))
 
   return rootNode
 }
@@ -113,7 +112,7 @@ const getGuidelineUrlResources = async (): Promise<string[]> => {
 }
 
 export const fetchCodingGuidelinesText = async (url: string): Promise<string> => {
-  // TODO Response caching
+  // Possible improvement: use cache mechanism (Axios with cache interceptor or react-query default cache)
   const response = await fetch(url, { method: 'GET', redirect: 'follow' })
-  return await response.text()
+  return response.text()
 }

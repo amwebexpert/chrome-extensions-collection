@@ -31,6 +31,7 @@ export enum MessageType {
   SET_SEARCH = 'setSearch',
   SET_OPTIONS = 'setOptions',
   ON_LINK_GUIDELINES_ITEM_SELECTED = 'onLinkGuidelinesItemSelected',
+  ON_CONTENT_SCRIPT_STATUS = 'onContentScriptStatus',
 
   // from background
   ON_SEARCH_LOADING = 'onSearchLoading',
@@ -38,10 +39,9 @@ export enum MessageType {
   ON_SEARCH_ERROR = 'onSearchError',
 }
 
-export type Message<PayloadType = string> = {
-  type: MessageType
-  payload: PayloadType
-}
+export type Message<PayloadType = void> = PayloadType extends void
+  ? { type: MessageType }
+  : { type: MessageType; payload: PayloadType }
 
 export enum MenuItems {
   SEND_SELECTION = 'sendSelection',

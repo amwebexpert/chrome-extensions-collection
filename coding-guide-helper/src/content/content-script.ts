@@ -1,18 +1,26 @@
 import debounce from 'debounce'
 import { type Message, MessageType } from '../models/models'
 
+const loadedAt = new Date().toISOString()
+
 type SendResponse = (response?: unknown) => void
 
 const onMessageReceived = (
-  message: Message,
+  request: Message<unknown>,
   _sender: chrome.runtime.MessageSender,
   sendResponse: SendResponse,
 ) => {
-  const { type } = message
+  const { type } = request
 
   switch (type) {
-    case MessageType.ON_LINK_GUIDELINES_ITEM_SELECTED:
+    case MessageType.ON_LINK_GUIDELINES_ITEM_SELECTED: {
+      const message = request as Message<string>
       onLinkGuidelinesItemSelected({ message, sendResponse })
+      break
+    }
+
+    case MessageType.ON_CONTENT_SCRIPT_STATUS:
+      sendResponse(loadedAt)
       break
 
     default:
@@ -58,8 +66,8 @@ const init = () => {
   chrome.runtime.onMessage.addListener(onMessageReceived)
   chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
     port.onDisconnect.addListener(() => {
-      console.info('port disconnected. Reconnecting...')
-      chrome.runtime.onMessage.addListener(onMessageReceived)
+      console.info('port disconnected.')
+      document.removeEventListener('selectionchange', onSelectionChange)
     })
   })
 }
