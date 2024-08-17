@@ -46,6 +46,10 @@
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
     - [ℹ️ Explanation](#ℹ️-explanation-9)
     - [📚 Additional Resources](#-additional-resources)
+  - [Prefer Breaking Down `<GodComponents />` into Subcomponents](#prefer-breaking-down-godcomponents--into-subcomponents)
+    - [❌ Avoid Complex Components with Excessive Responsibilities](#-avoid-complex-components-with-excessive-responsibilities)
+    - [✅ Prefer Breaking Down God Components into Smaller Subcomponents](#-prefer-breaking-down-god-components-into-smaller-subcomponents)
+    - [ℹ️ Explanation](#ℹ️-explanation-10)
 
 # Project React coding standards
 
@@ -801,3 +805,77 @@ By following these best practices and using early returns, you can create React 
 
 For more detailed information on the benefits of using early returns in your code, you can refer to these resources:
 - [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
+
+Here’s an improved version of the English texts for your examples:
+
+---
+
+## Prefer Breaking Down `<GodComponents />` into Subcomponents
+
+### ❌ Avoid Complex Components with Excessive Responsibilities
+
+```tsx
+// This code is an example of a God Component, making it challenging to read, maintain, and test.
+
+export const Dashboard = () => {
+
+  // Overloaded with state management hooks
+  // Multiple hook calls and useEffects
+  // Numerous event handlers
+  // Complex, embedded expressions
+  // Code that should be extracted into pure JS helper functions
+  // ...
+
+  return (
+    <>
+      {/** A complex rendering template spanning over 50 lines */}
+
+      {/** Involves complicated computed expressions */}
+
+      {/** Scrolling is required to view the entire template... */}
+
+      {/** Developers are reluctant to modify anything for fear of breaking functionality */}
+
+      {/** This code is increasingly difficult to manage due to its unreadability */}
+
+      {/** This component has too many responsibilities */}
+
+      {/** ... It’s time to stop feeding this uncontrollable beast :-/ */}
+    </>
+  )
+}
+```
+
+### ✅ Prefer Breaking Down God Components into Smaller Subcomponents
+
+```tsx
+// This code refactors the God Component into smaller, focused subcomponents, enhancing readability and maintainability.
+
+export const Dashboard = () => {
+  // A few state management hooks and minimal hook calls
+  // Simple computations, leveraging external pure JS utilities to avoid complexity
+
+  return (
+    <>
+      {/** A clean, concise rendering template with fewer than 50 lines */}
+      <SubComponent1 />
+      <SubComponent2>
+        <SubComponent3 attribute1={value1} />
+        <SubComponent4 attribute2={value2} />
+      </SubComponent2>
+    </>
+  )
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid God Components:**
+  - **Readability:** Components with excessive responsibilities (often exceeding 50 lines) are hard to read, understand, and navigate. They try to do too much at once, making it difficult to identify the component’s primary purpose.
+  - **Maintainability:** A God Component is prone to bugs and becomes harder to maintain as it grows in complexity. Any change could introduce new issues, affecting multiple aspects of the component.
+
+- **Break Down Components:**
+  - **Readability:** By breaking down a large component into smaller, focused subcomponents, you make the code easier to read and follow. Each subcomponent handles a specific responsibility, making the overall logic clearer.
+  - **Maintainability:** Smaller components are easier to test, debug, and extend. Changes can be made in isolation without affecting unrelated parts of the application, leading to more stable and maintainable code.
+
+By adhering to these principles, you can create React components that are not only more manageable but also easier for other developers to understand and work with.
