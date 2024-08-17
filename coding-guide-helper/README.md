@@ -1,10 +1,10 @@
 # coding-guide-helper
 
-Coding guide helper is a chrome extension to help doing pull requests review process or just to easily browse your coding standards.
+Coding guide helper is a [chrome extension](https://chromewebstore.google.com/detail/coding-guide-helper/opjhdjilkonehogiaakbaefekmjpgjna) to help doing pull requests review process or just to easily browse your coding standards.
 
 This open-source Chrome extension is designed to help the development workflow. This tool allows you to seamlessly integrate your project's development guide and recommended practices directly into your browser, making it easier than ever to maintain high standards and avoid common pitfalls.
 
-<img src="public/images/demo-coding-guide-helper-PR-review.png" />
+[<img src="public/images/demo-coding-guide-helper-PR-review.png" />](https://chromewebstore.google.com/detail/coding-guide-helper/opjhdjilkonehogiaakbaefekmjpgjna)
 
 
 ## Features:
