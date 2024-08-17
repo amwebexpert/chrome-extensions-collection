@@ -1216,7 +1216,7 @@ export const logBookViewItem = ({
     item_id: viewedItem.id,
     item_name: viewedItem.title,
     content_type: contentType,
-    origin: origin,
+    origin,
   })
 }
 ```
@@ -1241,7 +1241,7 @@ export const logBookViewItem = ({
     item_id: viewedItem.id,
     item_name: viewedItem.title,
     content_type: contentType,
-    origin: origin,
+    origin,
   })
 }
 ```
