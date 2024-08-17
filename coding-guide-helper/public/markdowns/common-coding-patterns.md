@@ -1078,10 +1078,12 @@ export const logBookViewItem = ({
   viewedItem,
   isOnline,
   origin,
+  lastViewDate,
 }: {
   viewedItem: StateBook | null
   isOnline: boolean
   origin?: BooksOrigin | null
+  lastViewDate?: Date
 }) => {
   // ...
 }
@@ -1096,12 +1098,14 @@ export type BookViewItemInfos = {
   viewedItem: StateBook | null
   isOnline: boolean
   origin?: BooksOrigin | null
+  lastViewDate?: Date
 }
 
 export const logBookViewItem = ({
   viewedItem,
   isOnline,
   origin,
+  lastViewDate,
 }: BookViewItemInfos) => {
   // ...
 }
