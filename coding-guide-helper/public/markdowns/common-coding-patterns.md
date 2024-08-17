@@ -67,6 +67,10 @@
     - [❌ Avoid Complex Interpolation Without Destructuring](#-avoid-complex-interpolation-without-destructuring)
     - [✅ Prefer Using Object Destructuring for Clarity](#-prefer-using-object-destructuring-for-clarity)
     - [ℹ️ Explanation](#ℹ️-explanation-15)
+  - [Prefer Extracting and Exporting Types over Inline Typing](#prefer-extracting-and-exporting-types-over-inline-typing)
+    - [❌ Avoid Using Inline Typing for Function Parameters](#-avoid-using-inline-typing-for-function-parameters)
+    - [✅ Prefer Extracting and Exporting Types for Reusability and Maintainability](#-prefer-extracting-and-exporting-types-for-reusability-and-maintainability)
+    - [ℹ️ Explanation](#ℹ️-explanation-16)
 
 # Typescript coding guidelines
 
@@ -1058,3 +1062,82 @@ const goodInterpolationExample = `The sum of ${a} and ${b} is ${sum}, the double
   - **Maintainability:** With destructuring, you only need to update the destructuring assignment if the object structure changes, which is easier to manage and reduces the risk of errors.
 
 By following these best practices and using object destructuring, you can create code that is more readable, maintainable, and easier to understand.
+
+Here’s the updated version of the examples, reflecting the new business domain:
+
+---
+
+## Prefer Extracting and Exporting Types over Inline Typing
+
+### ❌ Avoid Using Inline Typing for Function Parameters
+
+```tsx
+// This code uses inline typing within the function parameters, making it less reusable and harder to maintain.
+
+export const logBookViewItem = ({
+  viewedItem,
+  isOnline,
+  origin,
+}: {
+  viewedItem: StateBook | null
+  isOnline: boolean
+  origin?: BooksOrigin | null
+}) => {
+  if (!origin || !viewedItem || !viewedItem.id) {
+    return
+  }
+
+  const contentType = getItemContentType({ viewedItem, isOnline })
+
+  logViewItem<BooksViewItemAnalytics>({
+    item_id: viewedItem.id,
+    item_name: viewedItem.title,
+    content_type: contentType,
+    origin: origin,
+  })
+}
+```
+
+### ✅ Prefer Extracting and Exporting Types for Reusability and Maintainability
+
+```tsx
+// This code extracts types into reusable and exportable type aliases, improving readability, reusability, and maintainability.
+
+export type LogBookViewItemParams = {
+  viewedItem: StateBook | null
+  isOnline: boolean
+  origin?: BooksOrigin | null
+}
+
+export const logBookViewItem = ({
+  viewedItem,
+  isOnline,
+  origin,
+}: LogBookViewItemParams) => {
+  if (!origin || !viewedItem || !viewedItem.id) {
+    return
+  }
+
+  const contentType = getItemContentType({ viewedItem, isOnline })
+
+  logViewItem<BooksViewItemAnalytics>({
+    item_id: viewedItem.id,
+    item_name: viewedItem.title,
+    content_type: contentType,
+    origin: origin,
+  })
+}
+```
+
+### ℹ️ Explanation
+
+- **Avoid Inline Typing:**
+  - **Readability:** Inline typing within function parameters can clutter the function definition, making it harder to read and understand at a glance.
+  - **Maintainability:** Inline types are less reusable and can lead to duplication across your codebase. If the type changes, you’ll need to update every instance of that inline type, increasing the risk of errors.
+
+- **Prefer Extracted and Exported Types:**
+  - **Readability:** By extracting types into separate, named type aliases, you make the code cleaner and more readable. The function signature is easier to understand without the distraction of detailed type definitions.
+  - **Reusability:** Extracted types can be reused across your application, reducing redundancy and making your codebase more DRY (Don’t Repeat Yourself).
+  - **Maintainability:** When types are defined separately, updates can be made in one place, ensuring consistency and reducing the risk of introducing bugs.
+
+By following these practices, you ensure that your TypeScript code is more maintainable, readable, and less prone to errors, leading to a more scalable and efficient codebase.
