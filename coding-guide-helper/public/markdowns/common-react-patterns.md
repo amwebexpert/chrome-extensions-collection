@@ -1,50 +1,50 @@
 - [Project React coding standards](#project-react-coding-standards)
-  - [the `useMemo` overusage](#the-usememo-overusage)
+  - [The `useMemo` overusage](#the-usememo-overusage)
     - [❌ avoid premature memoizations through `useMemo`](#-avoid-premature-memoizations-through-usememo)
     - [✅ prefer simple computations](#-prefer-simple-computations)
     - [ℹ️ Explanations:](#ℹ️-explanations)
     - [📚 References](#-references)
-  - [avoid `{renderThisOrThat()}` pattern](#avoid-renderthisorthat-pattern)
+  - [Avoid `{renderThisOrThat()}` rendering template pattern](#avoid-renderthisorthat-rendering-template-pattern)
     - [❌ avoid inline template private renderers](#-avoid-inline-template-private-renderers)
     - [✅ prefer divide to conquer rule through small sub-components](#-prefer-divide-to-conquer-rule-through-small-sub-components)
-    - [ℹ️ :information\_source: Explanation](#ℹ️-information_source-explanation)
+    - [ℹ️ Explanation](#ℹ️-explanation)
     - [📚 References](#-references-1)
-  - [single arrow function event handler](#single-arrow-function-event-handler)
+  - [Single arrow function event handler](#single-arrow-function-event-handler)
     - [❌ avoid double arrows functions](#-avoid-double-arrows-functions)
     - [✅ prefer single arrow functions](#-prefer-single-arrow-functions)
-    - [ℹ️ Explanation](#ℹ️-explanation)
+    - [ℹ️ Explanation](#ℹ️-explanation-1)
   - [Promote pure typescript functions](#promote-pure-typescript-functions)
     - [❌ avoid inline unsharable code](#-avoid-inline-unsharable-code)
     - [✅ prefer pure typescript extracted logic](#-prefer-pure-typescript-extracted-logic)
-    - [ℹ️ Explanation](#ℹ️-explanation-1)
+    - [ℹ️ Explanation](#ℹ️-explanation-2)
   - [Avoid Misusing the `use` Prefix](#avoid-misusing-the-use-prefix)
     - [❌ Avoid Misusing the `use` Prefix for Non-Hook Functions](#-avoid-misusing-the-use-prefix-for-non-hook-functions)
     - [✅ Prefer a More Descriptive Name for Pure Functions](#-prefer-a-more-descriptive-name-for-pure-functions)
-    - [ℹ️ Explanation](#ℹ️-explanation-2)
+    - [ℹ️ Explanation](#ℹ️-explanation-3)
   - [Avoid Simple Assignment in State Update Functions](#avoid-simple-assignment-in-state-update-functions)
     - [❌ Avoid Simple Assignment for State Updates Dependent on Current State](#-avoid-simple-assignment-for-state-updates-dependent-on-current-state)
     - [✅ Prefer Using Setter Function for State Updates Dependent on Current State](#-prefer-using-setter-function-for-state-updates-dependent-on-current-state)
-    - [ℹ️ Explanation](#ℹ️-explanation-3)
+    - [ℹ️ Explanation](#ℹ️-explanation-4)
   - [Prefer External Filters and Sorters Over Inline Logic in Rendering](#prefer-external-filters-and-sorters-over-inline-logic-in-rendering)
     - [❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template](#-avoid-using-inline-logic-for-filtering-and-sorting-in-the-rendering-template)
     - [✅ Prefer Using External Filters and Sorters for Better Readability](#-prefer-using-external-filters-and-sorters-for-better-readability)
-    - [ℹ️ Explanation](#ℹ️-explanation-4)
+    - [ℹ️ Explanation](#ℹ️-explanation-5)
   - [Prefer External Utility Functions Over Complex Logic in the Rendering Template](#prefer-external-utility-functions-over-complex-logic-in-the-rendering-template)
     - [❌ Avoid Complex Logic in the Rendering Template](#-avoid-complex-logic-in-the-rendering-template)
     - [✅ Prefer Using External Utility Functions for Better Readability](#-prefer-using-external-utility-functions-for-better-readability)
-    - [ℹ️ Explanation](#ℹ️-explanation-5)
+    - [ℹ️ Explanation](#ℹ️-explanation-6)
   - [Prefer Using Hooks for Business Logic Over Returning React Components](#prefer-using-hooks-for-business-logic-over-returning-react-components)
     - [❌ Avoid Using Hooks to Return React Components](#-avoid-using-hooks-to-return-react-components)
     - [✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate](#-prefer-using-hooks-for-business-logic-and-keep-rendering-separate)
-    - [ℹ️ Explanation](#ℹ️-explanation-6)
+    - [ℹ️ Explanation](#ℹ️-explanation-7)
   - [Prefer Using `gap`, `rowGap`, and `columnGap` Over `margin` or `padding` in React Native](#prefer-using-gap-rowgap-and-columngap-over-margin-or-padding-in-react-native)
     - [❌ Avoid Using `margin` or `padding` for Spacing Between Elements](#-avoid-using-margin-or-padding-for-spacing-between-elements)
     - [✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements](#-prefer-using-gap-rowgap-and-columngap-for-spacing-between-elements)
-    - [ℹ️ Explanation](#ℹ️-explanation-7)
+    - [ℹ️ Explanation](#ℹ️-explanation-8)
   - [Prefer Using Early Returns for Simplified Rendering in React Components](#prefer-using-early-returns-for-simplified-rendering-in-react-components)
     - [❌ Avoid Complex Conditional Rendering with Nested Ternaries](#-avoid-complex-conditional-rendering-with-nested-ternaries)
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
-    - [ℹ️ Explanation](#ℹ️-explanation-8)
+    - [ℹ️ Explanation](#ℹ️-explanation-9)
     - [📚 Additional Resources](#-additional-resources)
 
 # Project React coding standards
@@ -58,7 +58,7 @@ This section outlines the coding patterns recommended for the project, focusing 
 
 By adhering to these principles, the project will benefit from cleaner, more efficient, and more sustainable code.
 
-## the `useMemo` overusage
+## The `useMemo` overusage
 
 Memoizing primitive values in `React` is redundant as they are cheap to compare and `React` efficiently handles their updates without additional optimization. Also, most computed and derived values are fast: unless you’re creating or looping over thousands of objects, it’s probably not expensive.
 
@@ -91,7 +91,7 @@ Re-renders will cause recomputations of the code above the final return but usua
 - [How to tell if a calculation is expensive?](https://react.dev/reference/react/useMemo#how-to-tell-if-a-calculation-is-expensive)
 
 
-## avoid `{renderThisOrThat()}` pattern
+## Avoid `{renderThisOrThat()}` rendering template pattern
 
 ### ❌ avoid inline template private renderers
 
@@ -134,7 +134,7 @@ return (
 )```
 ```
 
-### ℹ️ :information_source: Explanation
+### ℹ️ Explanation
 
 - `useCallback` hook is meant to be used around _user interactions_ and not as a _divide to conquer_ pattern
 - creating small dumb components:
@@ -146,7 +146,7 @@ return (
 
 - [3 React Mistakes, 1 App Killer](https://youtube.com/watch?v=QuLfCUh-iwI&si=JofynxnU-J58sA53)
 
-## single arrow function event handler
+## Single arrow function event handler
 
 ### ❌ avoid double arrows functions
 

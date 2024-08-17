@@ -2,71 +2,71 @@
   - [Prefer Type and Interface over usage of `any`](#prefer-type-and-interface-over-usage-of-any)
     - [❌ Avoid Using `any` for Type Definitions](#-avoid-using-any-for-type-definitions)
     - [✅ Prefer Using Type or Interface for Type Definitions](#-prefer-using-type-or-interface-for-type-definitions)
-    - [Explanation](#explanation)
+    - [ℹ️ Explanation](#ℹ️-explanation)
     - [Additional Resources](#additional-resources)
   - [Avoid Overusing the Ternary Operator](#avoid-overusing-the-ternary-operator)
     - [❌ Avoid Overusing the Ternary Operator in a Single Expression](#-avoid-overusing-the-ternary-operator-in-a-single-expression)
     - [✅ Prefer Using Early Returns for Multiple Conditions](#-prefer-using-early-returns-for-multiple-conditions)
-    - [ℹ️ Explanation](#ℹ️-explanation)
+    - [ℹ️ Explanation](#ℹ️-explanation-1)
   - [Prefer `const` Over `let` for Variable Declarations](#prefer-const-over-let-for-variable-declarations)
     - [❌ Avoid Using `let` When `const` Can Be Used](#-avoid-using-let-when-const-can-be-used)
     - [✅ Prefer Using `const` To Promote Values That Do Not Change](#-prefer-using-const-to-promote-values-that-do-not-change)
-    - [ℹ️ Explanation](#ℹ️-explanation-1)
+    - [ℹ️ Explanation](#ℹ️-explanation-2)
   - [Prefer `Array.includes()` Over Multiple Comparisons](#prefer-arrayincludes-over-multiple-comparisons)
     - [❌ Avoid Using Multiple Comparisons in Conditional Statements](#-avoid-using-multiple-comparisons-in-conditional-statements)
     - [✅ Prefer Using `Array.includes()` for Multiple Comparisons](#-prefer-using-arrayincludes-for-multiple-comparisons)
-    - [ℹ️ Explanation](#ℹ️-explanation-2)
+    - [ℹ️ Explanation](#ℹ️-explanation-3)
   - [Prefer Object Destructuring Over Multiple Positional Parameters](#prefer-object-destructuring-over-multiple-positional-parameters)
     - [❌ Avoid Using Multiple Positional Parameters in Function Arguments](#-avoid-using-multiple-positional-parameters-in-function-arguments)
     - [✅ Prefer Object Destructuring for Function Arguments](#-prefer-object-destructuring-for-function-arguments)
-    - [ℹ️ Explanation](#ℹ️-explanation-3)
+    - [ℹ️ Explanation](#ℹ️-explanation-4)
   - [Prefer `Array.some()` Over Checking `Array.find()` for Undefined](#prefer-arraysome-over-checking-arrayfind-for-undefined)
     - [❌ Avoid Checking `Array.find()` for Undefined](#-avoid-checking-arrayfind-for-undefined)
     - [✅ Prefer Using `Array.some()` for Better Readability](#-prefer-using-arraysome-for-better-readability)
-    - [ℹ️ Explanation](#ℹ️-explanation-4)
+    - [ℹ️ Explanation](#ℹ️-explanation-5)
   - [Prefer Logging Errors Over Silencing Them in `try-catch` Blocks](#prefer-logging-errors-over-silencing-them-in-try-catch-blocks)
     - [❌ Avoid Silencing Errors in `try-catch` Blocks](#-avoid-silencing-errors-in-try-catch-blocks)
     - [✅ Prefer Logging Errors in `try-catch` Blocks](#-prefer-logging-errors-in-try-catch-blocks)
-    - [ℹ️ Explanation](#ℹ️-explanation-5)
+    - [ℹ️ Explanation](#ℹ️-explanation-6)
   - [Prefer Flattening `try-catch` Blocks Over Using Nested `try-catch`](#prefer-flattening-try-catch-blocks-over-using-nested-try-catch)
     - [❌ Avoid Using Nested `try-catch` Blocks](#-avoid-using-nested-try-catch-blocks)
     - [✅ Prefer Flattening `try-catch` Blocks](#-prefer-flattening-try-catch-blocks)
-    - [ℹ️ Explanation](#ℹ️-explanation-6)
+    - [ℹ️ Explanation](#ℹ️-explanation-7)
   - [Avoid Re-throwing the Same Exception in `try-catch`](#avoid-re-throwing-the-same-exception-in-try-catch)
     - [❌ Avoid Using `try-catch` to Simply Re-throw the Same Exception](#-avoid-using-try-catch-to-simply-re-throw-the-same-exception)
     - [✅ Prefer Handling or Logging the Exception Instead of Re-throwing](#-prefer-handling-or-logging-the-exception-instead-of-re-throwing)
     - [✅ Prefer Letting the Exception Propagate Naturally](#-prefer-letting-the-exception-propagate-naturally)
-    - [ℹ️ Explanation](#ℹ️-explanation-7)
+    - [ℹ️ Explanation](#ℹ️-explanation-8)
   - [Prefer Using `??` Over `||` for Handling `null` and `undefined`](#prefer-using--over--for-handling-null-and-undefined)
     - [❌ Avoid Using `||` to Handle `null` and `undefined` Exclusively](#-avoid-using--to-handle-null-and-undefined-exclusively)
     - [✅ Prefer Using `??` to Handle `null` and `undefined`](#-prefer-using--to-handle-null-and-undefined)
-    - [ℹ️ Explanation](#ℹ️-explanation-8)
+    - [ℹ️ Explanation](#ℹ️-explanation-9)
   - [Prefer Using Optional Parameters Over `Type | undefined`](#prefer-using-optional-parameters-over-type--undefined)
     - [❌ Avoid Using `param: Type | undefined` for Optional Parameters](#-avoid-using-param-type--undefined-for-optional-parameters)
     - [✅ Prefer Using Optional Parameters with `param?: Type`](#-prefer-using-optional-parameters-with-param-type)
-    - [ℹ️ Explanation](#ℹ️-explanation-9)
+    - [ℹ️ Explanation](#ℹ️-explanation-10)
   - [Prefer Using Explicit Numeric Values for TypeScript Enums](#prefer-using-explicit-numeric-values-for-typescript-enums)
     - [❌ Avoid Using Implicit Ordinal Values for Enums](#-avoid-using-implicit-ordinal-values-for-enums)
     - [✅ Prefer Using Explicit Numeric Values for Enums](#-prefer-using-explicit-numeric-values-for-enums)
-    - [ℹ️ Explanation](#ℹ️-explanation-10)
+    - [ℹ️ Explanation](#ℹ️-explanation-11)
   - [Prefer Using `useWindowDimensions` Hook Over `Dimensions.get` in React Native](#prefer-using-usewindowdimensions-hook-over-dimensionsget-in-react-native)
     - [❌ Avoid Using `Dimensions.get` for Getting Window Dimensions](#-avoid-using-dimensionsget-for-getting-window-dimensions)
     - [✅ Prefer Using `useWindowDimensions` Hook for Getting Window Dimensions](#-prefer-using-usewindowdimensions-hook-for-getting-window-dimensions)
-    - [ℹ️ Explanation](#ℹ️-explanation-11)
+    - [ℹ️ Explanation](#ℹ️-explanation-12)
   - [Prefer Using Early Returns Over Multiple Nested If-Then-Else](#prefer-using-early-returns-over-multiple-nested-if-then-else)
     - [❌ Avoid Multiple Nested If-Then-Else Statements](#-avoid-multiple-nested-if-then-else-statements)
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
-    - [ℹ️ Explanation](#ℹ️-explanation-12)
+    - [ℹ️ Explanation](#ℹ️-explanation-13)
     - [📚 References:](#references)
   - [Prefer Using Early Returns for Simplified Rendering in React Components](#prefer-using-early-returns-for-simplified-rendering-in-react-components)
     - [❌ Avoid Complex Conditional Rendering with Nested Ternaries](#-avoid-complex-conditional-rendering-with-nested-ternaries)
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability-1)
-    - [ℹ️ Explanation](#ℹ️-explanation-13)
+    - [ℹ️ Explanation](#ℹ️-explanation-14)
     - [📚 References:](#references-1)
   - [Prefer Using Object Destructuring for String Interpolation in TypeScript](#prefer-using-object-destructuring-for-string-interpolation-in-typescript)
     - [❌ Avoid Complex Interpolation Without Destructuring](#-avoid-complex-interpolation-without-destructuring)
     - [✅ Prefer Using Object Destructuring for Clarity](#-prefer-using-object-destructuring-for-clarity)
-    - [Explanation](#explanation-1)
+    - [ℹ️ Explanation](#ℹ️-explanation-15)
 
 # Typescript coding guidelines
 
@@ -147,7 +147,7 @@ const user: User = { name: 'Alice', age: 30 }
 console.log(user.address) // Type checking, avoids runtime errors
 ```
 
-### Explanation
+### ℹ️ Explanation
 
 - **Avoid Using `any`:** Using `any` bypasses TypeScript's type-checking features, which can lead to several issues:
   - **Lack of Type Safety:** Without type-checking, errors related to incorrect types can go unnoticed until runtime, making debugging more difficult.
@@ -1047,7 +1047,7 @@ const deepObjectValue = obj?.level1?.level2?.level3?.value ?? 'NA'
 const goodInterpolationExample = `The sum of ${a} and ${b} is ${sum}, the double of the sum is ${doubledSum}, and the deep object value is ${deepObjectValue}.`
 ```
 
-### Explanation
+### ℹ️ Explanation
 
 - **Avoid Complex Interpolation Without Destructuring:**
   - **Readability:** Directly accessing nested properties within a string interpolation can make the code difficult to read and understand, especially when the nested structure is complex.
