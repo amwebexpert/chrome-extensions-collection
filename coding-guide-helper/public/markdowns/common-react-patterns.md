@@ -50,6 +50,7 @@
     - [❌ Avoid Complex Components with Excessive Responsibilities](#-avoid-complex-components-with-excessive-responsibilities)
     - [✅ Prefer Breaking Down God Components into Smaller Subcomponents](#-prefer-breaking-down-god-components-into-smaller-subcomponents)
     - [ℹ️ Explanation](#ℹ️-explanation-10)
+    - [📚 Additional Resources](#-additional-resources-1)
 
 # Project React coding standards
 
@@ -840,6 +841,8 @@ export const Dashboard = () => {
 
       {/** This component has too many responsibilities */}
 
+      {/** Performance can suffer as the component grows, with unnecessary re-renders and slowdowns */}
+
       {/** ... It’s time to stop feeding this uncontrollable beast :-/ */}
     </>
   )
@@ -871,11 +874,19 @@ export const Dashboard = () => {
 ### ℹ️ Explanation
 
 - **Avoid God Components:**
-  - **Readability:** Components with excessive responsibilities (often exceeding 50 lines) are hard to read, understand, and navigate. They try to do too much at once, making it difficult to identify the component’s primary purpose.
+  - **Readability:** Components with excessive responsibilities (often exceeding 50 lines) are hard to read, understand, and navigate. They attempt to handle too many tasks, making it difficult to discern the component’s primary purpose.
   - **Maintainability:** A God Component is prone to bugs and becomes harder to maintain as it grows in complexity. Any change could introduce new issues, affecting multiple aspects of the component.
+  - **Performance:** Larger components tend to trigger unnecessary re-renders and can lead to performance bottlenecks. The more responsibilities a component has, the more likely it is to experience slowdowns and inefficiencies.
 
 - **Break Down Components:**
-  - **Readability:** By breaking down a large component into smaller, focused subcomponents, you make the code easier to read and follow. Each subcomponent handles a specific responsibility, making the overall logic clearer.
+  - **Readability:** By breaking down a large component into smaller, focused subcomponents, you make the code easier to read and follow. Each subcomponent is responsible for a specific task, which makes the overall logic clearer.
   - **Maintainability:** Smaller components are easier to test, debug, and extend. Changes can be made in isolation without affecting unrelated parts of the application, leading to more stable and maintainable code.
+  - **Performance:** Smaller, focused components reduce the risk of unnecessary re-renders and improve overall performance. By isolating concerns, each component can be optimized individually, leading to a more efficient application.
 
-By adhering to these principles, you can create React components that are not only more manageable but also easier for other developers to understand and work with.
+By adhering to these principles, you can create React components that are not only more manageable but also optimized for performance, making them easier for other developers to understand, work with, and maintain.
+
+### 📚 Additional Resources
+
+For more detailed information on the benefits of small responsibilities components, you can refer to these resources:
+- [Are Your React Components Too BIG?](https://www.youtube.com/watch?v=NsFmOttIW9Y)
+- [Refactoring a messy react component](https://alexkondov.com/refactoring-a-messy-react-component/)
