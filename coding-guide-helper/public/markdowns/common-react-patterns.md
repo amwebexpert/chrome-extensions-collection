@@ -857,6 +857,7 @@ export const Dashboard = () => {
 export const Dashboard = () => {
   // A few state management hooks and minimal hook calls
   // Simple computations, leveraging external pure JS utilities to avoid complexity
+  // Use more custom hooks to avoid complexity
 
   return (
     <>
