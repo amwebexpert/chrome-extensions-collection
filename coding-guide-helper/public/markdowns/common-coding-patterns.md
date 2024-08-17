@@ -1128,10 +1128,6 @@ export const logBookViewItem = ({
 
 By following these practices, you ensure that your TypeScript code is more maintainable, readable, and less prone to errors, leading to a more scalable and efficient codebase.
 
-Here’s a new rule based on the provided bad example, following the same template:
-
----
-
 ## Prefer Using TypeScript `Record` Utility Type over Custom Index Signatures
 
 ### ❌ Avoid Custom Index Signatures for Object Types
@@ -1189,10 +1185,6 @@ When you use TypeScript's `Record` utility type, you gain several additional adv
 
 Using `Record` over a custom index signature provides you with stronger type safety, better IDE support, and more flexibility in defining key-value pairs in your TypeScript code. This makes `Record` not only a more concise but also a more powerful and expressive way to handle object types in TypeScript.
 By following these practices, you ensure that your TypeScript code is more maintainable, readable, and less prone to errors, leading to a more scalable and efficient codebase.
-
-Here’s a new rule based on the provided bad example, following the same template:
-
----
 
 ## Prefer Adding a Task Ticket ID to `TODO` Comments for Better Tracking
 
