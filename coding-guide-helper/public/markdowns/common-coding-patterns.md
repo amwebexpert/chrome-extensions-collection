@@ -1092,7 +1092,7 @@ export const logBookViewItem = ({
 ```tsx
 // This code extracts types into reusable and exportable type aliases, improving readability, reusability, and maintainability.
 
-export type LogBookViewItemParams = {
+export type BookViewItemInfos = {
   viewedItem: StateBook | null
   isOnline: boolean
   origin?: BooksOrigin | null
@@ -1102,7 +1102,7 @@ export const logBookViewItem = ({
   viewedItem,
   isOnline,
   origin,
-}: LogBookViewItemParams) => {
+}: BookViewItemInfos) => {
   // ...
 }
 ```
