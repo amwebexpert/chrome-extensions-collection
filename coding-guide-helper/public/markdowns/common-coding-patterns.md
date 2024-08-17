@@ -1083,18 +1083,7 @@ export const logBookViewItem = ({
   isOnline: boolean
   origin?: BooksOrigin | null
 }) => {
-  if (!origin || !viewedItem || !viewedItem.id) {
-    return
-  }
-
-  const contentType = getItemContentType({ viewedItem, isOnline })
-
-  logViewItem<BooksViewItemAnalytics>({
-    item_id: viewedItem.id,
-    item_name: viewedItem.title,
-    content_type: contentType,
-    origin: origin,
-  })
+  // ...
 }
 ```
 
@@ -1114,18 +1103,7 @@ export const logBookViewItem = ({
   isOnline,
   origin,
 }: LogBookViewItemParams) => {
-  if (!origin || !viewedItem || !viewedItem.id) {
-    return
-  }
-
-  const contentType = getItemContentType({ viewedItem, isOnline })
-
-  logViewItem<BooksViewItemAnalytics>({
-    item_id: viewedItem.id,
-    item_name: viewedItem.title,
-    content_type: contentType,
-    origin: origin,
-  })
+  // ...
 }
 ```
 
