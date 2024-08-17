@@ -1113,38 +1113,13 @@ export const logBookViewItem = ({
 
 ### ℹ️ Explanation
 
-When you use TypeScript's `Record` utility type, you gain several additional advantages over custom index signatures like `[key: string]: T`:
+- **Avoid Inline Typing:**
+  - **Readability:** Inline typing within function parameters can clutter the function definition, making it harder to read and understand at a glance.
+  - **Maintainability:** Inline types are less reusable and can lead to duplication across your codebase. If the type changes, you’ll need to update every instance of that inline type, increasing the risk of errors.
 
-- **Strongly Typed Keys:**
-   - **Record:** The `Record` utility type allows you to define keys with a specific type, not just `string`. For example, you can specify an `enum`, a union of string literals, or any other custom type as the keys.
-     ```typescript
-     type Status = 'pending' | 'completed' | 'failed';
-     export type TaskStatuses = Record<Status, Date>;
-     ```
-     In this example, `TaskStatuses` ensures that only `'pending'`, `'completed'`, or `'failed'` can be used as keys, providing stronger type safety.
+- **Prefer Extracted and Exported Types:**
+  - **Readability:** By extracting types into separate, named type aliases, you make the code cleaner and more readable. The function signature is easier to understand without the distraction of detailed type definitions.
+  - **Reusability:** Extracted types can be reused across your application, reducing redundancy and making your codebase more DRY (Don’t Repeat Yourself).
+  - **Maintainability:** When types are defined separately, updates can be made in one place, ensuring consistency and reducing the risk of introducing bugs.
 
-   - **Custom Index Signature:** When using a custom index signature like `[key: string]: Date`, you are limited to using `string` or `number` as the key type. You can't easily enforce a specific set of keys.
-
-- **Type Inference and Autocompletion:**
-   - **Record:** When using `Record`, TypeScript provides better type inference and autocompletion in your IDE, which makes development faster and reduces the likelihood of errors. For instance, with `Record<Status, Date>`, your IDE will automatically suggest the valid keys (`'pending'`, `'completed'`, `'failed'`) as you type.
-   
-   - **Custom Index Signature:** With a custom index signature, you lose the ability to leverage TypeScript’s powerful autocompletion and inference for specific keys because the key is only typed as `string`.
-
-- **Type Safety for Value Types:**
-   - **Record:** The `Record` utility type ensures that all keys map to the same type of value. If you need to change the value type later, you only need to update it in one place, and TypeScript will enforce this type across all occurrences.
-     ```typescript
-     export type ViewedItems = Record<string, Date>;
-     // Later, if you need to change Date to another type, like Date | null:
-     export type ViewedItems = Record<string, Date | null>;
-     ```
-   - **Custom Index Signature:** While you can achieve similar results with a custom index signature, it's not as straightforward or expressive as using `Record`.
-
-- **Reusability and Composition:**
-   - **Record:** The `Record` type can be easily composed with other utility types, such as `Partial`, `Pick`, or `Omit`, to create more complex types that are still type-safe and easy to manage.
-     ```typescript
-     export type PartialViewedItems = Partial<Record<string, Date>>;
-     ```
-   - **Custom Index Signature:** Custom index signatures are more limited in this regard and may require more manual work to compose types.
-
-Using `Record` over a custom index signature provides you with stronger type safety, better IDE support, and more flexibility in defining key-value pairs in your TypeScript code. This makes `Record` not only a more concise but also a more powerful and expressive way to handle object types in TypeScript.
 By following these practices, you ensure that your TypeScript code is more maintainable, readable, and less prone to errors, leading to a more scalable and efficient codebase.
