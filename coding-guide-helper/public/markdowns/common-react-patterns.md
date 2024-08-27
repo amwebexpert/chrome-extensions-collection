@@ -9,7 +9,7 @@
     - [✅ prefer divide to conquer rule through small sub-components](#-prefer-divide-to-conquer-rule-through-small-sub-components)
     - [ℹ️ Explanation](#ℹ️-explanation)
     - [📚 References](#-references-1)
-  - [Avoid `{renderThisOrThat()}` rendering template pattern](#avoid-renderthisorthat-rendering-template-pattern)
+  - [Avoid `{renderXyz()}` rendering template anti-pattern](#avoid-renderxyz-rendering-template-anti-pattern)
     - [❌ avoid inline template private renderers](#-avoid-inline-template-private-renderers)
     - [✅ prefer divide to conquer rule through small sub-components](#-prefer-divide-to-conquer-rule-through-small-sub-components-1)
     - [ℹ️ Explanation](#ℹ️-explanation-1)
@@ -156,7 +156,7 @@ return (
 
 - [3 React Mistakes, 1 App Killer](https://youtube.com/watch?v=QuLfCUh-iwI&si=JofynxnU-J58sA53)
 
-## Avoid `{renderThisOrThat()}` rendering template pattern
+## Avoid `{renderXyz()}` rendering template anti-pattern
 
 ### ❌ avoid inline template private renderers
 
