@@ -836,11 +836,11 @@ export const MyComponent = ({ userId }) => {
     fetchUser()
   }, [userId])
 
-  if (loading) return (<Layout><ActivityIndicator /><Layout />)
+  if (loading) return (<Layout><ActivityIndicator /></Layout>)
 
-  if (error) return (<Layout><Text>{error.message}</Text><Layout />)
+  if (error) return (<Layout><Text>{error.message}</Text></Layout>)
 
-  if (!user) return null
+  if (!user) return <Layout />
 
   return (
     <Layout>
