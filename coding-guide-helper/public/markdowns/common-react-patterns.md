@@ -305,7 +305,8 @@ return (...)
 export const computeTotal = (numbers: number[] = []) =>
   numbers.reduce((acc, value) => acc + value, 0)
 
-export const multiplyBy = (numbers: number[] = [], by: number = 1) =>
+type MultiplyByArgs = { numbers?: number[], by?: number }
+export const multiplyBy = ({ numbers = [], by = 1 }) =>
   numbers.map((value) => value * by)
 
 type BuildPersonArgs = { firstName: string, lastName: string, age: number }
@@ -324,7 +325,7 @@ const total = useMemo(() => computeTotal(numbers), [numbers])
 const fullName = buildPersonFullName({ firstName, lastName, age })
 
 const onMultiplyBy = useCallback(
-  (by: number) => setNumbers(multiplyBy(numbers, by)),
+  (by: number) => setNumbers(multiplyBy({numbers, by})),
   [numbers]
 )
 
