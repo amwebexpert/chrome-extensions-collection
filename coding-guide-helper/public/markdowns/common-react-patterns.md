@@ -369,7 +369,11 @@ const Component = () => {
 
 ```tsx
 // This function is correctly named to reflect that it's a pure utility function
-export const calculateDiscount = (price: number, discount: number) => {
+type CalculateDiscountArgs = {
+  price: number
+  discount: number
+}
+export const calculateDiscount = ({ price, discount }: CalculateDiscountArgs) => {
   return price - (price * discount)
 }
 ```
@@ -383,7 +387,7 @@ import { calculateDiscount } from 'my-component.utils.ts'
 const Component = () => {
   const price = 100
   const discount = 0.1
-  const discountedPrice = calculateDiscount(price, discount)
+  const discountedPrice = calculateDiscount({ price, discount })
 
   return <TextView>Discounted Price: {discountedPrice}</TextView>
 }
