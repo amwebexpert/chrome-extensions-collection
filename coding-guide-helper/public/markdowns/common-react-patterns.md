@@ -306,7 +306,7 @@ export const computeTotal = (numbers: number[] = []) =>
   numbers.reduce((acc, value) => acc + value, 0)
 
 type MultiplyByArgs = { numbers?: number[], by?: number }
-export const multiplyBy = ({ numbers = [], by = 1 }) =>
+export const multiplyBy = ({ numbers = [], by = 1 }: MultiplyByArgs) =>
   numbers.map((value) => value * by)
 
 type BuildPersonArgs = { firstName: string, lastName: string, age: number }
