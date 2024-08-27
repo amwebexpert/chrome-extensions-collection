@@ -876,9 +876,6 @@ By following these best practices and using early returns, you can create React 
 For more detailed information on the benefits of using early returns in your code, you can refer to these resources:
 - [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
 
-Here’s an improved version of the English texts for your examples:
-
----
 
 ## Prefer Breaking Down `<GodComponents />` into Subcomponents
 
