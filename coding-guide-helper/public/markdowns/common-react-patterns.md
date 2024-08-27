@@ -756,8 +756,9 @@ export default Component;
 
 ```tsx
 // This code uses nested ternary operators, making it harder to read and maintain
-import React, { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
+  <View style={styles.container}>{children}</View>
+)
 
 export const MyComponent = ({ userId }) => {
   const [loading, setLoading] = useState(true)
@@ -810,8 +811,10 @@ const styles = StyleSheet.create({
 
 ```tsx
 // This code uses early returns, making it more readable and easier to maintain
-import React, { useState, useEffect } from 'react'
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
+  <View style={styles.container}>{children}</View>
+)
 
 export const MyComponent = ({ userId }) => {
   const [loading, setLoading] = useState(true)
@@ -833,15 +836,21 @@ export const MyComponent = ({ userId }) => {
     fetchUser()
   }, [userId])
 
-  if (loading) return <ActivityIndicator />
-  if (error) return <Text>Error occurred: {error.message}</Text>
+  if (loading) return <Layout><ActivityIndicator /><Layout />
+
+  if (error) return (
+    <Layout>
+      <Text>Error occurred: {error.message}</Text>
+    <Layout />
+  )
+
   if (!user) return null
 
   return (
-    <View style={styles.container}>
+    <Layout>
       <Text>User Name: {user.name}</Text>
       <Text>User Email: {user.email}</Text>
-    </View>
+    </Layout>
   )
 }
 
