@@ -785,7 +785,7 @@ export const MyComponent = ({ userId }) => {
       {loading ? (
         <ActivityIndicator />
       ) : error ? (
-        <Text>Error occurred: {error.message}</Text>
+        <Text>{error.message}</Text>
       ) : (
         user && (
           <View>
@@ -836,13 +836,9 @@ export const MyComponent = ({ userId }) => {
     fetchUser()
   }, [userId])
 
-  if (loading) return <Layout><ActivityIndicator /><Layout />
+  if (loading) return (<Layout><ActivityIndicator /><Layout />)
 
-  if (error) return (
-    <Layout>
-      <Text>Error occurred: {error.message}</Text>
-    <Layout />
-  )
+  if (error) return (<Layout><Text>{error.message}</Text><Layout />)
 
   if (!user) return null
 
