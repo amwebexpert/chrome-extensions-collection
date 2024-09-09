@@ -340,7 +340,7 @@ if (VALID_VALUES.includes(value)) {
 
 ```tsx
 // This code uses multiple positional parameters, including an optional one, making it less readable
-const createUser = (firstName: string, middleNameÉ: string, lastName: string, age: number, email: string) => {
+const createUser = (firstName: string, middleName: string, lastName: string, age: number, email: string) => {
   return {
     firstName,
     middleName,
