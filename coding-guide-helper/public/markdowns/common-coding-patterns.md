@@ -341,13 +341,7 @@ if (VALID_VALUES.includes(value)) {
 ```tsx
 // This code uses multiple positional parameters, including an optional one, making it less readable
 const createUser = (firstName: string, middleName: string, lastName: string, age: number, email: string) => {
-  return {
-    firstName,
-    middleName,
-    lastName,
-    age,
-    email
-  }
+  // do something here to create the user...
 }
 
 // Usage
@@ -367,13 +361,9 @@ type CreateUserArgs = {
   middleName?: string // Optional parameter
 }
 
-const createUser = ({ firstName, middleName, lastName, age, email }: CreateUserArgs) => ({
-    firstName,
-    middleName,
-    lastName,
-    age,
-    email
-  })
+const createUser = ({ firstName, middleName, lastName, age, email }: CreateUserArgs) => {
+  // do something here to create the user...
+}
 
 // Usage
 const user = createUser({ firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' })
