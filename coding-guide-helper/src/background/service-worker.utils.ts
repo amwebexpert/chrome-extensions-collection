@@ -9,6 +9,9 @@ import {
   isParentOfAvoidPreferSection,
 } from './markdown-parser'
 
+export const getSenderInfo = (sender: chrome.runtime.MessageSender): string =>
+  sender.tab?.id ? `tab ${sender.tab.id}` : 'extension'
+
 export const normalizeForSearch = (search: string): string =>
   search.toLowerCase().replaceAll('`', '').trim()
 
