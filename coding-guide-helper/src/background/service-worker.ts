@@ -46,9 +46,19 @@ class ServiceWorker {
   }
 
   async loadGuidelines() {
-    this.rootNode = await collectOnlineGuidelines()
-    storeOrderedNodes(this.rootNode)
-    console.info('====>>> guidelines loaded')
+    chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {
+      if (this.rootNode || !allOrderedNodes) return
+      this.rootNode = allOrderedNodes
+      console.info('====>>> guidelines loaded from cache')
+    })
+
+    setTimeout(() => {
+      collectOnlineGuidelines().then((rootNode) => {
+        this.rootNode = rootNode
+        storeOrderedNodes(this.rootNode)
+        console.info('====>>> guidelines loaded from web')
+      })
+    }, 5000)
   }
 
   initMessageHandler() {
