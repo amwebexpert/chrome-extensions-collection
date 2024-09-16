@@ -10,12 +10,19 @@ const DEFAULT_FILES: string[] = [
   'common-unit-testing.md',
 ]
 
+const DEFAULT_OPTIONS: OptionsType = {
+  files: DEFAULT_FILES.join('\n'),
+  markdownFilesUrlPrefix: DEFAULT_MARKDOWN_FILES_URL_PREFIX,
+}
+
 export const getOptions = async (): Promise<OptionsType> =>
   new Promise((resolve) => {
-    chrome.storage.local.get('options', ({ options }) => {
-      const files: string = options?.files ?? DEFAULT_FILES.join('\n')
+    chrome.storage.local.get('options', (result) => {
+      const options = result.options ?? DEFAULT_OPTIONS
+
+      const files: string = options.files ?? DEFAULT_FILES.join('\n')
       const markdownFilesUrlPrefix: string =
-        options?.markdownFilesUrlPrefix ?? DEFAULT_MARKDOWN_FILES_URL_PREFIX
+        options.markdownFilesUrlPrefix ?? DEFAULT_MARKDOWN_FILES_URL_PREFIX
 
       resolve({ markdownFilesUrlPrefix, files })
     })
