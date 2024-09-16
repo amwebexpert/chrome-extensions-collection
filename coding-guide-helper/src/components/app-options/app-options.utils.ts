@@ -34,19 +34,14 @@ export const validateOptions = async (options: OptionsType): Promise<ValidationR
 
   for (const file of files) {
     if (!file.toLocaleLowerCase().endsWith('.md'))
-      return buildInvalidResults(
-        `All files should have a markdown extension (example: path/to/my-file.md). Not a markdown file: ${file}`,
-      )
+      return buildInvalidResults(`Markdown file extension (.md) missing: ${file}`)
   }
 
-  const links = files.map((file) =>
-    `${markdownFilesUrlPrefix.trim()}/${file}`.replace(/\/\//g, '/'),
-  )
+  const links = files
+    .map((file) => `${markdownFilesUrlPrefix.trim()}/${file}`)
+    .map((link) => link.replace(/\/\//g, '/'))
   for (const link of links) {
-    if (!isValidHttpUrl(link))
-      return buildInvalidResults(
-        `Markdown files references should be valid http(s) url. Not a valid url: ${link}`,
-      )
+    if (!isValidHttpUrl(link)) return buildInvalidResults(`Not a valid http resource: ${link}`)
   }
 
   const results = await Promise.all(links.map(checkIfFileExists))
@@ -69,9 +64,11 @@ const isValidHttpUrl = (link: string): boolean => {
 const checkIfFileExists = async (link: string): Promise<ValidationResult> => {
   try {
     const response = await fetch(link)
-    if (!response.ok) return buildInvalidResult(`Markdown file not found at: ${link}`)
-  } catch (error) {
-    return buildInvalidResult(`Error while fetching markdown file at: ${link}. Error: ${error}`)
+    if (!response.ok) return buildInvalidResult(`Can't retrieve resource: ${link}`)
+  } catch (e: unknown) {
+    return buildInvalidResult(
+      `Error while fetching resource at: ${link}. Error: ${JSON.stringify(e)}`,
+    )
   }
 
   return VALID_RESULT
