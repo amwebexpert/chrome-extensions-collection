@@ -100,10 +100,11 @@ const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<Guide
 const getGuidelineUrlResources = async (): Promise<string[]> => {
   const { markdownFilesUrlPrefix = '', files = '' } = await getOptions()
 
-  const filenames = files
-    .split('\n')
-    .map((filename) => filename.trim())
-    .filter(Boolean)
+  const filenames =
+    files
+      .split('\n')
+      .map((filename) => filename.trim())
+      .filter(Boolean) ?? []
 
   const fullFilenames = filenames.map(
     // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
