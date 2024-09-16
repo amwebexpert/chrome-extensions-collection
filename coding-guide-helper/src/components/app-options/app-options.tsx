@@ -21,9 +21,9 @@ export const Options: FunctionComponent = () => {
     setIsLoading(true)
 
     try {
-      const { isValid, message } = await validateOptions(options)
+      const { isValid, messages } = await validateOptions(options)
       if (!isValid) {
-        form.setFields([{ name: 'files', errors: [message] }])
+        form.setFields([{ name: 'files', errors: messages }])
         return
       }
 
