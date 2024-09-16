@@ -32,22 +32,24 @@ export const validateOptions = async (options: OptionsType): Promise<ValidationR
   if (files.length === 0)
     return buildInvalidResults('At least one markdown file should be provided')
 
-  for (const file of files) {
-    if (!file.toLocaleLowerCase().endsWith('.md'))
-      return buildInvalidResults(`Markdown file extension (.md) missing: ${file}`)
-  }
+  const invalidNames = files.filter((file) => !file.toLocaleLowerCase().endsWith('.md'))
+  if (invalidNames.length > 0)
+    return {
+      isValid: false,
+      messages: invalidNames.map((file) => `Invalid markdown extension: "${file}"`),
+    }
 
   const links = files
     .map((file) => `${markdownFilesUrlPrefix.trim()}/${file}`)
     .map((link) => link.replace(/\/\//g, '/'))
   for (const link of links) {
-    if (!isValidHttpUrl(link)) return buildInvalidResults(`Not a valid http resource: ${link}`)
+    if (!isValidHttpUrl(link)) return buildInvalidResults(`Not a valid http resource: "${link}"`)
   }
 
   const results = await Promise.all(links.map(checkIfFileExists))
   const invalidResults = results.filter((result) => !result.isValid)
   if (invalidResults.length > 0)
-    return buildInvalidResults(invalidResults.map((r) => r.message).join('\n'))
+    return { isValid: false, messages: invalidResults.map((r) => r.message) }
 
   return VALID_RESULTS
 }
@@ -64,10 +66,10 @@ const isValidHttpUrl = (link: string): boolean => {
 const checkIfFileExists = async (link: string): Promise<ValidationResult> => {
   try {
     const response = await fetch(link)
-    if (!response.ok) return buildInvalidResult(`Can't retrieve resource: ${link}`)
+    if (!response.ok) return buildInvalidResult(`Can't retrieve resource: "${link}"`)
   } catch (e: unknown) {
     return buildInvalidResult(
-      `Error while fetching resource at: ${link}. Error: ${JSON.stringify(e)}`,
+      `Error while fetching resource: "${link}". Error: ${JSON.stringify(e)}`,
     )
   }
 
