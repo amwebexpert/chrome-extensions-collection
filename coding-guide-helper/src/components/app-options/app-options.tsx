@@ -24,6 +24,7 @@ export const Options: FunctionComponent = () => {
       const { isValid, messages } = await validateOptions(options)
       if (!isValid) {
         form.setFields([{ name: 'files', errors: messages }])
+        setIsLoading(false)
         return
       }
 
@@ -31,7 +32,6 @@ export const Options: FunctionComponent = () => {
       setTimeout(() => window.close(), 700)
     } catch (error: unknown) {
       form.setFields([{ name: 'files', errors: [JSON.stringify(error)] }])
-    } finally {
       setIsLoading(false)
     }
   }
