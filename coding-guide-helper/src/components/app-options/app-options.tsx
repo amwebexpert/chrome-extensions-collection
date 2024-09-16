@@ -4,6 +4,7 @@ import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment, MessageType, type OptionsType } from '../../models/models'
 import { getOptions } from '../../utils/options'
 import { useDarkTheme } from '../theme/use-dark-theme'
+import { validateOptions } from './app-options.utils'
 
 const { title } = Environment
 
@@ -16,10 +17,23 @@ export const Options: FunctionComponent = () => {
     getOptions().then(form.setFieldsValue)
   }, [form])
 
-  const onFinish: FormProps<OptionsType>['onFinish'] = (options) => {
+  const onFinish: FormProps<OptionsType>['onFinish'] = async (options) => {
     setIsLoading(true)
-    chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
-    setTimeout(() => window.close(), 700)
+
+    try {
+      const { isValid, message } = await validateOptions(options)
+      if (!isValid) {
+        form.setFields([{ name: 'files', errors: [message] }])
+        return
+      }
+
+      chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
+      setTimeout(() => window.close(), 700)
+    } catch (error: unknown) {
+      form.setFields([{ name: 'files', errors: [JSON.stringify(error)] }])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
