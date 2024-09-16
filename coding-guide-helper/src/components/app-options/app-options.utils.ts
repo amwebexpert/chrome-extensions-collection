@@ -20,7 +20,7 @@ const buildInvalidResults = (message: string): ValidationResults => ({
 const buildInvalidResult = (message: string): ValidationResult => ({ isValid: false, message })
 
 export const validateOptions = async (options: OptionsType): Promise<ValidationResults> => {
-  const { markdownFilesUrlPrefix, files: filesText } = options
+  const { markdownFilesUrlPrefix = '', files: filesText = '' } = options
 
   if (!markdownFilesUrlPrefix.trim())
     return buildInvalidResults('Markdown files url prefix is required')

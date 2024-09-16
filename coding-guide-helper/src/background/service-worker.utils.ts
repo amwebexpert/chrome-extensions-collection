@@ -98,7 +98,7 @@ const collectAllGuidelinesIntoSingleRoot = async (urls: string[]): Promise<Guide
 }
 
 const getGuidelineUrlResources = async (): Promise<string[]> => {
-  const { markdownFilesUrlPrefix, files } = await getOptions()
+  const { markdownFilesUrlPrefix = '', files = '' } = await getOptions()
 
   const filenames = files
     .split('\n')
