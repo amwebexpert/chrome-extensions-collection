@@ -53,3 +53,9 @@ Instructions to install the Chrome extension from the source.
   - any other ideas welcome
 - add a reset button for the default original guidelines
 - manage a list of stored guidelines specifications
+
+## LLM work
+
+Starting LLM integration in order to work with embeddings so we can do semantic searchs
+
+- `yarn tsx ./ollama-integration/embeddings.ts`
