@@ -1,4 +1,5 @@
 import type { OptionsType } from '../models/models'
+import { isChromeExtension } from './chrome.utils'
 
 const DEFAULT_MARKDOWN_FILES_URL_PREFIX =
   'https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns'
@@ -17,6 +18,8 @@ const DEFAULT_OPTIONS: OptionsType = {
 
 export const getOptions = async (): Promise<OptionsType> =>
   new Promise((resolve) => {
+    if (!isChromeExtension()) return resolve(DEFAULT_OPTIONS)
+
     chrome.storage.local.get('options', (result) => {
       const options = result.options ?? DEFAULT_OPTIONS
 

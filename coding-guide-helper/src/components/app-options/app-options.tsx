@@ -2,7 +2,7 @@ import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment, MessageType, type OptionsType } from '../../models/models'
-import { getOptions } from '../../utils/options'
+import { getOptions } from '../../utils/options.utils'
 import { useDarkTheme } from '../theme/use-dark-theme'
 import { validateOptions } from './app-options.utils'
 

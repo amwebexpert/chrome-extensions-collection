@@ -1,5 +1,5 @@
 import { type GuidelineNode, MenuItems } from '../models/models'
-import { getOptions } from '../utils/options'
+import { getOptions } from '../utils/options.utils'
 import {
   buildNode,
   buildOrderedNodes,
