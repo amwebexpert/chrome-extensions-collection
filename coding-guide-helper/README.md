@@ -58,4 +58,10 @@ Instructions to install the Chrome extension from the source.
 
 Starting LLM integration in order to work with embeddings so we can do semantic searchs
 
-- `npx vite-node ./ollama-integration/embeddings.ts`
+- Start Chromadb locally
+  - https://docs.trychroma.com/getting-started
+
+- Then run the script
+  - `npx vite-node ./ollama-integration/embeddings.ts`
+
+

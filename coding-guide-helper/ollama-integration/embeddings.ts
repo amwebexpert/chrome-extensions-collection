@@ -1,12 +1,27 @@
+import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { GuidelineNode } from '../src/models/models'
-import { collectOnlineGuidelines } from './../src/background/service-worker.utils'
+
+import { ChromaClient } from 'chromadb'
 
 const main = async () => {
   const rules = await loadRules()
-  for (const rule of rules) {
-    console.log(rule.title)
-    console.info(`\t====>>> ${rule.content.slice(0, 100)}...`)
-  }
+
+  const client = new ChromaClient()
+
+  const collection = await client.getOrCreateCollection({ name: 'codingGuidelinesCollection' })
+
+  await collection.upsert({
+    documents: rules.map((rule) => rule.content),
+    ids: rules.map((rule) => rule.title),
+    metadatas: rules.map((rule) => ({ title: rule.title })),
+  })
+
+  const results = await collection.query({
+    queryTexts: 'many args position',
+    nResults: 1,
+  })
+
+  console.log(results.metadatas)
 }
 
 type Rule = {
