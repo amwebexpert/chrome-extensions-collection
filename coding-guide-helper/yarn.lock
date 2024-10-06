@@ -2304,6 +2304,13 @@ binary-extensions@^2.3.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
+bindings@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
+  integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
+  dependencies:
+    file-uri-to-path "1.0.0"
+
 boolbase@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
@@ -3493,6 +3500,11 @@ figures@^6.0.0, figures@^6.1.0:
   integrity sha512-d+l3qxjSesT4V7v2fh+QnmFnUWv9lSpjarhShNTgBOfA0ttejbQUAlHLitbjkoRiDulW0OPoQPYIGhIC8ohejg==
   dependencies:
     is-unicode-supported "^2.0.0"
+
+file-uri-to-path@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
+  integrity sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==
 
 filelist@^1.0.4:
   version "1.0.4"
@@ -5815,6 +5827,11 @@ nerf-dart@^1.0.0:
   resolved "https://registry.yarnpkg.com/nerf-dart/-/nerf-dart-1.0.0.tgz#e6dab7febf5ad816ea81cf5c629c5a0ebde72c1a"
   integrity sha512-EZSPZB70jiVsivaBLYDCyntd5eH8NTSMOn3rB+HxwdmKThGELLdYv8qVIMWvZEFy9w8ZZpW9h9OB32l1rGtj7g==
 
+node-addon-api@^8.0.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.1.0.tgz#55a573685dd4bd053f189cffa4e6332d2b1f1645"
+  integrity sha512-yBY+qqWSv3dWKGODD6OGE6GnTX7Q2r+4+DfpqxHSHh8x0B4EKP9+wVGLS6U/AM1vxSNNmUEuIV5EGhYwPpfOwQ==
+
 node-emoji@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/node-emoji/-/node-emoji-2.1.3.tgz#93cfabb5cc7c3653aa52f29d6ffb7927d8047c06"
@@ -5824,6 +5841,11 @@ node-emoji@^2.1.3:
     char-regex "^1.0.2"
     emojilib "^2.4.0"
     skin-tone "^2.0.0"
+
+node-gyp-build@^4.8.0:
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.2.tgz#4f802b71c1ab2ca16af830e6c1ea7dd1ad9496fa"
+  integrity sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==
 
 node-gyp@^10.0.0, node-gyp@^10.1.0:
   version "10.1.0"
@@ -8243,6 +8265,15 @@ url-parse@^1.5.3:
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
+
+usearch@^2.15.2:
+  version "2.15.2"
+  resolved "https://registry.yarnpkg.com/usearch/-/usearch-2.15.2.tgz#430a3329521da46df5302ace5a7033ae2f944525"
+  integrity sha512-Qzcvor8IlrJQZaFI0XxRYoQ2LIwNzuhEU3gZb7JlPekzTRUWCvGB3N5GHhY7UD0TLggdI0+Nhps9W85V6UOI6Q==
+  dependencies:
+    bindings "^1.5.0"
+    node-addon-api "^8.0.0"
+    node-gyp-build "^4.8.0"
 
 util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"

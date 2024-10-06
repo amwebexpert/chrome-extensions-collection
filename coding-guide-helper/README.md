@@ -58,4 +58,4 @@ Instructions to install the Chrome extension from the source.
 
 Starting LLM integration in order to work with embeddings so we can do semantic searchs
 
-- `yarn tsx ./ollama-integration/embeddings.ts`
+- `npx vite-node ./ollama-integration/embeddings.ts`
