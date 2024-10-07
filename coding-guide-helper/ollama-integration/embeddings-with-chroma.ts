@@ -16,8 +16,9 @@ const main = async () => {
   })
 
   const results = await collection.query({
-    // squeryTexts: 'many args position',
-    queryTexts: 'multiple values comparison',
+    queryTexts: 'ternary abuse',
+    // queryTexts: 'many args position',
+    // queryTexts: 'multiple values comparison',
     nResults: 1,
   })
 

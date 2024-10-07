@@ -60,8 +60,9 @@ Starting LLM integration in order to work with embeddings so we can do semantic 
 
 - Start Chromadb locally
   - https://docs.trychroma.com/getting-started
+  - TODO IndexedDB equivalent for tensorflow embeddings
 
-- Then run the script
-  - `npx vite-node ./ollama-integration/embeddings.ts`
-
+- Then run one of the scripts so we can compare results accuracy:
+  - `npx vite-node ./ollama-integration/embeddings-with-chroma.ts`
+  - `npx vite-node ./ollama-integration/embeddings-with-tensorflow.ts`
 
