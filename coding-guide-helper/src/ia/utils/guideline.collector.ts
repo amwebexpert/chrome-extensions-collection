@@ -1,4 +1,3 @@
-import { collectOnlineGuidelines } from '../../background/service-worker.utils'
 import type { GuidelineNode } from '../../models/models'
 import type { Rule } from '../models/models'
 
@@ -12,8 +11,7 @@ export const extractFullRule = (node: GuidelineNode): Rule => {
   return { title, content }
 }
 
-export const loadRules = async (): Promise<Rule[]> => {
-  const rootNode = await collectOnlineGuidelines()
+export const loadRules = async (rootNode: GuidelineNode): Promise<Rule[]> => {
   const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
 
   const rules: Rule[] = []

@@ -1,3 +1,4 @@
+import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { EmbeddingVector, Rule } from '../src/ia/models/models'
 import { loadRules } from './../src/ia/utils/guideline.collector'
 
@@ -29,7 +30,8 @@ const cosineSimilarity = (vectorA: EmbeddingVector, vectorB: EmbeddingVector): n
 }
 
 const main = async () => {
-  const rules: Rule[] = await loadRules()
+  const rootNode = await collectOnlineGuidelines()
+  const rules = await loadRules(rootNode)
 
   // compute embeddings for each rule
   const documents: string[] = rules.map((rule) => rule.content)

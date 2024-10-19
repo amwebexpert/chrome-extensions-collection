@@ -1,10 +1,12 @@
+import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import { loadRules } from './../src/ia/utils/guideline.collector'
 
 // @see https://github.com/chroma-core/chroma
 import { ChromaClient } from 'chromadb'
 
 const main = async () => {
-  const rules = await loadRules()
+  const rootNode = await collectOnlineGuidelines()
+  const rules = await loadRules(rootNode)
 
   const client = new ChromaClient()
   const collection = await client.getOrCreateCollection({ name: 'codingGuidelinesCollection' })
