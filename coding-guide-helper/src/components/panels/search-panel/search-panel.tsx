@@ -6,7 +6,7 @@ import './search-panel.css'
 
 export const SearchPanel: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
-  const { search, setSearch, isSearching, searchResults, doSearch } = useSearch()
+  const { search, setSearch, isSearching, searchResults, launchSearch } = useSearch()
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.select(), 300)
@@ -26,7 +26,7 @@ export const SearchPanel: FunctionComponent = () => {
           value={search}
           onKeyDown={(e) => console.debug(`onKeyDown ${e.key}`)}
           onChange={(e) => setSearch(e.target.value)}
-          onSearch={() => doSearch(search)}
+          onSearch={() => launchSearch()}
         />
       </Space>
 

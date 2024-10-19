@@ -1,6 +1,7 @@
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
+import { initGemini } from './search.utils'
 
 const doSearch = (payload: string) =>
   chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
@@ -13,6 +14,11 @@ export const useSearch = () => {
   const [search, setSearch] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
+
+  const launchSearch = () => {
+    initGemini()
+    doSearch(search)
+  }
 
   useEffect(() => {
     // restore search value
@@ -36,5 +42,5 @@ export const useSearch = () => {
     doSearchDebounced(search)
   }, [search])
 
-  return { search, setSearch, isSearching, searchResults, doSearch }
+  return { search, setSearch, isSearching, searchResults, launchSearch }
 }

@@ -1,11 +1,9 @@
-import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
-import type { GuidelineNode } from '../src/models/models'
+import type { EmbeddingVector, Rule } from '../src/ia/models/models'
+import { loadRules } from './../src/ia/utils/guideline.collector'
 
 // @see https://www.npmjs.com/package/tensorflow-models
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import '@tensorflow/tfjs'
-
-type EmbeddingVector = number[]
 
 const generateEmbedding = async (documents: string[]): Promise<EmbeddingVector[]> => {
   console.info('====>>> loading model') // 5 seconds
@@ -48,12 +46,6 @@ const main = async () => {
   console.info('====>>> bestDocTitle', bestDocTitle)
 }
 
-type Rule = {
-  title: string
-  content: string
-  embedding?: EmbeddingVector
-}
-
 const findRelevantDocument = async (queryText: string, documentsEmbeddings: Rule[]) => {
   const [queryTextEmbedding] = await generateEmbedding([queryText])
   let bestDoc: Rule | null = null
@@ -68,28 +60,6 @@ const findRelevantDocument = async (queryText: string, documentsEmbeddings: Rule
   }
 
   return bestDoc ? bestDoc.title : null
-}
-
-const extractFullRule = (node: GuidelineNode): Rule => {
-  const title = node.titleMarkdown
-
-  const content = node.children
-    .map((child) => `${child.titleMarkdown}\n${child.markdownLines.join('\n')}`)
-    .join('\n')
-
-  return { title, content }
-}
-
-const loadRules = async (): Promise<Rule[]> => {
-  const rootNode = await collectOnlineGuidelines()
-  const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
-
-  const rules: Rule[] = []
-  for (const child of tsCodingGuidelines.children) {
-    rules.push(extractFullRule(child))
-  }
-
-  return rules
 }
 
 main()

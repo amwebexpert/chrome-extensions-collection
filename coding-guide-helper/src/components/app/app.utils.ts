@@ -6,6 +6,11 @@ export const logPlatformInfo = () =>
     .getPlatformInfo()
     .then((info) => console.log('platform info', JSON.stringify(info, null, 2)))
 
+export const logManifestInfo = () => {
+  const { version, author, name } = chrome.runtime.getManifest()
+  console.info(`chrome extension ${name} - by ${author} v.${version}`)
+}
+
 export const sendLoadStatusToContentScript = async () => {
   const tabId = await getFirstActiveTab()
   if (!tabId) return

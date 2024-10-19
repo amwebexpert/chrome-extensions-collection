@@ -60,6 +60,8 @@ Starting LLM integration in order to work with embeddings so we can do semantic 
 
 - Start Chromadb locally
   - https://docs.trychroma.com/getting-started
+  - for instance:
+    - `chroma run --path ./chromadb_data`
   - TODO IndexedDB equivalent for tensorflow embeddings
 
 - Then run one of the scripts so we can compare results accuracy:
