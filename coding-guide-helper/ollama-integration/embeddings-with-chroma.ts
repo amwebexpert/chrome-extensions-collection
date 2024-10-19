@@ -1,6 +1,7 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { GuidelineNode } from '../src/models/models'
 
+// @see https://github.com/chroma-core/chroma
 import { ChromaClient } from 'chromadb'
 
 const main = async () => {

@@ -1,6 +1,7 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { GuidelineNode } from '../src/models/models'
 
+// @see https://www.npmjs.com/package/tensorflow-models
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import '@tensorflow/tfjs'
 
@@ -39,9 +40,9 @@ const main = async () => {
     rule.embedding = embeddings[idx]
   })
 
-  const queryText = 'ternary abuse'
-  // const queryText = 'many args position'
-  //const queryText = 'multiple values comparison'
+  //const queryText = 'ternary abuse'
+  //const queryText = 'many args position'
+  const queryText = 'multiple values comparison'
 
   const bestDocTitle = await findRelevantDocument(queryText, rules)
   console.info('====>>> bestDocTitle', bestDocTitle)
