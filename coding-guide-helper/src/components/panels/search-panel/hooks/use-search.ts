@@ -1,7 +1,7 @@
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
-import { initGemini } from './search.utils'
+import { browserAssistant } from './search.utils'
 
 const doSearch = (payload: string) =>
   chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
@@ -18,11 +18,20 @@ export const useSearch = () => {
   const launchSearch = () => {
     if (!search) return
 
-    initGemini(search)
+    browserAssistant
+      .promptAssistant(search)
+      .then((response) => console.info('====>>> assistant response', response))
+      .catch((error) => console.error('====>>> assistant error', error))
+
     doSearch(search)
   }
 
   useEffect(() => {
+    browserAssistant
+      .init()
+      .then(() => console.info('====>>> assistant initialized'))
+      .catch((error) => console.error('====>>> assistant error', error))
+
     // restore search value
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
