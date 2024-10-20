@@ -1,7 +1,7 @@
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
-import { browserAssistant } from './search.utils'
+import { browserAssistant, isAssistantAvailableOnPlatform } from './search.utils'
 
 const doSearch = (payload: string) =>
   chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
@@ -18,12 +18,13 @@ export const useSearch = () => {
   const launchSearch = () => {
     if (!search) return
 
-    browserAssistant
-      .promptAssistant(search)
-      .then((response) => console.info('====>>> assistant response', response))
-      .catch((error) => console.error('====>>> assistant error', error))
-
     doSearch(search)
+
+    if (isAssistantAvailableOnPlatform())
+      browserAssistant
+        .promptAssistant(search)
+        .then((response) => console.info('====>>> assistant response', response))
+        .catch((error) => console.error('====>>> assistant error', error))
   }
 
   useEffect(() => {
