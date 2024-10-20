@@ -58,13 +58,29 @@ Instructions to install the Chrome extension from the source.
 
 Starting LLM integration in order to work with embeddings so we can do semantic searchs
 
-- Start Chromadb locally
-  - https://docs.trychroma.com/getting-started
-  - for instance:
-    - `chroma run --path ./chromadb_data`
-  - TODO IndexedDB equivalent for tensorflow embeddings
+### Start Chromadb locally
 
-- Then run one of the scripts so we can compare results accuracy:
-  - `npx vite-node ./ollama-integration/embeddings-with-chroma.ts`
-  - `npx vite-node ./ollama-integration/embeddings-with-tensorflow.ts`
+- https://docs.trychroma.com/getting-started
+- for instance: `chroma run --path ./chromadb_data`
+- TODO IndexedDB equivalent for tensorflow embeddings
 
+### run one of the scripts so we can compare results accuracy
+
+- `npx vite-node ./ollama-integration/embeddings-with-chroma.ts`
+- `npx vite-node ./ollama-integration/embeddings-with-tensorflow.ts`
+
+## Chrome AI Gemini Nano work
+
+### AI Assistant installation
+
+- https://huggingface.co/blog/Xenova/run-gemini-nano-in-your-browser
+
+### Next possible optimizations
+
+- load guidelines from cache
+- usage of `systemPrompt` like: `ai.languageModel.create({ systemPrompt: "...instruction here..." })`
+- provide up to 3 rules for each prompt (instead of just 1)
+- instead of calling `.destroy()` we could keep a ref to the current session and use `.clone()` before next prompt
+  - `const freshSession = await session.clone()` // may not be available (see below)
+  - `TypeError: window.ai.assistant.clone is not a function`
+- https://github.com/explainers-by-googlers/prompt-api/

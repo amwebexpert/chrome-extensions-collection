@@ -17,22 +17,14 @@ const EXPECTED_ACTION =
 export const isAssistantAvailableOnPlatform = (): boolean => !!window.ai?.assistant?.create
 
 class BrowserAssistant {
-  // biome-ignore lint: noExplicitAny
-  assistant: any | null = null
-
-  rootNode: GuidelineNode | null = null
   rules: Rule[] = []
-
-  get isAssistantReady(): boolean {
-    return !!this.assistant
-  }
 
   get hasRules(): boolean {
     return !!this.rules.length
   }
 
   get isReadyToQuery(): boolean {
-    return this.isAssistantReady && this.hasRules
+    return isAssistantAvailableOnPlatform() && this.hasRules
   }
 
   get allRulesAsJson(): string {
@@ -42,7 +34,7 @@ class BrowserAssistant {
         title: rule.title,
         content: rule.content,
       }))
-      .slice(0, 5)
+      .slice(0, 5) // limit to 5 rules otherwise it's too much info for the gemini nano (for now)
 
     return JSON.stringify(allRules, null, 2)
   }
@@ -55,13 +47,11 @@ class BrowserAssistant {
     if (!isAssistantAvailableOnPlatform()) throw Error('Assistant not available')
     if (this.isReadyToQuery) return
 
-    // TODO: Promise.all
-    this.assistant = await window.ai.assistant.create()
-    this.rootNode = await collectOnlineGuidelines() // TODO get from local storage cache
+    const rootNode = await collectOnlineGuidelines() // TODO get from local storage cache
 
-    if (!this.rootNode.children?.length) throw Error('Cannot load guidelines')
+    if (!rootNode.children?.length) throw Error('Cannot load guidelines')
 
-    const tsCodingGuidelines: GuidelineNode = this.rootNode.children[0] // 1st one is TS coding guidelines
+    const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
     this.rules = await loadRules(tsCodingGuidelines)
   }
 
@@ -72,7 +62,11 @@ class BrowserAssistant {
     const prompt = this.buildPrompt(search)
     console.info('====>>> prompt', prompt)
 
-    return await this.assistant.prompt(prompt)
+    const assistant = await window.ai.assistant.create()
+    const response = await assistant.prompt(prompt)
+    await assistant.destroy()
+
+    return response
   }
 }
 
