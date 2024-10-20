@@ -57,7 +57,7 @@ class BrowserAssistant {
 
     // TODO: Promise.all
     this.assistant = await window.ai.assistant.create()
-    this.rootNode = await collectOnlineGuidelines()
+    this.rootNode = await collectOnlineGuidelines() // TODO get from local storage cache
 
     if (!this.rootNode.children?.length) throw Error('Cannot load guidelines')
 
