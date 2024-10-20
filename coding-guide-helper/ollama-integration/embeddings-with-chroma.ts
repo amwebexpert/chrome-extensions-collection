@@ -20,9 +20,9 @@ const main = async () => {
   })
 
   const results = await collection.query({
-    queryTexts: 'ternary abuse',
+    // queryTexts: 'ternary abuse',
     // queryTexts: 'many args position',
-    // queryTexts: 'multiple values comparison',
+    queryTexts: 'multiple values comparison',
     nResults: 1,
   })
 
