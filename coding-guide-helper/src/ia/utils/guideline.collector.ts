@@ -11,11 +11,9 @@ export const extractFullRule = (node: GuidelineNode): Rule => {
   return { title, content }
 }
 
-export const loadRules = async (rootNode: GuidelineNode): Promise<Rule[]> => {
-  const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
-
+export const loadRules = async (guidelineNode: GuidelineNode): Promise<Rule[]> => {
   const rules: Rule[] = []
-  for (const child of tsCodingGuidelines.children) {
+  for (const child of guidelineNode.children) {
     rules.push(extractFullRule(child))
   }
 

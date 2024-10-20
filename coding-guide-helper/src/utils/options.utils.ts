@@ -18,7 +18,10 @@ const DEFAULT_OPTIONS: OptionsType = {
 
 export const getOptions = async (): Promise<OptionsType> =>
   new Promise((resolve) => {
-    if (!isChromeExtension()) return resolve(DEFAULT_OPTIONS)
+    if (!isChromeExtension()) {
+      resolve(DEFAULT_OPTIONS)
+      return
+    }
 
     chrome.storage.local.get('options', (result) => {
       const options = result.options ?? DEFAULT_OPTIONS

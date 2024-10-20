@@ -16,7 +16,9 @@ export const useSearch = () => {
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
   const launchSearch = () => {
-    initGemini()
+    if (!search) return
+
+    initGemini(search)
     doSearch(search)
   }
 

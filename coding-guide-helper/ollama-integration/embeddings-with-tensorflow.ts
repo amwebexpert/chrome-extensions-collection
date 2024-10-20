@@ -1,5 +1,6 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { EmbeddingVector, Rule } from '../src/ia/models/models'
+import type { GuidelineNode } from '../src/models/models'
 import { loadRules } from './../src/ia/utils/guideline.collector'
 
 // @see https://www.npmjs.com/package/tensorflow-models
@@ -31,7 +32,8 @@ const cosineSimilarity = (vectorA: EmbeddingVector, vectorB: EmbeddingVector): n
 
 const main = async () => {
   const rootNode = await collectOnlineGuidelines()
-  const rules = await loadRules(rootNode)
+  const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
+  const rules = await loadRules(tsCodingGuidelines)
 
   // compute embeddings for each rule
   const documents: string[] = rules.map((rule) => rule.content)
