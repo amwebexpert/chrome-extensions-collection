@@ -9,6 +9,9 @@ declare global {
   }
 }
 
+const ASSISTANT_ROLE = 'You are a react.js and typescript assistant and these are the coding rules:'
+const EXPECTED_ACTION = 'Find the most relevant rule number matching the following expression:'
+
 export const initGemini = async (search: string) => {
   if (!window.ai?.assistant?.create) {
     console.error('cannot create assistant')
@@ -23,15 +26,13 @@ export const initGemini = async (search: string) => {
 
   const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
   const rules = await loadRules(tsCodingGuidelines)
-  //console.info('====>>> rules', rules)
+  const allRulesAsText = rules.map((rule, index) => ({ number: index + 1, ...rule }))
+  const allRulesAsJson = JSON.stringify(allRulesAsText, null, 2).trim()
 
-  const prompt = `You are a coding typescript assistant and these are the coding guide rules that a reviewer is searching through: \n\n
-    ${rules.map((rule, index) => `RULE ${index + 1}: ${rule.title}\n${rule.content}`).join('\n')}\n\n
-    What it the rule number that matches the following search criteria? \n\n
-    "${search}"`
-  //console.info('====>>> prompt', prompt)
+  const prompt = `${ASSISTANT_ROLE}\n${allRulesAsJson}\n\n${EXPECTED_ACTION} "${search}"`
+  console.info('====>>> prompt', prompt)
 
-  const assistant = await window.ai.assistant.create()
-  const response = await assistant.prompt(prompt)
-  console.info('====>>> assistant response', response)
+  // const assistant = await window.ai.assistant.create()
+  // const response = await assistant.prompt(prompt)
+  // console.info('====>>> assistant response', response)
 }
