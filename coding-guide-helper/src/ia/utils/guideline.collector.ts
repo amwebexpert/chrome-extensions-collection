@@ -16,10 +16,21 @@ export const extractFullRule = (node: GuidelineNode): Rule => {
   return { title, content }
 }
 
-export const loadRules = async (guidelineNode: GuidelineNode): Promise<Rule[]> => {
+export const loadRules = (guidelineNode: GuidelineNode): Rule[] => {
   const rules: Rule[] = []
   for (const child of guidelineNode.children) {
     rules.push(extractFullRule(child))
+  }
+
+  return rules
+}
+
+export const loadAllRules = (rootNode: GuidelineNode): Rule[] => {
+  const rules: Rule[] = []
+
+  for (const guidelineNode of rootNode.children) {
+    const guidelineNodeRules = loadRules(guidelineNode)
+    rules.push(...guidelineNodeRules)
   }
 
   return rules

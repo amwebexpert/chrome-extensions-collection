@@ -8,7 +8,7 @@ import { ChromaClient } from 'chromadb'
 const main = async () => {
   const rootNode = await collectOnlineGuidelines()
   const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
-  const rules = await loadRules(tsCodingGuidelines)
+  const rules = loadRules(tsCodingGuidelines)
 
   const client = new ChromaClient()
   const collection = await client.getOrCreateCollection({ name: 'codingGuidelinesCollection' })
