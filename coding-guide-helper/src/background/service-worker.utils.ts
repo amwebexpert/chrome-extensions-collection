@@ -106,11 +106,13 @@ const getGuidelineUrlResources = async (): Promise<string[]> => {
     .map((filename) => filename.trim())
     .filter(Boolean)
 
-  const fullFilenames = filenames.map(
-    // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
-    // Pattern 2: https://github.com/${organizationName}/${repoName}/raw/main/${filename}
-    (filename) => `${prefix}/${filename}`.replace(/\/\//g, '/'),
-  )
+  const fullFilenames = filenames
+    .map((filename) => filename.replace(/\/\//g, '/')) // remove double slashes
+    .map(
+      // Pattern 1: https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns/common-coding-patterns.md
+      // Pattern 2: https://github.com/${organizationName}/${repoName}/raw/main/${filename}
+      (filename) => `${prefix}/${filename}`,
+    )
 
   return fullFilenames
 }

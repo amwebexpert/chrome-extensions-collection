@@ -20,6 +20,7 @@ export const useSearch = () => {
 
     doSearch(search)
 
+    // ask browser assistant (Gemini) for help as well
     if (isAssistantAvailableOnPlatform())
       browserAssistant
         .promptAssistant(search)
@@ -28,6 +29,7 @@ export const useSearch = () => {
   }
 
   useEffect(() => {
+    // init browser assistant (Gemini) when component mounts
     browserAssistant
       .init()
       .then(() => console.info('====>>> assistant initialized'))
