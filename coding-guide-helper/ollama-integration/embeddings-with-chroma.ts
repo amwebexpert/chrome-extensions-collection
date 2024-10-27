@@ -4,6 +4,7 @@ import { loadRules } from './../src/ia/utils/guideline.collector'
 
 // @see https://github.com/chroma-core/chroma
 import { ChromaClient } from 'chromadb'
+import { QUERIES } from './queries.utils'
 
 const main = async () => {
   const rootNode = await collectOnlineGuidelines()
@@ -19,14 +20,10 @@ const main = async () => {
     metadatas: rules.map((rule) => ({ title: rule.title })),
   })
 
-  const results = await collection.query({
-    // queryTexts: 'ternary abuse',
-    // queryTexts: 'many args position',
-    queryTexts: 'multiple values comparison',
-    nResults: 1,
-  })
-
-  console.log(results.metadatas)
+  for (const queryTexts of QUERIES) {
+    const results = await collection.query({ queryTexts, nResults: 1 })
+    console.info(`====>>> match for "${queryTexts}"`, results.metadatas)
+  }
 }
 
 main()

@@ -8,10 +8,9 @@ export const extractFullRule = (node: GuidelineNode): Rule => {
   const { title } = node
 
   const content = node.children
-    .map(({ title }) => title)
-    .filter(isAvoidOrPreferTitle)
+    .map(({ title, markdownLines }) => `${title}\n${markdownLines.join('\n')}`)
     .join('\n')
-  // console.info('====>>> content', { title, content })
+  //console.info('====>>> content', { title, content })
 
   return { title, content }
 }

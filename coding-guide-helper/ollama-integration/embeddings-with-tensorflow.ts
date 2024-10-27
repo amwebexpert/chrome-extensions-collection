@@ -1,6 +1,7 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { EmbeddingVector, Rule } from '../src/ia/models/models'
 import { loadAllRules } from './../src/ia/utils/guideline.collector'
+import { QUERIES } from './queries.utils'
 
 // @see https://www.npmjs.com/package/tensorflow-models
 import * as use from '@tensorflow-models/universal-sentence-encoder'
@@ -40,12 +41,10 @@ const main = async () => {
     rule.embedding = embeddings[idx]
   })
 
-  //const queryText = 'ternary abuse'
-  //const queryText = 'many args position'
-  const queryText = 'multiple values comparison'
-
-  const bestDocTitle = await findRelevantDocument(queryText, rules)
-  console.info('====>>> bestDocTitle', bestDocTitle)
+  for (const queryTexts of QUERIES) {
+    const bestDocTitle = await findRelevantDocument(queryTexts, rules)
+    console.info(`====>>> bestDocTitle for "${queryTexts}"`, bestDocTitle)
+  }
 }
 
 const findRelevantDocument = async (queryText: string, documentsEmbeddings: Rule[]) => {
