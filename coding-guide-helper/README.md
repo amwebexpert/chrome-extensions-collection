@@ -66,8 +66,9 @@ Starting LLM integration in order to work with embeddings so we can do semantic 
 
 ### run one of the scripts so we can compare results accuracy
 
-- `npx vite-node ./ollama-integration/embeddings-with-chroma.ts`
-- `npx vite-node ./ollama-integration/embeddings-with-tensorflow.ts`
+- `npx vite-node ./LLM-integration/embeddings-with-chroma.ts`
+- `npx vite-node ./LLM-integration/embeddings-with-tensorflow.ts`
+- `npx vite-node ./LLM-integration/embeddings-with-client-vector-search.ts`
 
 ## Chrome AI Gemini Nano work
 

@@ -1,5 +1,5 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
-import { loadAllRules } from './../src/ia/utils/guideline.collector'
+import { loadAllRules } from '../src/ia/utils/guideline.collector'
 
 // @see https://github.com/chroma-core/chroma
 import { ChromaClient } from 'chromadb'
