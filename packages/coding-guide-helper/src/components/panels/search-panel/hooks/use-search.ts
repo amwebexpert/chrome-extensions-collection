@@ -4,6 +4,7 @@ import {
   PortName,
   browserAssistant,
   isAssistantAvailableOnPlatform,
+  isSemanticServiceAvailable,
   semanticSearcher,
 } from '@packages/coding-guide-helper-common'
 import debounce from 'debounce'
@@ -21,31 +22,7 @@ export const useSearch = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
-  const launchSearch = () => {
-    if (!search) return
-
-    doSearch(search)
-
-    if (isAssistantAvailableOnPlatform())
-      browserAssistant
-        .promptAssistant(search)
-        .then((response) => console.info('====>>> assistant response', response))
-        .catch((error) => console.error('====>>> assistant error', error))
-
-    semanticSearcher
-      .findMostRelevantNodes(search)
-      .then((nodes) => console.info('====>>> semantic search results', nodes))
-  }
-
   useEffect(() => {
-    // init browser assistant (Gemini) when component mounts
-    browserAssistant
-      .init()
-      .then(() => console.info('====>>> assistant initialized'))
-      .catch((error) => console.error('====>>> assistant error', error))
-
-    semanticSearcher.init().then(() => console.info('====>>> semantic searcher initialized'))
-
     // restore search value
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
@@ -62,6 +39,34 @@ export const useSearch = () => {
       if (type === MessageType.ON_SEARCH_ERROR) setIsSearching(false)
     })
   }, [])
+
+  useEffect(() => {
+    if (isAssistantAvailableOnPlatform())
+      browserAssistant
+        .init()
+        .then(() => console.info('====>>> assistant initialized'))
+        .catch((error) => console.error('====>>> assistant error', error))
+
+    if (isSemanticServiceAvailable())
+      semanticSearcher.init().then(() => console.info('====>>> semantic searcher initialized'))
+  }, [])
+
+  const launchSearch = () => {
+    if (!search) return
+
+    doSearch(search)
+
+    if (isAssistantAvailableOnPlatform())
+      browserAssistant
+        .promptAssistant(search)
+        .then((response) => console.info('====>>> assistant response', response))
+        .catch((error) => console.error('====>>> assistant error', error))
+
+    if (isSemanticServiceAvailable())
+      semanticSearcher
+        .findMostRelevantNodes(search)
+        .then((nodes) => console.info('====>>> semantic search results', nodes))
+  }
 
   useEffect(() => {
     doSearchDebounced(search)

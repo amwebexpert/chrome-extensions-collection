@@ -10,7 +10,7 @@ class ClientVectorSearcher {
   async init() {
     this.reset()
 
-    const rootNode = await collectOnlineGuidelines() // TODO get from local storage cache (or axios cache)
+    const rootNode = await collectOnlineGuidelines()
     if (!rootNode.children?.length) throw Error('Cannot load guidelines')
 
     this.rootNode = rootNode
@@ -58,3 +58,8 @@ class ClientVectorSearcher {
 }
 
 export const semanticSearcher = new ClientVectorSearcher()
+
+// feature-flag for semantic search in the browser
+// - issues with the WebAssembly module when running on a browser
+//   ==> we probably need to download a model from public CDN or extension's public/ assets folder
+export const isSemanticServiceAvailable = (): boolean => false

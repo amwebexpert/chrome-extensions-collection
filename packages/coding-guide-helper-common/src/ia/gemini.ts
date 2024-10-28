@@ -67,7 +67,7 @@ class BrowserAssistant {
     if (!isAssistantAvailableOnPlatform()) throw Error('Assistant not available')
     if (this.isReadyToQuery) return
 
-    const rootNode = await collectOnlineGuidelines() // TODO get from local storage cache
+    const rootNode = await collectOnlineGuidelines()
 
     if (!rootNode.children?.length) throw Error('Cannot load guidelines')
 
