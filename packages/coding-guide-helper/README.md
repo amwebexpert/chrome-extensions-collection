@@ -54,22 +54,6 @@ Instructions to install the Chrome extension from the source.
 - add a reset button for the default original guidelines
 - manage a list of stored guidelines specifications
 
-## LLM work
-
-Starting LLM integration in order to work with embeddings so we can do semantic searchs
-
-### Start Chromadb locally
-
-- https://docs.trychroma.com/getting-started
-- for instance: `chroma run --path ./chromadb_data`
-- TODO IndexedDB equivalent for tensorflow embeddings
-
-### run one of the scripts so we can compare results accuracy
-
-- `npx vite-node ./LLM-integration/embeddings-with-chroma.ts`
-- `npx vite-node ./LLM-integration/embeddings-with-tensorflow.ts`
-- `npx vite-node ./LLM-integration/embeddings-with-client-vector-search.ts`
-
 ## Chrome AI Gemini Nano work
 
 ### AI Assistant installation
