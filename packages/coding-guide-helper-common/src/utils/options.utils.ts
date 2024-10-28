@@ -2,7 +2,7 @@ import type { OptionsType } from '../models/models'
 import { isChromeExtension } from './chrome.utils'
 
 const DEFAULT_MARKDOWN_FILES_URL_PREFIX =
-  'https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/coding-guide-helper/public/markdowns'
+  'https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/packages/coding-guide-helper/public/markdowns'
 
 const DEFAULT_FILES: string[] = [
   'common-coding-patterns.md',

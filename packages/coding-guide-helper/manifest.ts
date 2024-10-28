@@ -26,18 +26,17 @@ export const manifest: ManifestV3Export = {
       matches: ['*://*/*'],
     },
   ],
-  permissions: [
-    'activeTab',
-    'contextMenus',
-    'unlimitedStorage',
-    'storage',
-  ],
+  permissions: ['activeTab', 'contextMenus', 'unlimitedStorage', 'storage'],
   content_scripts: [
     {
       js: ['src/content/content-script.ts'],
       matches: ['https://github.com/*'],
     },
   ],
+  content_security_policy: {
+    // Insecure CSP value "'wasm-eval'" in directive 'script-src'. Could not load manifest.
+    // extension_pages: "script-src 'self' 'wasm-eval'; object-src 'self'",
+  },
   commands: {
     _execute_action: {
       suggested_key: {
