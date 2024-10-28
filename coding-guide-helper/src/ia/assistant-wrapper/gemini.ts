@@ -1,7 +1,7 @@
-import { collectOnlineGuidelines } from '../../../../background/service-worker.utils'
-import type { Rule } from '../../../../ia/models/models'
-import { loadRules } from '../../../../ia/utils/guideline.collector'
-import type { GuidelineNode } from '../../../../models/models'
+import { collectOnlineGuidelines } from '../../background/service-worker.utils'
+import type { GuidelineNode } from '../../models/models'
+import type { Rule } from '../models/models'
+import { isAvoidOrPreferTitle } from '../utils/guideline.collector'
 
 declare global {
   interface Window {
@@ -12,9 +12,29 @@ declare global {
 
 const ASSISTANT_ROLE = 'You are a react.js and typescript assistant and these are the coding rules:'
 const EXPECTED_ACTION =
-  'Give the rule (only respond with a simple number) that has the best matche to following criteria:'
+  'Give the one rule number (only the number) that matches the following search query:'
 
 export const isAssistantAvailableOnPlatform = (): boolean => !!window.ai?.assistant?.create
+
+const extractFullRule = (node: GuidelineNode): Rule => {
+  const { title, href } = node
+
+  const content = node.children
+    .filter(({ title }) => isAvoidOrPreferTitle(title))
+    .map(({ title }) => title)
+    .join('\n')
+
+  return { title, href, content }
+}
+
+const loadRules = (guidelineNode: GuidelineNode): Rule[] => {
+  const rules: Rule[] = []
+  for (const child of guidelineNode.children) {
+    rules.push(extractFullRule(child))
+  }
+
+  return rules
+}
 
 class BrowserAssistant {
   rules: Rule[] = []
@@ -52,7 +72,7 @@ class BrowserAssistant {
     if (!rootNode.children?.length) throw Error('Cannot load guidelines')
 
     const tsCodingGuidelines: GuidelineNode = rootNode.children[0] // 1st one is TS coding guidelines
-    this.rules = await loadRules(tsCodingGuidelines)
+    this.rules = loadRules(tsCodingGuidelines)
   }
 
   async promptAssistant(search: string): Promise<string> {

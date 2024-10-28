@@ -1,7 +1,10 @@
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
+import {
+  browserAssistant,
+  isAssistantAvailableOnPlatform,
+} from '../../../../ia/assistant-wrapper/gemini'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
-import { browserAssistant, isAssistantAvailableOnPlatform } from './search.utils'
 
 const doSearch = (payload: string) =>
   chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })

@@ -1,7 +1,7 @@
 import type { GuidelineNode } from '../../models/models'
 import type { Rule } from '../models/models'
 
-const isAvoidOrPreferTitle = (title: string): boolean =>
+export const isAvoidOrPreferTitle = (title: string): boolean =>
   title.startsWith('❌ Avoid') || title.startsWith('✅ Prefer')
 
 export const extractFullRule = (node: GuidelineNode): Rule => {
