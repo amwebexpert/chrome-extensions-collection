@@ -53,7 +53,7 @@ class ClientVectorSearcher {
       // },
     })
 
-    return results.map((result) => result.object)
+    return results?.map((result) => result.object)
   }
 }
 
