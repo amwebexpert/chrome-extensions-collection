@@ -75,9 +75,9 @@ class BrowserAssistant {
     this.rules = loadRules(tsCodingGuidelines)
   }
 
-  async promptAssistant(search: string): Promise<string> {
-    if (!search) return ''
-    if (!this.isReadyToQuery) return ''
+  async promptAssistant(search: string): Promise<Rule | undefined> {
+    if (!search) return undefined
+    if (!this.isReadyToQuery) return undefined
 
     const prompt = this.buildPrompt(search)
     console.info('====>>> prompt', prompt)
@@ -86,7 +86,10 @@ class BrowserAssistant {
     const response = await assistant.prompt(prompt)
     await assistant.destroy()
 
-    return response
+    const ruleNumber: number = +response - 1
+    if (Number.isNaN(ruleNumber)) return undefined
+
+    return this.rules[ruleNumber]
   }
 }
 

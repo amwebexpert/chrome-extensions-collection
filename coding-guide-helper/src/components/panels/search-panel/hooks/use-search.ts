@@ -23,7 +23,6 @@ export const useSearch = () => {
 
     doSearch(search)
 
-    // ask browser assistant (Gemini) for help as well
     if (isAssistantAvailableOnPlatform())
       browserAssistant
         .promptAssistant(search)
