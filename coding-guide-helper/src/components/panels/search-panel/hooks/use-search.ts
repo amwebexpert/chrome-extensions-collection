@@ -4,6 +4,7 @@ import {
   browserAssistant,
   isAssistantAvailableOnPlatform,
 } from '../../../../ia/assistant-wrapper/gemini'
+import { semanticSearcher } from '../../../../ia/semantic-search/client-vector-searcher'
 import { type GuidelineNode, MessageType, PortName } from '../../../../models/models'
 
 const doSearch = (payload: string) =>
@@ -28,6 +29,10 @@ export const useSearch = () => {
         .promptAssistant(search)
         .then((response) => console.info('====>>> assistant response', response))
         .catch((error) => console.error('====>>> assistant error', error))
+
+    semanticSearcher
+      .findMostRelevantNodes(search)
+      .then((nodes) => console.info('====>>> semantic search results', nodes))
   }
 
   useEffect(() => {
@@ -36,6 +41,8 @@ export const useSearch = () => {
       .init()
       .then(() => console.info('====>>> assistant initialized'))
       .catch((error) => console.error('====>>> assistant error', error))
+
+    semanticSearcher.init().then(() => console.info('====>>> semantic searcher initialized'))
 
     // restore search value
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))

@@ -11,18 +11,19 @@ class ServiceWorker {
   popupPort: chrome.runtime.Port | null = null
   rootNode: GuidelineNode | null = null
 
+  constructor() {
+    this.init()
+  }
+
   init() {
     this.initPopup()
     this.initContextMenu()
     this.initMessageHandler()
 
-    chrome.runtime.onInstalled.addListener((detail) => {
-      console.info(`service-worker ${detail.reason}`)
-      this.loadGuidelines()
-    })
+    this.loadGuidelines()
   }
 
-  initPopup() {
+  private initPopup() {
     chrome.runtime.onConnect.addListener((port) => {
       if (port.name !== PortName.POPUP) return
 
@@ -33,7 +34,7 @@ class ServiceWorker {
     })
   }
 
-  initContextMenu() {
+  private initContextMenu() {
     chrome.contextMenus.removeAll()
     chrome.contextMenus.create(menuItemSendSelection)
     chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -45,7 +46,7 @@ class ServiceWorker {
     })
   }
 
-  async loadGuidelines() {
+  private async loadGuidelines() {
     chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {
       if (this.rootNode || !allOrderedNodes) return
       this.rootNode = allOrderedNodes
@@ -61,7 +62,7 @@ class ServiceWorker {
     }, 5000)
   }
 
-  initMessageHandler() {
+  private initMessageHandler() {
     chrome.runtime.onMessage.addListener((request, sender) => {
       const { type, payload } = request
 
@@ -93,7 +94,7 @@ class ServiceWorker {
     })
   }
 
-  async onSearch(search: string) {
+  private async onSearch(search: string) {
     try {
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
 
@@ -112,4 +113,3 @@ class ServiceWorker {
 }
 
 const serviceWorker = new ServiceWorker()
-serviceWorker.init()
