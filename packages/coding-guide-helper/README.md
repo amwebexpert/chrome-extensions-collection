@@ -69,3 +69,8 @@ Instructions to install the Chrome extension from the source.
   - `const freshSession = await session.clone()` // may not be available (see below)
   - `TypeError: window.ai.assistant.clone is not a function`
 - https://github.com/explainers-by-googlers/prompt-api/
+
+## References
+
+- [yarn-workspaces-cheat-sheet](https://github.com/isthatcentered/yarn-workspaces-cheat-sheet)
+- [Transformers.js - Sample browser extension](https://github.com/huggingface/transformers.js/blob/main/examples/extension/README.md)
