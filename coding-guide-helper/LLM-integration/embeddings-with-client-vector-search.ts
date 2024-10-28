@@ -1,7 +1,7 @@
 import { EmbeddingIndex, getEmbedding } from 'client-vector-search'
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import { loadAllRules } from '../src/ia/utils/guideline.collector'
-import { QUERIES } from './queries.utils'
+import { SAMPLE_QUERIES } from './queries.utils'
 
 const main = async () => {
   const rootNode = await collectOnlineGuidelines()
@@ -11,15 +11,11 @@ const main = async () => {
     rule.embedding = await getEmbedding(rule.content)
   }
 
-  const initialObjects = rules.map((rule, index) => ({
-    id: index,
-    name: rule.title,
-    embedding: rule.embedding,
-  }))
+  const initialObjects = rules.map((rule, index) => ({ id: index, ...rule }))
   const index = new EmbeddingIndex(initialObjects)
   // await index.saveIndex('indexedDB')
 
-  for (const queryTexts of QUERIES) {
+  for (const queryTexts of SAMPLE_QUERIES) {
     const queryEmbedding = await getEmbedding(queryTexts)
 
     const results = await index.search(queryEmbedding, {
@@ -31,7 +27,8 @@ const main = async () => {
       // },
     })
 
-    console.info(`====>>> match for "${queryTexts}"`, results[0].object)
+    const { id, title, href } = results[0].object
+    console.info(`====>>> match for "${queryTexts}"`, { id, title, href })
   }
 
   // await index.deleteIndexedDB()

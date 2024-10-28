@@ -3,7 +3,7 @@ import { loadAllRules } from '../src/ia/utils/guideline.collector'
 
 // @see https://github.com/chroma-core/chroma
 import { ChromaClient } from 'chromadb'
-import { QUERIES } from './queries.utils'
+import { SAMPLE_QUERIES } from './queries.utils'
 
 const main = async () => {
   const rootNode = await collectOnlineGuidelines()
@@ -18,7 +18,7 @@ const main = async () => {
     metadatas: rules.map((rule) => ({ title: rule.title })),
   })
 
-  for (const queryTexts of QUERIES) {
+  for (const queryTexts of SAMPLE_QUERIES) {
     const results = await collection.query({ queryTexts, nResults: 1 })
     console.info(`====>>> match for "${queryTexts}"`, results.metadatas)
   }

@@ -1,11 +1,11 @@
 import { collectOnlineGuidelines } from '../src/background/service-worker.utils'
 import type { EmbeddingVector, Rule } from '../src/ia/models/models'
 import { loadAllRules } from './../src/ia/utils/guideline.collector'
-import { QUERIES } from './queries.utils'
 
 // @see https://www.npmjs.com/package/tensorflow-models
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import '@tensorflow/tfjs'
+import { SAMPLE_QUERIES } from './queries.utils'
 
 const generateEmbedding = async (documents: string[]): Promise<EmbeddingVector[]> => {
   console.info('====>>> loading model') // 5 seconds
@@ -41,7 +41,7 @@ const main = async () => {
     rule.embedding = embeddings[idx]
   })
 
-  for (const queryTexts of QUERIES) {
+  for (const queryTexts of SAMPLE_QUERIES) {
     const bestDocTitle = await findRelevantDocument(queryTexts, rules)
     console.info(`====>>> bestDocTitle for "${queryTexts}"`, bestDocTitle)
   }
