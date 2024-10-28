@@ -1,4 +1,15 @@
 {
+  "name": "chrome-extensions-collection",
+  "version": "1.0.0",
+  "description": "Collection of Google Chrome extensions made with React + Typescript",
+  "main": "index.js",
+  "repository": "https://github.com/amwebexpert/chrome-extensions-collection",
+  "author": "amwebexpert@gmail.com",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "biome": "^0.3.3"
