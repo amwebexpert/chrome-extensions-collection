@@ -33,6 +33,9 @@ export const manifest: ManifestV3Export = {
       matches: ['https://github.com/*'],
     },
   ],
+  content_security_policy: {
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'",
+  },
   commands: {
     _execute_action: {
       suggested_key: {

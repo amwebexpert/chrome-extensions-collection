@@ -247,7 +247,7 @@ export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => 
     isMatching: undefined,
   }
 
-  newNode.children = newNode.children.map(cloneAndRemoveAllParents)
+  newNode.children = newNode.children?.map(cloneAndRemoveAllParents) ?? []
 
   return newNode
 }
