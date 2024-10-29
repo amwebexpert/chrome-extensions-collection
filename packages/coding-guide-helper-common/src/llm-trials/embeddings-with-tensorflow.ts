@@ -5,6 +5,7 @@ import type { EmbeddingVector, Rule } from '../ia/models'
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import '@tensorflow/tfjs'
 import { loadAllRules } from '../ia/guideline.collector'
+import { cosineSimilarity } from '../utils/llm.utils'
 import { SAMPLE_QUERIES } from './queries.utils'
 
 const generateEmbedding = async (documents: string[]): Promise<EmbeddingVector[]> => {
@@ -19,15 +20,6 @@ const generateEmbedding = async (documents: string[]): Promise<EmbeddingVector[]
   tensor2D.dispose()
 
   return embeddings
-}
-
-const cosineSimilarity = (vectorA: EmbeddingVector, vectorB: EmbeddingVector): number => {
-  const dotProduct: number = vectorA.reduce((sum, a, idx) => sum + a * vectorB[idx], 0)
-
-  const magnitudeA: number = Math.sqrt(vectorA.reduce((sum, a) => sum + a * a, 0))
-  const magnitudeB: number = Math.sqrt(vectorB.reduce((sum, b) => sum + b * b, 0))
-
-  return dotProduct / (magnitudeA * magnitudeB)
 }
 
 const main = async () => {

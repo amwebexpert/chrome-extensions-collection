@@ -1,65 +1,75 @@
-import { EmbeddingIndex, getEmbedding } from 'client-vector-search'
+import { type FeatureExtractionPipeline, type Tensor, pipeline } from '@xenova/transformers'
 import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import type { GuidelineNode } from '../models/models'
+import { cosineSimilarity } from '../utils/llm.utils'
 import { loadAllRules } from './guideline.collector'
+import type { EmbeddingVector, Rule } from './models'
 
-class ClientVectorSearcher {
-  index: EmbeddingIndex | null = null
+enum LlmModel {
+  all_minilm_l6_v2 = 'Xenova/all-MiniLM-L6-v2',
+  gte_small = 'Xenova/gte-small',
+}
+
+class FeatureExtractionEmbeddingsSearcher {
   rootNode: GuidelineNode | null = null
 
-  async init() {
-    this.reset()
+  featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
+  rules: Rule[] = []
 
+  async init() {
     const rootNode = await collectOnlineGuidelines()
     if (!rootNode.children?.length) throw Error('Cannot load guidelines')
 
     this.rootNode = rootNode
 
-    const rules = loadAllRules(rootNode)
+    this.rules = loadAllRules(rootNode)
 
-    // Note: when running this on a browser we are getting the following error:
-    // ==> Uncaught (in promise) Error: no available backend found.
-    //     ERR: [wasm] RuntimeError: Aborted(CompileError: WebAssembly.instantiate():
-    //     Refused to compile or instantiate WebAssembly module because neither 'wasm-eval' nor 'unsafe-eval' is
-    //     an allowed source of script in the following Content Security Policy directive: "script-src 'self'").
-    for (const rule of rules) {
-      rule.embedding = await getEmbedding(rule.content)
+    const model = LlmModel.gte_small
+    console.info(`====>>> loading feature-extraction pipeline for model ${model}...`)
+    this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
+    console.info('====>>> End loading feature-extraction pipeline.')
+
+    console.info('====>>> Computing embeddings for all rules...')
+    for (const rule of this.rules) {
+      const tensor: Tensor = await this.featureExtractionEmbeddings(rule.content, {
+        pooling: 'mean',
+        normalize: false,
+      })
+
+      rule.embedding = Array.from(tensor.data as number[]).map((value) =>
+        Number.parseFloat(value.toFixed(7)),
+      )
     }
 
-    console.info('====>>> info', rules)
-
-    const initialObjects = rules.map((rule, i) => ({ id: i, ...rule }))
-    this.index = new EmbeddingIndex(initialObjects)
+    console.info('END computing.')
   }
 
-  async reset() {
-    if (!this.index) return
+  findRelevantDocument = async (queryText: string) => {
+    if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
-    await this.index.deleteIndexedDB()
-    this.index = null
-    this.rootNode = null
-  }
-
-  async findMostRelevantNodes(queryTexts: string): Promise<GuidelineNode[]> {
-    if (!this.index) return []
-
-    const queryEmbedding = await getEmbedding(queryTexts)
-    const results = await this.index.search(queryEmbedding, {
-      topK: 3,
-      // useStorage: 'indexedDB',
-      // storageOptions: { // use only if you overrode the defaults
-      //   indexedDBName: 'clientVectorDB',
-      //   indexedDBObjectStoreName: 'ClientEmbeddingStore',
-      // },
+    const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
+      pooling: 'mean',
+      normalize: true,
     })
+    const queryTextEmbedding = Array.from(tensor.data as number[]).map((value) =>
+      Number.parseFloat(value.toFixed(7)),
+    )
 
-    return results?.map((result) => result.object)
+    let bestDoc: Rule | null = null
+    let bestSimilarity = -1
+
+    for (const rule of this.rules) {
+      const similarity: number = cosineSimilarity(queryTextEmbedding, rule.embedding ?? [])
+      if (similarity > bestSimilarity) {
+        bestSimilarity = similarity
+        bestDoc = rule
+      }
+    }
+
+    return bestDoc
   }
 }
 
-export const semanticSearcher = new ClientVectorSearcher()
+export const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
 
-// feature-flag for semantic search in the browser
-// - issues with the WebAssembly module when running on a browser
-//   ==> we probably need to download a model from public CDN or extension's public/ assets folder
-export const isSemanticServiceAvailable = (): boolean => false
+export const isSemanticServiceAvailable = (): boolean => true

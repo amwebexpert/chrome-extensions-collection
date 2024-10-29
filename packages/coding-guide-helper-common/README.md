@@ -25,5 +25,6 @@ Starting LLM integration in order to work with embeddings so we can do semantic 
 
 - `npx vite-node ./src/llm-trials/embeddings-with-chroma.ts`
 - `npx vite-node ./src/llm-trials/embeddings-with-tensorflow.ts`
-- `npx vite-node ./src/llm-trials/embeddings-with-client-vector-search.ts`
+- `npx vite-node ./src/llm-trials/embeddings-with-client-vector-search-lib.ts`
+- `npx vite-node ./src/llm-trials/embeddings-with-client-feature-extraction.ts`
 

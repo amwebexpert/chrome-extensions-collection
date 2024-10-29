@@ -33,11 +33,6 @@ export const manifest: ManifestV3Export = {
       matches: ['https://github.com/*'],
     },
   ],
-  content_security_policy: {
-    // Insecure CSP value "'wasm-eval'" in directive 'script-src'. Could not load manifest.
-    // extension_pages: "script-src 'self' 'wasm-eval'; object-src 'self'",
-    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
-  },
   commands: {
     _execute_action: {
       suggested_key: {

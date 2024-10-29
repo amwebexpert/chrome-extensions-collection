@@ -4,8 +4,6 @@ import {
   PortName,
   browserAssistant,
   isAssistantAvailableOnPlatform,
-  isSemanticServiceAvailable,
-  semanticSearcher,
 } from '@packages/coding-guide-helper-common'
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
@@ -46,9 +44,6 @@ export const useSearch = () => {
         .init()
         .then(() => console.info('====>>> assistant initialized'))
         .catch((error) => console.error('====>>> assistant error', error))
-
-    if (isSemanticServiceAvailable())
-      semanticSearcher.init().then(() => console.info('====>>> semantic searcher initialized'))
   }, [])
 
   const launchSearch = () => {
@@ -61,11 +56,6 @@ export const useSearch = () => {
         .promptAssistant(search)
         .then((response) => console.info('====>>> assistant response', response))
         .catch((error) => console.error('====>>> assistant error', error))
-
-    if (isSemanticServiceAvailable())
-      semanticSearcher
-        .findMostRelevantNodes(search)
-        .then((nodes) => console.info('====>>> semantic search results', nodes))
   }
 
   useEffect(() => {
