@@ -10,6 +10,11 @@ enum LlmModel {
   gte_small = 'Xenova/gte-small',
 }
 
+const buildEmbeddingVectorFromTensor = (tensor: Tensor): EmbeddingVector =>
+  Array.from(tensor.data as number[]).map((v) => Number.parseFloat(v.toFixed(7)))
+
+export const isSemanticServiceAvailable = (): boolean => true
+
 class FeatureExtractionEmbeddingsSearcher {
   rootNode: GuidelineNode | null = null
 
@@ -36,9 +41,7 @@ class FeatureExtractionEmbeddingsSearcher {
         normalize: false,
       })
 
-      rule.embedding = Array.from(tensor.data as number[]).map((value) =>
-        Number.parseFloat(value.toFixed(7)),
-      )
+      rule.embedding = buildEmbeddingVectorFromTensor(tensor)
     }
 
     console.info('END computing.')
@@ -51,9 +54,7 @@ class FeatureExtractionEmbeddingsSearcher {
       pooling: 'mean',
       normalize: true,
     })
-    const queryTextEmbedding = Array.from(tensor.data as number[]).map((value) =>
-      Number.parseFloat(value.toFixed(7)),
-    )
+    const queryTextEmbedding = buildEmbeddingVectorFromTensor(tensor)
 
     let bestDoc: Rule | null = null
     let bestSimilarity = -1
@@ -71,5 +72,3 @@ class FeatureExtractionEmbeddingsSearcher {
 }
 
 export const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
-
-export const isSemanticServiceAvailable = (): boolean => true
