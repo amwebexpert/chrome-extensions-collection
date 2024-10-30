@@ -1,4 +1,5 @@
 import {
+  FeatureExtractionEmbeddingsSearcher,
   type GuidelineNode,
   MenuItems,
   MessageType,
@@ -13,6 +14,7 @@ import {
 class ServiceWorker {
   popupPort: chrome.runtime.Port | null = null
   rootNode: GuidelineNode | null = null
+  featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
 
   constructor() {
     this.init()
@@ -56,13 +58,15 @@ class ServiceWorker {
       console.info('====>>> guidelines loaded from cache')
     })
 
-    setTimeout(() => {
-      collectOnlineGuidelines().then((rootNode) => {
-        this.rootNode = rootNode
-        storeOrderedNodes(this.rootNode)
-        console.info('====>>> guidelines loaded from web')
-      })
-    }, 5000)
+    const rootNode = await collectOnlineGuidelines()
+    if (!rootNode) {
+      console.error('====>>> guidelines not loaded from web')
+      return
+    }
+
+    this.rootNode = rootNode
+    storeOrderedNodes(rootNode)
+    this.featureExtractionEmbeddingsSearcher.init(rootNode)
   }
 
   private initMessageHandler() {

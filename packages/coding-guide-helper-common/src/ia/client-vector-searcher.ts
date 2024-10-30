@@ -1,9 +1,15 @@
-import { type FeatureExtractionPipeline, type Tensor, pipeline } from '@xenova/transformers'
-import { collectOnlineGuidelines } from '../background/service-worker.utils'
+import { type FeatureExtractionPipeline, type Tensor, env, pipeline } from '@xenova/transformers'
 import type { GuidelineNode } from '../models/models'
 import { cosineSimilarity } from '../utils/llm.utils'
 import { loadAllRules } from './guideline.collector'
 import type { EmbeddingVector, Rule } from './models'
+
+// skip initial check for local models, since we are not loading any local models.
+env.allowLocalModels = false
+
+// due to a bug in onnxruntime-web, we must disable multithreading for now.
+// @see https://github.com/microsoft/onnxruntime/issues/14445 for more information.
+env.backends.onnx.wasm.numThreads = 1
 
 enum LlmModel {
   all_minilm_l6_v2 = 'Xenova/all-MiniLM-L6-v2',
@@ -15,27 +21,20 @@ const buildEmbeddingVectorFromTensor = (tensor: Tensor): EmbeddingVector =>
 
 export const isSemanticServiceAvailable = (): boolean => true
 
-class FeatureExtractionEmbeddingsSearcher {
-  rootNode: GuidelineNode | null = null
-
+export class FeatureExtractionEmbeddingsSearcher {
   featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
   rules: Rule[] = []
 
-  async init() {
-    const rootNode = await collectOnlineGuidelines()
+  async init(rootNode: GuidelineNode) {
     if (!rootNode.children?.length) throw Error('Cannot load guidelines')
-
-    this.rootNode = rootNode
 
     this.rules = loadAllRules(rootNode)
 
     const model = LlmModel.gte_small
-    console.info(`====>>> loading feature-extraction pipeline for model ${model}...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
-    console.info('====>>> End loading feature-extraction pipeline.')
 
-    console.info('====>>> Computing embeddings for all rules...')
     for (const rule of this.rules) {
+      console.info(`====>>> computing embeddings for rule ${rule.title}`)
       const tensor: Tensor = await this.featureExtractionEmbeddings(rule.content, {
         pooling: 'mean',
         normalize: false,
@@ -44,7 +43,7 @@ class FeatureExtractionEmbeddingsSearcher {
       rule.embedding = buildEmbeddingVectorFromTensor(tensor)
     }
 
-    console.info('END computing.')
+    console.info('====>>> Computed embeddings for all rules...')
   }
 
   findRelevantDocument = async (queryText: string) => {
@@ -70,5 +69,3 @@ class FeatureExtractionEmbeddingsSearcher {
     return bestDoc
   }
 }
-
-export const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
