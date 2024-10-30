@@ -54,7 +54,7 @@ class ServiceWorker {
   private async loadGuidelines() {
     chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {
       if (this.rootNode || !allOrderedNodes) return
-      this.rootNode = allOrderedNodes
+      this.rootNode = allOrderedNodes // investigate why this is needed since rootNode is not an array?!
       console.info('====>>> guidelines loaded from cache')
     })
 
@@ -110,6 +110,16 @@ class ServiceWorker {
 
       chrome.storage.local.set({ search })
       const results = filterGuidelines({ search, rootNode: this.rootNode })
+
+      console.info('====>>> launch semantic search...')
+      this.featureExtractionEmbeddingsSearcher
+        .findRelevantDocument(search)
+        .then((semanticResults) => {
+          console.info(
+            '====>>> semantic search completed. Next step: calling this.popupPort?.postMessage',
+            semanticResults,
+          )
+        })
 
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
     } catch (e) {
