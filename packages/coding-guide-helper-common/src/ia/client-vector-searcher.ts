@@ -31,10 +31,11 @@ export class FeatureExtractionEmbeddingsSearcher {
     this.rules = loadAllRules(rootNode)
 
     const model = LlmModel.gte_small
+    console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
 
     for (const rule of this.rules) {
-      console.info(`====>>> computing embeddings for rule ${rule.title}`)
+      console.info(`====>>> computing rule embeddings: ${rule.title}`)
       const tensor: Tensor = await this.featureExtractionEmbeddings(rule.content, {
         pooling: 'mean',
         normalize: false,

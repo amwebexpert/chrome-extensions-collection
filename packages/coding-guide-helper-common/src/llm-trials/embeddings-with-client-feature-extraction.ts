@@ -1,8 +1,11 @@
-import { featureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
+import { collectOnlineGuidelines } from '../background/service-worker.utils'
+import { FeatureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
 import { SAMPLE_QUERIES } from './queries.utils'
 
 const main = async () => {
-  await featureExtractionEmbeddingsSearcher.init()
+  const rootNode = await collectOnlineGuidelines()
+  const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
+  await featureExtractionEmbeddingsSearcher.init(rootNode)
 
   for (const queryTexts of SAMPLE_QUERIES) {
     const rule = await featureExtractionEmbeddingsSearcher.findRelevantDocument(queryTexts)
