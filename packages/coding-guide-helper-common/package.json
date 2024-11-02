@@ -11,7 +11,8 @@
     "lint": "biome lint ./src check",
     "lint:fix": "biome check ./src --write",
     "test:watch": "vitest",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate-embeddings": "vite-node src/utils/create-coding-guide-embeddings.ts"
   },
   "dependencies": {
     "@xenova/transformers": "^2.17.2",
