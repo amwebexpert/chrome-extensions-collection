@@ -30,7 +30,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
   rules: Rule[] = []
 
-  private async computeEmbeddings(model: LlmModel) {
+  async computeEmbeddings(model: LlmModel) {
     console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
 
