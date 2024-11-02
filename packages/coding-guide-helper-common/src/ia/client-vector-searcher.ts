@@ -21,7 +21,7 @@ type RelevantDocumentsArgs = {
   maxResults?: number
 }
 
-const buildEmbeddingVectorFromTensor = (tensor: Tensor): EmbeddingVector =>
+const tensorToEmbeddingVector = (tensor: Tensor): EmbeddingVector =>
   Array.from(tensor.data as number[]).map((v) => Number.parseFloat(v.toFixed(7)))
 
 export const isSemanticServiceAvailable = (): boolean => true
@@ -42,16 +42,19 @@ export class FeatureExtractionEmbeddingsSearcher {
 
   async computeEmbeddings() {
     if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
+    const createEmbedding = this.featureExtractionEmbeddings
 
-    for (const rule of this.rules) {
+    const embeddingPromises = this.rules.map(async (rule) => {
       console.info(`====>>> computing rule embeddings: ${rule.title}`)
-      const tensor: Tensor = await this.featureExtractionEmbeddings(rule.content, {
+      const tensor: Tensor = await createEmbedding(rule.content, {
         pooling: 'mean',
         normalize: false,
       })
 
-      rule.embedding = buildEmbeddingVectorFromTensor(tensor)
-    }
+      rule.embedding = tensorToEmbeddingVector(tensor)
+    })
+
+    await Promise.all(embeddingPromises)
 
     console.info('====>>> Computed embeddings for all rules...')
   }
@@ -69,7 +72,7 @@ export class FeatureExtractionEmbeddingsSearcher {
       pooling: 'mean',
       normalize: true,
     })
-    const queryTextEmbedding = buildEmbeddingVectorFromTensor(tensor)
+    const queryTextEmbedding = tensorToEmbeddingVector(tensor)
 
     let bestDoc: Rule | null = null
     let bestSimilarity = -1
@@ -93,7 +96,7 @@ export class FeatureExtractionEmbeddingsSearcher {
       pooling: 'mean',
       normalize: true,
     })
-    const queryTextEmbedding = buildEmbeddingVectorFromTensor(tensor)
+    const queryTextEmbedding = tensorToEmbeddingVector(tensor)
 
     const rules: Rule[] = this.rules
       .map((rule) => ({
