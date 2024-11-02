@@ -30,12 +30,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
   rules: Rule[] = []
 
-  async init(rootNode: GuidelineNode) {
-    if (!rootNode.children?.length) throw Error('Cannot load guidelines')
-
-    this.rules = loadAllRules(rootNode)
-
-    const model = LlmModel.gte_small
+  private async computeEmbeddings(model: LlmModel) {
     console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
 
@@ -50,6 +45,13 @@ export class FeatureExtractionEmbeddingsSearcher {
     }
 
     console.info('====>>> Computed embeddings for all rules...')
+  }
+
+  async init(rootNode: GuidelineNode) {
+    if (!rootNode.children?.length) throw Error('Cannot load guidelines')
+
+    this.rules = loadAllRules(rootNode)
+    await this.computeEmbeddings(LlmModel.gte_small)
   }
 
   findRelevantDocument = async (queryText: string): Promise<Rule | null> => {
