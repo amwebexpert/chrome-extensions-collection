@@ -54,8 +54,8 @@ export const useSearch = () => {
     if (isAssistantAvailableOnPlatform())
       browserAssistant
         .promptAssistant(search)
-        .then((response) => console.info('====>>> assistant response', response))
-        .catch((error) => console.error('====>>> assistant error', error))
+        .then((response) => console.info('====>>> gemini assistant response', response))
+        .catch((error) => console.error('====>>> gemini assistant error', error))
   }
 
   useEffect(() => {

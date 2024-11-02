@@ -20,12 +20,12 @@ class ServiceWorker {
     this.init()
   }
 
-  init() {
+  async init() {
+    this.loadGuidelines().then(() => this.featureExtractionEmbeddingsSearcher.init(this.rootNode))
+
     this.initPopup()
     this.initContextMenu()
     this.initMessageHandler()
-
-    this.loadGuidelines()
   }
 
   private initPopup() {
@@ -66,7 +66,6 @@ class ServiceWorker {
 
     this.rootNode = rootNode
     storeOrderedNodes(rootNode)
-    this.featureExtractionEmbeddingsSearcher.init(rootNode)
   }
 
   private initMessageHandler() {

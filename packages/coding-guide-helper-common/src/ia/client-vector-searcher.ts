@@ -30,7 +30,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
   rules: Rule[] = []
 
-  loadRules(rootNode?: GuidelineNode) {
+  loadRules(rootNode?: GuidelineNode | null) {
     if (!rootNode?.children?.length) throw Error('Guidelines should be loaded first')
     this.rules = loadAllRules(rootNode)
   }
@@ -59,7 +59,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     console.info('====>>> Computed embeddings for all rules...')
   }
 
-  async init(rootNode?: GuidelineNode) {
+  async init(rootNode?: GuidelineNode | null) {
     this.loadRules(rootNode)
     await this.loadModel(LlmModel.gte_small)
     await this.computeEmbeddings()
