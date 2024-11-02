@@ -35,7 +35,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     this.rules = loadAllRules(rootNode)
   }
 
-  get isAllEmbeddingsComputingCompleted(): boolean {
+  get isReadyForSemanticSearch(): boolean {
     return this.rules.every((rule) => !!rule.embedding)
   }
 

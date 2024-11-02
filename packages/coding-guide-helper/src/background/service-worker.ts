@@ -123,14 +123,11 @@ class ServiceWorker {
   }
 
   private async addSemanticSearchMatches(search: string, results: GuidelineNode[]) {
-    const rootNode = this.rootNode
-    if (!rootNode) throw new Error('guidelines not loaded')
-
-    const { isAllEmbeddingsComputingCompleted, findRelevantDocuments } = this.featureExtractionEmbeddingsSearcher
-    if (!isAllEmbeddingsComputingCompleted) return
+    const { isReadyForSemanticSearch, findRelevantDocuments } = this.featureExtractionEmbeddingsSearcher
+    if (!this.rootNode || !isReadyForSemanticSearch) return
 
     const rules = await findRelevantDocuments({ queryText: search, maxResults: 3 })
-    const semanticResults = getNodesFromRules({ rootNode, rules })
+    const semanticResults = getNodesFromRules({ rootNode: this.rootNode, rules })
     const payload = [...results, ...semanticResults]
 
     this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload })
