@@ -16,6 +16,11 @@ enum LlmModel {
   gte_small = 'Xenova/gte-small',
 }
 
+type RelevantDocumentsArgs = {
+  queryTexts: string
+  maxResults?: number
+}
+
 const buildEmbeddingVectorFromTensor = (tensor: Tensor): EmbeddingVector =>
   Array.from(tensor.data as number[]).map((v) => Number.parseFloat(v.toFixed(7)))
 
@@ -70,9 +75,10 @@ export class FeatureExtractionEmbeddingsSearcher {
     return bestDoc
   }
 
-  findRelevantDocuments = async (queryTexts: string, maxResults = 3): Promise<Rule[]> => {
+  findRelevantDocuments = async (configs: RelevantDocumentsArgs): Promise<Rule[]> => {
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
+    const { queryTexts, maxResults = 3 } = configs
     const tensor: Tensor = await this.featureExtractionEmbeddings(queryTexts, {
       pooling: 'mean',
       normalize: true,
