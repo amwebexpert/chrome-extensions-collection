@@ -6,6 +6,7 @@ import {
   PortName,
   collectOnlineGuidelines,
   filterGuidelines,
+  getNodesFromRules,
   getSenderInfo,
   menuItemSendSelection,
   storeOrderedNodes,
@@ -105,26 +106,34 @@ class ServiceWorker {
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
 
       if (!this.rootNode) await this.loadGuidelines()
-      if (!this.rootNode) throw new Error('guidelines not loaded')
+
+      const rootNode = this.rootNode
+      if (!rootNode) throw new Error('guidelines not loaded')
 
       chrome.storage.local.set({ search })
-      const results = filterGuidelines({ search, rootNode: this.rootNode })
 
-      console.info('====>>> launch semantic search...')
-      this.featureExtractionEmbeddingsSearcher
-        .findRelevantDocument(search)
-        .then((semanticResults) => {
-          console.info(
-            '====>>> semantic search completed. Next step: calling this.popupPort?.postMessage',
-            semanticResults,
-          )
-        })
-
+      const results = filterGuidelines({ search, rootNode })
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
+
+      await this.addSemanticSearchMatches(search, results)
     } catch (e) {
       console.error('error on search', e)
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_ERROR, payload: e })
     }
+  }
+
+  private async addSemanticSearchMatches(search: string, results: GuidelineNode[]) {
+    const rootNode = this.rootNode
+    if (!rootNode) throw new Error('guidelines not loaded')
+
+    const { isAllEmbeddingsComputingCompleted, findRelevantDocuments } = this.featureExtractionEmbeddingsSearcher
+    if (!isAllEmbeddingsComputingCompleted) return
+
+    const rules = await findRelevantDocuments({ queryText: search, maxResults: 3 })
+    const semanticResults = getNodesFromRules({ rootNode, rules })
+    const payload = [...results, ...semanticResults]
+
+    this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload })
   }
 }
 

@@ -8,19 +8,19 @@ const main = async () => {
   await featureExtractionEmbeddingsSearcher.init(rootNode)
 
   const maxResults = 3
-  for (const queryTexts of SAMPLE_QUERIES) {
+  for (const queryText of SAMPLE_QUERIES) {
     const rules = await featureExtractionEmbeddingsSearcher.findRelevantDocuments({
-      queryTexts,
+      queryText,
       maxResults,
     })
 
     if (!rules.length) {
-      console.info(`====>>> no match for "${queryTexts}"`)
+      console.info(`====>>> no match for "${queryText}"`)
       continue
     }
 
     console.info(
-      `====>>> best ${maxResults} matches for "${queryTexts}"`,
+      `====>>> best ${maxResults} matches for "${queryText}"`,
       rules.map((rule) => rule.title),
     )
   }

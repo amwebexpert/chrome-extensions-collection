@@ -1,4 +1,5 @@
 export * from './client-vector-searcher'
+export * from './client-vector.utils'
 export * from './gemini'
 export * from './guideline.collector'
 export * from './models'

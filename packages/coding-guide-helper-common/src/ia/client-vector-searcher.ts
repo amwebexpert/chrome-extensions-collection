@@ -17,7 +17,7 @@ enum LlmModel {
 }
 
 type RelevantDocumentsArgs = {
-  queryTexts: string
+  queryText: string
   maxResults?: number
 }
 
@@ -33,6 +33,10 @@ export class FeatureExtractionEmbeddingsSearcher {
   loadRules(rootNode?: GuidelineNode | null) {
     if (!rootNode?.children?.length) throw Error('Guidelines should be loaded first')
     this.rules = loadAllRules(rootNode)
+  }
+
+  get isAllEmbeddingsComputingCompleted(): boolean {
+    return this.rules.every((rule) => !!rule.embedding)
   }
 
   async loadModel(model = LlmModel.all_minilm_l6_v2) {
@@ -56,7 +60,7 @@ export class FeatureExtractionEmbeddingsSearcher {
 
     await Promise.all(embeddingPromises)
 
-    console.info('====>>> Computed embeddings for all rules...')
+    console.info('====>>> Computed embeddings for all rules. END.')
   }
 
   async init(rootNode?: GuidelineNode | null) {
@@ -91,8 +95,8 @@ export class FeatureExtractionEmbeddingsSearcher {
   findRelevantDocuments = async (configs: RelevantDocumentsArgs): Promise<Rule[]> => {
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
-    const { queryTexts, maxResults = 3 } = configs
-    const tensor: Tensor = await this.featureExtractionEmbeddings(queryTexts, {
+    const { queryText, maxResults = 3 } = configs
+    const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
       pooling: 'mean',
       normalize: true,
     })
