@@ -2,6 +2,7 @@ import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import type { EmbeddingVector, Rule } from '../ia/models'
 
 // @see https://www.npmjs.com/package/tensorflow-models
+// NOTE: this model tends to have bad performances because it is way too generic
 import * as use from '@tensorflow-models/universal-sentence-encoder'
 import '@tensorflow/tfjs'
 import { loadAllRules } from '../ia/guideline.collector'
