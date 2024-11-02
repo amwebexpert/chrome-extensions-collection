@@ -5,4 +5,5 @@ export type Rule = {
   content: string
   href: string
   embedding?: EmbeddingVector
+  similarity?: number
 }

@@ -8,15 +8,17 @@ const main = async () => {
   await featureExtractionEmbeddingsSearcher.init(rootNode)
 
   for (const queryTexts of SAMPLE_QUERIES) {
-    const rule = await featureExtractionEmbeddingsSearcher.findRelevantDocument(queryTexts)
+    const rules = await featureExtractionEmbeddingsSearcher.findRelevantDocuments(queryTexts)
 
-    if (!rule) {
+    if (!rules.length) {
       console.info(`====>>> no match for "${queryTexts}"`)
       continue
     }
 
-    const { title, href } = rule
-    console.info(`====>>> match for "${queryTexts}"`, { title, href })
+    console.info(
+      `================>>> match for "${queryTexts}"`,
+      rules.map((rule) => rule.title),
+    )
   }
 }
 

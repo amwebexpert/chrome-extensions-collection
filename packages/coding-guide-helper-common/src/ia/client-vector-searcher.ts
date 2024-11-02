@@ -47,7 +47,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     console.info('====>>> Computed embeddings for all rules...')
   }
 
-  findRelevantDocument = async (queryText: string) => {
+  findRelevantDocument = async (queryText: string): Promise<Rule | null> => {
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
     const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
@@ -68,5 +68,25 @@ export class FeatureExtractionEmbeddingsSearcher {
     }
 
     return bestDoc
+  }
+
+  findRelevantDocuments = async (queryTexts: string, maxResults = 3): Promise<Rule[]> => {
+    if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
+
+    const tensor: Tensor = await this.featureExtractionEmbeddings(queryTexts, {
+      pooling: 'mean',
+      normalize: true,
+    })
+    const queryTextEmbedding = buildEmbeddingVectorFromTensor(tensor)
+
+    const rules: Rule[] = this.rules
+      .map((rule) => ({
+        ...rule,
+        similarity: cosineSimilarity(queryTextEmbedding, rule.embedding ?? []),
+      }))
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, maxResults)
+
+    return rules
   }
 }
