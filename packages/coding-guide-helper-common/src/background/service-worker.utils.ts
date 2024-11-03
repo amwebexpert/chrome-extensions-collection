@@ -9,11 +9,37 @@ import {
   isParentOfAvoidPreferSection,
 } from './markdown-parser'
 
+type CombineUniqueSearchResultsArgs = {
+  exactMatches: GuidelineNode[]
+  semanticResults: GuidelineNode[]
+}
+
+export const combineUniqueSearchResults = ({
+  exactMatches,
+  semanticResults,
+}: CombineUniqueSearchResultsArgs): GuidelineNode[] => {
+  const exactMatchesHrefs = exactMatches.filter((node) => node.shouldDisplayNode).map((node) => node.href)
+  const semanticResultsHrefs = semanticResults.map((node) => node.href)
+  console.info('====>>> combineUniqueSearchResults', {
+    exactMatchesHrefs,
+    semanticResultsHrefs,
+  })
+
+  const combinedResults = [...exactMatches]
+
+  for (const semanticResult of semanticResults) {
+    if (!exactMatchesHrefs.includes(semanticResult.href)) combinedResults.push(semanticResult)
+  }
+
+  console.info(`====>>> returning ${combinedResults.length} combined search results`)
+
+  return combinedResults
+}
+
 export const getSenderInfo = (sender: chrome.runtime.MessageSender): string =>
   sender.tab?.id ? `tab ${sender.tab.id}` : 'extension'
 
-export const normalizeForSearch = (search: string): string =>
-  search.toLowerCase().replaceAll('`', '').trim()
+export const normalizeForSearch = (search: string): string => search.toLowerCase().replaceAll('`', '').trim()
 
 type FilterGuidelines = {
   search: string
@@ -41,7 +67,7 @@ export const filterGuidelines = ({ search, rootNode }: FilterGuidelines): Guidel
     node.shouldDisplayNode = node.isMatching || hasDescendentMatching(node)
   }
 
-  return allOrderedNodes
+  return allOrderedNodes.filter((node) => node.shouldDisplayNode)
 }
 
 export const getFullOrderedNodes = (rootNode: GuidelineNode): GuidelineNode[] => {
@@ -74,10 +100,7 @@ export const storeOrderedNodes = (node: GuidelineNode): void => {
 }
 
 export const collectOfflineGuidelines = async (): Promise<GuidelineNode> => {
-  const urls = [
-    chrome.runtime.getURL('markdowns/example-1.md'),
-    chrome.runtime.getURL('markdowns/example-2.md'),
-  ]
+  const urls = [chrome.runtime.getURL('markdowns/example-1.md'), chrome.runtime.getURL('markdowns/example-2.md')]
 
   return collectAllGuidelinesIntoSingleRoot(urls)
 }

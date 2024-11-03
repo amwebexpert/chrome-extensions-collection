@@ -5,6 +5,7 @@ import {
   MessageType,
   PortName,
   collectOnlineGuidelines,
+  combineUniqueSearchResults,
   filterGuidelines,
   getNodesFromRules,
   getSenderInfo,
@@ -15,14 +16,14 @@ import {
 class ServiceWorker {
   popupPort: chrome.runtime.Port | null = null
   rootNode: GuidelineNode | null = null
-  featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
+  semanticSearcher = new FeatureExtractionEmbeddingsSearcher()
 
   constructor() {
     this.init()
   }
 
   async init() {
-    this.loadGuidelines().then(() => this.featureExtractionEmbeddingsSearcher.init(this.rootNode))
+    this.loadGuidelines().then(() => this.semanticSearcher.init(this.rootNode))
 
     this.initPopup()
     this.initContextMenu()
@@ -101,36 +102,38 @@ class ServiceWorker {
     })
   }
 
+  private async getRootNode(): Promise<GuidelineNode> {
+    if (!this.rootNode) await this.loadGuidelines()
+
+    const rootNode = this.rootNode
+    if (!rootNode) throw new Error('guidelines not loaded')
+
+    return rootNode
+  }
+
+  private async filterWithSemantic(search: string): Promise<GuidelineNode[]> {
+    if (!search || !this.rootNode || !this.semanticSearcher.isReadyForSemanticSearch) return []
+
+    const rules = await this.semanticSearcher.findRelevantDocuments({ queryText: search, maxResults: 3 })
+    return getNodesFromRules({ rootNode: this.rootNode, rules })
+  }
+
   private async onSearch(search: string) {
     try {
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_LOADING })
 
-      if (!this.rootNode) await this.loadGuidelines()
+      const rootNode = await this.getRootNode()
 
-      const rootNode = this.rootNode
-      if (!rootNode) throw new Error('guidelines not loaded')
+      const exactMatches = filterGuidelines({ search, rootNode })
+      const semanticResults = await this.filterWithSemantic(search)
+      const payload = combineUniqueSearchResults({ exactMatches, semanticResults })
 
+      this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload })
       chrome.storage.local.set({ search })
-
-      const results = filterGuidelines({ search, rootNode })
-      this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload: results })
-
-      await this.addSemanticSearchMatches(search, results)
     } catch (e) {
       console.error('error on search', e)
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_ERROR, payload: e })
     }
-  }
-
-  private async addSemanticSearchMatches(search: string, results: GuidelineNode[]) {
-    const { isReadyForSemanticSearch, findRelevantDocuments } = this.featureExtractionEmbeddingsSearcher
-    if (!this.rootNode || !isReadyForSemanticSearch) return
-
-    const rules = await findRelevantDocuments({ queryText: search, maxResults: 3 })
-    const semanticResults = getNodesFromRules({ rootNode: this.rootNode, rules })
-    const payload = [...results, ...semanticResults]
-
-    this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload })
   }
 }
 
