@@ -1,5 +1,7 @@
 {
   "name": "@packages/coding-guide-helper",
+  "author": "amwebexpert@gmail.com",
+  "description": "Coding guide helper is a chrome extension to help doing pull requests review process.",
   "private": true,
   "version": "1.0.8",
   "license": "MIT",
@@ -9,7 +11,7 @@
     "clean:node": "rm -rf node_modules & rm -rf yarn.lock",
     "dev": "vite",
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "yarn generate:version && tsc && vite build",
     "preview": "vite preview",
     "lint": "biome lint ./src check",
     "lint:fix": "biome check ./src --apply",
@@ -17,7 +19,8 @@
     "test": "vitest run",
     "release": "semantic-release",
     "release:build": "yarn build && zip -r dist.zip dist",
-    "postversion": "yarn release:build"
+    "postversion": "yarn release:build",
+    "generate:version": "node scripts/generate-version"
   },
   "dependencies": {
     "@packages/coding-guide-helper-common": "*",

@@ -1,7 +1,8 @@
-import { BookOutlined, SearchOutlined } from '@ant-design/icons'
+import { BookOutlined, InfoCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import { MessageType } from '@packages/coding-guide-helper-common'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
+import { AboutPanel } from '../panels/about-panel/about-panel'
 import { GuidelinesPanel } from '../panels/guidelines-panel/guidelines-panel'
 import { SearchPanel } from '../panels/search-panel/search-panel'
 import { Version } from '../version/version'
@@ -42,6 +43,12 @@ export const App: FunctionComponent = () => {
               label: 'Guidelines',
               icon: <BookOutlined />,
               children: <GuidelinesPanel />,
+            },
+            {
+              key: 'about',
+              label: 'About',
+              icon: <InfoCircleOutlined />,
+              children: <AboutPanel />,
             },
           ]}
         />

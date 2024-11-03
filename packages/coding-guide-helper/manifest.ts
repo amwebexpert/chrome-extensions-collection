@@ -4,8 +4,8 @@ export const manifest: ManifestV3Export = {
   manifest_version: 3,
   name: 'coding-guide-helper',
   version: process.env.npm_package_version,
-  description:
-    'Coding guide helper is a chrome extension to help doing pull requests review process.',
+  author: 'amwebexpert@gmail.com',
+  description: 'Coding guide helper is a chrome extension to help doing pull requests review process.',
   action: {
     default_popup: 'index.html',
   },
