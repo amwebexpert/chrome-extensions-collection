@@ -8,8 +8,7 @@ import {
 import debounce from 'debounce'
 import { useEffect, useRef, useState } from 'react'
 
-const doSearch = (payload: string) =>
-  chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
+const doSearch = (payload: string) => chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
 
 const doSearchDebounced = debounce(doSearch, 500)
 
@@ -42,8 +41,8 @@ export const useSearch = () => {
     if (isAssistantAvailableOnPlatform())
       browserAssistant
         .init()
-        .then(() => console.info('====>>> assistant initialized'))
-        .catch((error) => console.error('====>>> assistant error', error))
+        .then(() => console.info('====>>> gemini assistant initialized'))
+        .catch((error) => console.error('====>>> gemini assistant error', error))
   }, [])
 
   const launchSearch = () => {
