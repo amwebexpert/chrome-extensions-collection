@@ -137,4 +137,4 @@ class ServiceWorker {
   }
 }
 
-const serviceWorker = new ServiceWorker()
+export const serviceWorker = new ServiceWorker()
