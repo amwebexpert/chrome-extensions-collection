@@ -2,7 +2,7 @@ import { writeFileSync } from 'node:fs'
 import packageMetadata from '../package.json' with { type: 'json' }
 
 const constantsFilename = './src/constants.ts'
-const { name, description, version, author } = packageMetadata
+const { name, description, version, author, repository } = packageMetadata
 const date = new Date().toISOString().split('T')[0]
 const data = `/* eslint-disable */
 // ----------------------------------------------------------------------------------------
@@ -11,6 +11,7 @@ const data = `/* eslint-disable */
 export const APP_VERSION_INFO = Object.freeze({
   NAME: '${name}',
   DESCRIPTION: "${description}",
+  REPOSITORY: '${repository}',
   AUTHOR: '${author}',
   VERSION: '${version}',
   VERSION_DATE: '${date}',
