@@ -32,7 +32,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
-    "react-syntax-highlighter": "^15.6.1"
+    "react-syntax-highlighter": "^15.6.1",
+    "url-shim": "^1.0.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -45,12 +46,12 @@
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "@tensorflow/tfjs-converter": "^4.22.0",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.2",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
-    "@types/chrome": "^0.0.279",
+    "@types/chrome": "^0.0.280",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^22.8.4",
+    "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/react-syntax-highlighter": "^15.5.13",
