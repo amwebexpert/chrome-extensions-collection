@@ -35,8 +35,12 @@ export class FeatureExtractionEmbeddingsSearcher {
     this.rules = loadAllRules(rootNode)
   }
 
+  get hasRules(): boolean {
+    return this.rules.length > 0
+  }
+
   get isReadyForSemanticSearch(): boolean {
-    return this.rules.every((rule) => !!rule.embedding)
+    return this.hasRules && this.rules.every((rule) => !!rule.embedding)
   }
 
   async loadModel(model = LlmModel.all_minilm_l6_v2) {
@@ -44,7 +48,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
   }
 
-  async computeEmbeddings() {
+  private buildEmbeddingsPromises(): Promise<void>[] {
     if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
     const createEmbedding = this.featureExtractionEmbeddings
 
@@ -58,9 +62,23 @@ export class FeatureExtractionEmbeddingsSearcher {
       rule.embedding = tensorToEmbeddingVector(tensor)
     })
 
-    await Promise.all(embeddingPromises)
+    return embeddingPromises
+  }
 
-    console.info('====>>> Computed embeddings for all rules. END.')
+  async computeEmbeddings(): Promise<void> {
+    if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
+    const createEmbedding = this.featureExtractionEmbeddings
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        Promise.all(this.buildEmbeddingsPromises())
+          .then(() => {
+            console.info('====>>> Computed embeddings for all rules. END.')
+            resolve(undefined)
+          })
+          .catch(reject)
+      }, 0)
+    })
   }
 
   async init(rootNode?: GuidelineNode | null) {
@@ -70,6 +88,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   }
 
   findRelevantDocument = async (queryText: string): Promise<Rule | null> => {
+    if (!this.isReadyForSemanticSearch) return null
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
     const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
@@ -93,6 +112,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   }
 
   findRelevantDocuments = async (configs: RelevantDocumentsArgs): Promise<Rule[]> => {
+    if (!this.isReadyForSemanticSearch) return []
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
     const { queryText, maxResults = 3 } = configs

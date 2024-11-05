@@ -28,12 +28,22 @@ export const useSearch = () => {
     portRef.current.onDisconnect.addListener(() => console.info('popup disconnected'))
     portRef.current.onMessage.addListener((message, _port) => {
       const { type, payload } = message
-      if (type === MessageType.ON_SEARCH_COMPLETED) {
-        setSearchResults(payload)
-        setIsSearching(false)
+      switch (type) {
+        case MessageType.ON_SEARCH_COMPLETED:
+          setSearchResults(payload)
+          setIsSearching(false)
+          break
+        case MessageType.ON_SEARCH_LOADING:
+          setIsSearching(true)
+          break
+        case MessageType.ON_SEARCH_ERROR:
+          setIsSearching(false)
+          break
+
+        default:
+          console.warn(`unknown message type: ${type}`, payload)
+          break
       }
-      if (type === MessageType.ON_SEARCH_LOADING) setIsSearching(true)
-      if (type === MessageType.ON_SEARCH_ERROR) setIsSearching(false)
     })
   }, [])
 
