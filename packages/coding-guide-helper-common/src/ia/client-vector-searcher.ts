@@ -46,6 +46,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   async loadModel(model = LlmModel.all_minilm_l6_v2) {
     console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
+    console.info(`====>>> model "${model}" feature-extraction pipeline created.`)
   }
 
   private buildEmbeddingsPromises(): Promise<void>[] {

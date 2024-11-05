@@ -34,7 +34,7 @@ export const manifest: ManifestV3Export = {
     },
   ],
   content_security_policy: {
-    extension_pages: "script-src 'self' 'wasm-unsafe-eval'",
+    extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
   },
   commands: {
     _execute_action: {
