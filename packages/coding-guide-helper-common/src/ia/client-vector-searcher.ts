@@ -49,37 +49,23 @@ export class FeatureExtractionEmbeddingsSearcher {
     console.info(`====>>> model "${model}" feature-extraction pipeline created.`)
   }
 
-  private buildEmbeddingsPromises(): Promise<void>[] {
-    if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
+  async computeRuleEmbedding(rule: Rule): Promise<void> {
+    console.info(`====>>> computing rule embeddings: ${rule.title}`)
+
+    if (!this.featureExtractionEmbeddings) return
     const createEmbedding = this.featureExtractionEmbeddings
 
-    const embeddingPromises = this.rules.map(async (rule) => {
-      console.info(`====>>> computing rule embeddings: ${rule.title}`)
-      const tensor: Tensor = await createEmbedding(rule.content, {
-        pooling: 'mean',
-        normalize: false,
-      })
+    const tensor: Tensor = await createEmbedding(rule.content, { pooling: 'mean', normalize: false })
 
-      rule.embedding = tensorToEmbeddingVector(tensor)
-    })
-
-    return embeddingPromises
+    rule.embedding = tensorToEmbeddingVector(tensor)
   }
 
   async computeEmbeddings(): Promise<void> {
     if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
-    const createEmbedding = this.featureExtractionEmbeddings
 
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        Promise.all(this.buildEmbeddingsPromises())
-          .then(() => {
-            console.info('====>>> Computed embeddings for all rules. END.')
-            resolve(undefined)
-          })
-          .catch(reject)
-      }, 0)
-    })
+    const embeddingPromises = this.rules.map((rule) => this.computeRuleEmbedding(rule))
+    await Promise.all(embeddingPromises)
+    console.info('====>>> Computed embeddings for all rules. END.')
   }
 
   async init(rootNode?: GuidelineNode | null) {
