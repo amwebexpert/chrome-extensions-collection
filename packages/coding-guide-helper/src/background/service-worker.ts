@@ -54,12 +54,6 @@ class ServiceWorker {
   }
 
   private async loadGuidelines() {
-    chrome.storage.local.get('allOrderedNodes', ({ allOrderedNodes }) => {
-      if (this.rootNode || !allOrderedNodes) return
-      this.rootNode = allOrderedNodes // investigate why this is needed since rootNode is not an array?!
-      console.info('====>>> guidelines loaded from cache')
-    })
-
     const rootNode = await collectOnlineGuidelines()
     if (!rootNode) {
       console.error('====>>> guidelines not loaded from web')
