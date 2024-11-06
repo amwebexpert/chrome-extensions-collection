@@ -28,10 +28,14 @@ export enum MessageType {
   ON_LINK_GUIDELINES_ITEM_SELECTED = 'onLinkGuidelinesItemSelected',
   ON_CONTENT_SCRIPT_STATUS = 'onContentScriptStatus',
 
+  CREATE_NEXT_EMBEDDINGS = 'createNextEmbeddings',
+
   // from background
   ON_SEARCH_LOADING = 'onSearchLoading',
   ON_SEARCH_COMPLETED = 'onSearchCompleted',
   ON_SEARCH_ERROR = 'onSearchError',
+
+  ON_EMBEDDINGS_CREATED = 'onEmbeddingsCreated',
 }
 
 export type Message<PayloadType = void> = PayloadType extends void
@@ -49,4 +53,10 @@ export enum PortName {
 export type TocLink = {
   title: string
   href: string
+}
+
+export type ComputeEmbeddingsStats = {
+  completed: number
+  total: number
+  isCompleted: boolean
 }

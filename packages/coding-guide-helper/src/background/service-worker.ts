@@ -88,12 +88,21 @@ class ServiceWorker {
         case MessageType.ON_SELECTION_CHANGE:
           console.info(`====>>> selection changed: ${payload}`)
           break
+        case MessageType.CREATE_NEXT_EMBEDDINGS:
+          this.computeNextEmbeddings()
+          break
 
         default:
           console.warn(`unhandled message received from "${getSenderInfo(sender)}"`, type)
           break
       }
     })
+  }
+
+  private async computeNextEmbeddings() {
+    await this.semanticSearcher.computeNextRuleEmbedding()
+    const payload = this.semanticSearcher.computeEmbeddingsStats
+    this.popupPort?.postMessage({ type: MessageType.ON_EMBEDDINGS_CREATED, payload })
   }
 
   private async getRootNode(): Promise<GuidelineNode> {

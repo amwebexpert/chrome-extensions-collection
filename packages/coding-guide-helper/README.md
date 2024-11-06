@@ -74,3 +74,10 @@ Instructions to install the Chrome extension from the source.
 
 - [yarn-workspaces-cheat-sheet](https://github.com/isthatcentered/yarn-workspaces-cheat-sheet)
 - [Transformers.js - Sample browser extension](https://github.com/huggingface/transformers.js/blob/main/examples/extension/README.md)
+
+
+## TODOs
+
+- Ticket-001:
+  - Once ONNX runtime is no longer relaying on URL.createObjectURL we should start using multi-threading on worker
+  - see https://github.com/microsoft/onnxruntime/issues/14445 for more information.

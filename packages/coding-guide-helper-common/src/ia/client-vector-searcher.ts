@@ -1,5 +1,5 @@
 import { type FeatureExtractionPipeline, type Tensor, env, pipeline } from '@xenova/transformers'
-import type { GuidelineNode } from '../models/models'
+import type { ComputeEmbeddingsStats, GuidelineNode } from '../models/models'
 import { cosineSimilarity } from '../utils/llm.utils'
 import { loadAllRules } from './guideline.collector'
 import type { EmbeddingVector, Rule } from './models'
@@ -7,7 +7,7 @@ import type { EmbeddingVector, Rule } from './models'
 // skip initial check for local models, since we are not loading any local models.
 env.allowLocalModels = false
 
-// due to a bug in onnxruntime-web, we must disable multithreading for now.
+// TODO Ticket-001 Due to a bug in onnxruntime-web, we must disable multithreading for now.
 // @see https://github.com/microsoft/onnxruntime/issues/14445 for more information.
 env.backends.onnx.wasm.numThreads = 1
 
@@ -43,10 +43,26 @@ export class FeatureExtractionEmbeddingsSearcher {
     return this.hasRules && this.rules.every((rule) => !!rule.embedding)
   }
 
+  get computeEmbeddingsStats(): ComputeEmbeddingsStats {
+    return {
+      completed: this.rules.filter((rule) => !!rule.embedding).length,
+      total: this.rules.length,
+      isCompleted: this.isReadyForSemanticSearch,
+    }
+  }
+
   async loadModel(model = LlmModel.all_minilm_l6_v2) {
     console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
     this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
     console.info(`====>>> model "${model}" feature-extraction pipeline created.`)
+  }
+
+  computeNextRuleEmbedding = async (): Promise<void> => {
+    if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
+    const rule = this.rules.find((rule) => !rule.embedding)
+    if (!rule) return
+
+    await this.computeRuleEmbedding(rule)
   }
 
   async computeRuleEmbedding(rule: Rule): Promise<void> {
@@ -71,7 +87,7 @@ export class FeatureExtractionEmbeddingsSearcher {
   async init(rootNode?: GuidelineNode | null) {
     this.loadRules(rootNode)
     await this.loadModel(LlmModel.gte_small)
-    await this.computeEmbeddings()
+    // TODO Ticket-001: await this.computeEmbeddings()
   }
 
   findRelevantDocument = async (queryText: string): Promise<Rule | null> => {
