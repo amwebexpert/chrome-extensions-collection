@@ -75,6 +75,10 @@ Instructions to install the Chrome extension from the source.
 - [yarn-workspaces-cheat-sheet](https://github.com/isthatcentered/yarn-workspaces-cheat-sheet)
 - [Transformers.js - Sample browser extension](https://github.com/huggingface/transformers.js/blob/main/examples/extension/README.md)
 
+### Vite CRX tool hacks
+
+- https://github.com/crxjs/chrome-extension-tools/issues/846#issuecomment-1861880919
+- https://github.com/crxjs/chrome-extension-tools/issues/918#issuecomment-2441547925
 
 ## TODOs
 
