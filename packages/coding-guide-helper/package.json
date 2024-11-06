@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@crxjs/vite-plugin": "^1.0.14",
+    "@crxjs/vite-plugin": "2.0.0-beta.26",
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^12.0.1",
