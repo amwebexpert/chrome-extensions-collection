@@ -17,3 +17,5 @@ export const sendLoadStatusToContentScript = async () => {
   const message: Message = { type: MessageType.ON_CONTENT_SCRIPT_STATUS }
   return await chrome.tabs.sendMessage(tabId, message)
 }
+
+export const POPUP_PORT = chrome.runtime.connect({ name: 'popup' })

@@ -1,20 +1,22 @@
 import {
+  type ComputeEmbeddingsStats,
   type GuidelineNode,
   MessageType,
-  PortName,
   browserAssistant,
   isAssistantAvailableOnPlatform,
 } from '@packages/coding-guide-helper-common'
 import debounce from 'debounce'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { POPUP_PORT } from '../../../app/app.utils'
 
 const doSearch = (payload: string) => chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
 
 const doSearchDebounced = debounce(doSearch, 500)
 
-export const useSearch = () => {
-  const portRef = useRef<chrome.runtime.Port>()
+const EMPTY_PROGRESS: ComputeEmbeddingsStats = { completed: 0, total: 0, isCompleted: false }
 
+export const useSearch = () => {
+  const [embeddingsProgress, setEmbeddingsProgress] = useState<ComputeEmbeddingsStats>(EMPTY_PROGRESS)
   const [search, setSearch] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
@@ -24,9 +26,8 @@ export const useSearch = () => {
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
     // listen for worker search results and update the state
-    portRef.current = chrome.runtime.connect({ name: PortName.POPUP })
-    portRef.current.onDisconnect.addListener(() => console.info('popup disconnected'))
-    portRef.current.onMessage.addListener((message, _port) => {
+    POPUP_PORT.onDisconnect.addListener(() => console.info('popup disconnected'))
+    POPUP_PORT.onMessage.addListener((message, _port) => {
       const { type, payload } = message
       switch (type) {
         case MessageType.ON_SEARCH_COMPLETED:
@@ -39,6 +40,12 @@ export const useSearch = () => {
         case MessageType.ON_SEARCH_ERROR:
           setIsSearching(false)
           break
+        case MessageType.ON_EMBEDDINGS_CREATED: {
+          const stats: ComputeEmbeddingsStats = payload
+          setEmbeddingsProgress(stats)
+          if (!stats.isCompleted) chrome.runtime.sendMessage({ type: MessageType.CREATE_NEXT_EMBEDDINGS })
+          break
+        }
 
         default:
           console.warn(`unknown message type: ${type}`, payload)
@@ -48,6 +55,8 @@ export const useSearch = () => {
   }, [])
 
   useEffect(() => {
+    chrome.runtime.sendMessage({ type: MessageType.CREATE_NEXT_EMBEDDINGS })
+
     if (isAssistantAvailableOnPlatform())
       browserAssistant
         .init()
@@ -71,5 +80,5 @@ export const useSearch = () => {
     doSearchDebounced(search)
   }, [search])
 
-  return { search, setSearch, isSearching, searchResults, launchSearch }
+  return { search, setSearch, isSearching, searchResults, launchSearch, embeddingsProgress }
 }

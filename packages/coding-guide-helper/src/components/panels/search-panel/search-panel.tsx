@@ -1,16 +1,19 @@
 import { Flex, Input, type InputRef, Space } from 'antd'
 import { type FunctionComponent, useEffect, useRef } from 'react'
 import { SearchResults } from '../../search-results/search-results'
+import { EmbeddingsComputingProgress } from './embeddings-computing-progress'
 import { useSearch } from './hooks/use-search'
 import './search-panel.css'
 
 export const SearchPanel: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
-  const { search, setSearch, isSearching, searchResults, launchSearch } = useSearch()
+  const { search, setSearch, isSearching, searchResults, launchSearch, embeddingsProgress } = useSearch()
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.select(), 300)
   }, [])
+
+  if (!embeddingsProgress.isCompleted) return <EmbeddingsComputingProgress stats={embeddingsProgress} />
 
   return (
     <Flex gap="middle" vertical={true} flex={1} align="center">
