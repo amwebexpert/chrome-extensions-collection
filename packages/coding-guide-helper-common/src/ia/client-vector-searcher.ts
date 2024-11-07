@@ -48,7 +48,7 @@ export class FeatureExtractionEmbeddingsSearcher {
       completed: this.rules.filter((rule) => !!rule.embedding).length,
       total: this.rules.length,
       isCompleted: this.isReadyForSemanticSearch,
-      nextRuleTitle: this.nextRuleToCompute?.title,
+      nextRuleTitle: this.nextRuleToCompute?.title ?? '',
     }
   }
 
