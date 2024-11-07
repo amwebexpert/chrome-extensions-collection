@@ -1,7 +1,7 @@
 import type { GuidelineNode } from '@packages/coding-guide-helper-common'
 import { Flex } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
-import { SearchResults } from '../../search-results/search-results'
+import { SearchResults } from '../../../features/search-results/search-results'
 import './guidelines-panel.css'
 
 export const GuidelinesPanel: FunctionComponent = () => {

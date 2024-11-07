@@ -15,7 +15,7 @@
     "build": "yarn generate:version && tsc && vite build",
     "preview": "vite preview",
     "lint": "biome lint ./src check",
-    "lint:fix": "biome check ./src --apply",
+    "lint:fix": "biome check ./src --write",
     "test:watch": "vitest",
     "test": "vitest run",
     "release": "semantic-release",

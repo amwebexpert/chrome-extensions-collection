@@ -22,15 +22,13 @@ const buildInvalidResult = (message: string): ValidationResult => ({ isValid: fa
 export const validateOptions = async (options: OptionsType): Promise<ValidationResults> => {
   const { markdownFilesUrlPrefix = '', files: filesText = '' } = options
 
-  if (!markdownFilesUrlPrefix.trim())
-    return buildInvalidResults('Markdown files url prefix is required')
+  if (!markdownFilesUrlPrefix.trim()) return buildInvalidResults('Markdown files url prefix is required')
 
   const files = filesText
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
-  if (files.length === 0)
-    return buildInvalidResults('At least one markdown file should be provided')
+  if (files.length === 0) return buildInvalidResults('At least one markdown file should be provided')
 
   const invalidNames = files.filter((file) => !file.toLocaleLowerCase().endsWith('.md'))
   if (invalidNames.length > 0)
@@ -48,8 +46,7 @@ export const validateOptions = async (options: OptionsType): Promise<ValidationR
 
   const results = await Promise.all(links.map(checkIfFileExists))
   const invalidResults = results.filter((result) => !result.isValid)
-  if (invalidResults.length > 0)
-    return { isValid: false, messages: invalidResults.map((r) => r.message) }
+  if (invalidResults.length > 0) return { isValid: false, messages: invalidResults.map((r) => r.message) }
 
   return VALID_RESULTS
 }
@@ -68,9 +65,7 @@ const checkIfFileExists = async (link: string): Promise<ValidationResult> => {
     const response = await fetch(link)
     if (!response.ok) return buildInvalidResult(`Can't retrieve resource: "${link}"`)
   } catch (e: unknown) {
-    return buildInvalidResult(
-      `Error while fetching resource: "${link}". Error: ${JSON.stringify(e)}`,
-    )
+    return buildInvalidResult(`Error while fetching resource: "${link}". Error: ${JSON.stringify(e)}`)
   }
 
   return VALID_RESULT

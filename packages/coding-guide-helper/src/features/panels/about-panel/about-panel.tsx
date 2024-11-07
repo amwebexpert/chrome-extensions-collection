@@ -1,7 +1,7 @@
+import { getManifestData } from '@packages/coding-guide-helper-common'
 import { Table } from 'antd'
 import type { FunctionComponent } from 'react'
 import { APP_VERSION_INFO } from '../../../constants'
-import { getManifestData } from '../../app/app.utils'
 import './about-panel.css'
 
 type AboutInfo = {

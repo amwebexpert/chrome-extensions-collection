@@ -1,13 +1,12 @@
 import { BookOutlined, InfoCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import { MessageType } from '@packages/coding-guide-helper-common'
+import { MessageType, logPlatformInfo } from '@packages/coding-guide-helper-common'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
+import { Version } from '../../components/version/version'
 import { AboutPanel } from '../panels/about-panel/about-panel'
 import { GuidelinesPanel } from '../panels/guidelines-panel/guidelines-panel'
 import { SearchPanel } from '../panels/search-panel/search-panel'
-import { Version } from '../version/version'
 import './app.css'
-import { logPlatformInfo } from './app.utils'
 
 const TITLE = 'Coding guidelines helper'
 

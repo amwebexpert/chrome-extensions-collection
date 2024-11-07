@@ -6,9 +6,7 @@ export const useDarkTheme = () => {
   const [isDarkMode, setIsDarkMode] = useState(DEFAULT_VALUE)
 
   useEffect(() => {
-    chrome.storage.local.get('isDarkMode', ({ isDarkMode }) =>
-      setIsDarkMode(isDarkMode ?? DEFAULT_VALUE),
-    )
+    chrome.storage.local.get('isDarkMode', ({ isDarkMode }) => setIsDarkMode(isDarkMode ?? DEFAULT_VALUE))
     chrome.storage.local.onChanged.addListener((changes) => {
       if (changes.isDarkMode) setIsDarkMode(changes.isDarkMode.newValue ?? DEFAULT_VALUE)
     })

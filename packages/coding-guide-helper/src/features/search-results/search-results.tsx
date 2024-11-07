@@ -2,9 +2,9 @@ import type { GuidelineNode } from '@packages/coding-guide-helper-common'
 import { Collapse } from 'antd'
 import type { FunctionComponent } from 'react'
 
-import { SearchResultsMarkdown } from './search-results-markdown'
 import { SearchResultsTitle } from './search-results-title'
 
+import { MarkdownLines } from '../../components/markdown/markdown-lines'
 import './search-results.css'
 
 interface IProps {
@@ -22,7 +22,7 @@ export const SearchResults: FunctionComponent<IProps> = ({ nodes }) => (
       label: <SearchResultsTitle title={title} href={href} />,
       children: (
         <>
-          <SearchResultsMarkdown markdownLines={markdownLines} />
+          <MarkdownLines markdownLines={markdownLines} />
           {children && <SearchResults nodes={children} />}
         </>
       ),

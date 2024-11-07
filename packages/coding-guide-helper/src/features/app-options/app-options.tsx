@@ -2,8 +2,8 @@ import { MessageType, type OptionsType, getOptions } from '@packages/coding-guid
 import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
+import { useDarkTheme } from '../../components/theme/use-dark-theme'
 import { Environment } from '../../models/environment'
-import { useDarkTheme } from '../theme/use-dark-theme'
 import { validateOptions } from './app-options.utils'
 
 const { title } = Environment

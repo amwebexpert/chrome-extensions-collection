@@ -1,9 +1,8 @@
-import { toHhMmSs } from '@packages/coding-guide-helper-common'
+import { sendLoadStatusToContentScript, toHhMmSs } from '@packages/coding-guide-helper-common'
 import { Flex, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
-import { sendLoadStatusToContentScript } from '../app/app.utils'
-import './version.css'
 import { Environment } from '../../models/environment'
+import './version.css'
 
 const { title, version } = Environment
 const information = `${title} v${version}`

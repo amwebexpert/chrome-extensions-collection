@@ -1,6 +1,6 @@
 import { Flex, Input, type InputRef, Space } from 'antd'
 import { type FunctionComponent, useEffect, useRef } from 'react'
-import { SearchResults } from '../../search-results/search-results'
+import { SearchResults } from '../../../features/search-results/search-results'
 import { EmbeddingsComputingProgress } from './embeddings-computing-progress'
 import { useSearch } from './hooks/use-search'
 import './search-panel.css'

@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Options from './components/app-options/app-options'
 import { ThemeWrapper } from './components/theme/theme-wrapper'
+import Options from './features/app-options/app-options'
 import { getDocumentRoot } from './main.utils'
 
 ReactDOM.createRoot(getDocumentRoot()).render(
