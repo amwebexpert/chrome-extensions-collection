@@ -75,7 +75,7 @@ class ServiceWorker {
         }
         case MessageType.SET_OPTIONS:
           chrome.storage.local.set({ options: payload })
-          this.loadGuidelines()
+          this.loadGuidelines().then(() => this.semanticSearcher.init(this.rootNode))
           break
         case MessageType.CONTENT_SCRIPT_STARTED:
           chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

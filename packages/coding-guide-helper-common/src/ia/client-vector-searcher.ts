@@ -31,11 +31,6 @@ export class FeatureExtractionEmbeddingsSearcher {
   featureExtractionEmbeddings: FeatureExtractionPipeline | null = null
   rules: Rule[] = []
 
-  loadRules(rootNode?: GuidelineNode | null) {
-    if (!rootNode?.children?.length) throw Error('Guidelines should be loaded first')
-    this.rules = loadAllRules(rootNode)
-  }
-
   get hasRules(): boolean {
     return this.rules.length > 0
   }
@@ -51,12 +46,6 @@ export class FeatureExtractionEmbeddingsSearcher {
       completed: this.rules.filter((rule) => !!rule.embedding).length,
       nextRuleTitle: this.nextRuleToCompute?.title ?? '',
     }
-  }
-
-  async loadModel(model = LlmModel.all_minilm_l6_v2) {
-    console.info(`====>>> model "${model}" feature-extraction pipeline creation...`)
-    this.featureExtractionEmbeddings = await pipeline('feature-extraction', model)
-    console.info(`====>>> model "${model}" feature-extraction pipeline created.`)
   }
 
   get nextRuleToCompute(): Rule | null {
@@ -97,8 +86,10 @@ export class FeatureExtractionEmbeddingsSearcher {
   }
 
   async init(rootNode?: GuidelineNode | null) {
-    this.loadRules(rootNode)
-    await this.loadModel(LlmModel.gte_small)
+    if (!rootNode?.children?.length) throw Error('Guidelines should be loaded first')
+
+    this.rules = loadAllRules(rootNode)
+    this.featureExtractionEmbeddings = await pipeline('feature-extraction', LlmModel.all_minilm_l6_v2)
     // TODO Ticket-001: await this.computeEmbeddings()
   }
 
