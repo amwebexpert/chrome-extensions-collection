@@ -90,30 +90,6 @@ export class FeatureExtractionEmbeddingsSearcher {
     // TODO Ticket-001: await this.computeEmbeddings()
   }
 
-  findRelevantDocument = async (queryText: string): Promise<Rule | null> => {
-    if (!this.isReadyForSemanticSearch) return null
-    if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
-
-    const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
-      pooling: 'mean',
-      normalize: true,
-    })
-    const queryTextEmbedding = tensorToEmbeddingVector(tensor)
-
-    let bestDoc: Rule | null = null
-    let bestSimilarity = -1
-
-    for (const rule of this.rules) {
-      const similarity: number = cosineSimilarity(queryTextEmbedding, rule.embedding ?? [])
-      if (similarity > bestSimilarity) {
-        bestSimilarity = similarity
-        bestDoc = rule
-      }
-    }
-
-    return bestDoc
-  }
-
   findRelevantDocuments = async (configs: RelevantDocumentsArgs): Promise<Rule[]> => {
     if (!this.isReadyForSemanticSearch) return []
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
@@ -135,4 +111,7 @@ export class FeatureExtractionEmbeddingsSearcher {
 
     return rules
   }
+
+  findRelevantDocument = async (queryText: string): Promise<Rule | null> =>
+    this.findRelevantDocuments({ queryText, maxResults: 1 }).then((docs) => docs[0] ?? null)
 }
