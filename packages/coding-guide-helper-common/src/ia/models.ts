@@ -7,3 +7,9 @@ export type Rule = {
   embedding?: EmbeddingVector
   similarity?: number
 }
+
+export type SerializedRule = {
+  href: string
+  contentSha256: number
+  embedding: EmbeddingVector
+}

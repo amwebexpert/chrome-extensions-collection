@@ -13,7 +13,7 @@ const doSearch = (payload: string) => chrome.runtime.sendMessage({ type: Message
 
 const doSearchDebounced = debounce(doSearch, 500)
 
-const EMPTY_PROGRESS: ComputeEmbeddingsStats = { completed: 0, total: 0, isCompleted: false }
+const EMPTY_PROGRESS: ComputeEmbeddingsStats = { completed: 0, total: 0, isCompleted: false, nextRuleTitle: '' }
 
 export const useSearch = () => {
   const [embeddingsProgress, setEmbeddingsProgress] = useState<ComputeEmbeddingsStats>(EMPTY_PROGRESS)

@@ -1,6 +1,7 @@
 import { type FeatureExtractionPipeline, type Tensor, env, pipeline } from '@xenova/transformers'
 import type { ComputeEmbeddingsStats, GuidelineNode } from '../models/models'
 import { cosineSimilarity } from '../utils/llm.utils'
+import { loadRuleEmbeddings, storeRuleEmbeddings } from './client-vector-searcher.utils'
 import { loadAllRules } from './guideline.collector'
 import type { EmbeddingVector, Rule } from './models'
 
@@ -67,7 +68,13 @@ export class FeatureExtractionEmbeddingsSearcher {
     const rule = this.nextRuleToCompute
     if (!rule) return
 
-    await this.computeRuleEmbedding(rule)
+    const embeddings = await loadRuleEmbeddings(rule)
+    if (embeddings) {
+      rule.embedding = embeddings
+    } else {
+      await this.computeRuleEmbedding(rule)
+      storeRuleEmbeddings(rule)
+    }
   }
 
   async computeRuleEmbedding(rule: Rule): Promise<void> {
