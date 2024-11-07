@@ -59,4 +59,5 @@ export type ComputeEmbeddingsStats = {
   completed: number
   total: number
   isCompleted: boolean
+  nextRuleTitle?: string
 }

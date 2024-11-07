@@ -12,6 +12,7 @@ export const EmbeddingsComputingProgress: FunctionComponent<{
     <Flex gap="middle" vertical={true} flex={1} align="center">
       <p>Computing styleguide semantic infos for the very first time...</p>
       <Progress type="circle" size={80} percent={percent} />
+      <p>{stats.nextRuleTitle ?? ''}</p>
     </Flex>
   )
 }

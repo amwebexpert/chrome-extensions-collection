@@ -48,6 +48,7 @@ export class FeatureExtractionEmbeddingsSearcher {
       completed: this.rules.filter((rule) => !!rule.embedding).length,
       total: this.rules.length,
       isCompleted: this.isReadyForSemanticSearch,
+      nextRuleTitle: this.nextRuleToCompute?.title,
     }
   }
 
@@ -57,9 +58,13 @@ export class FeatureExtractionEmbeddingsSearcher {
     console.info(`====>>> model "${model}" feature-extraction pipeline created.`)
   }
 
+  get nextRuleToCompute(): Rule | null {
+    return this.rules.find((rule) => !rule.embedding) ?? null
+  }
+
   computeNextRuleEmbedding = async (): Promise<void> => {
     if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
-    const rule = this.rules.find((rule) => !rule.embedding)
+    const rule = this.nextRuleToCompute
     if (!rule) return
 
     await this.computeRuleEmbedding(rule)
