@@ -56,8 +56,8 @@ export type TocLink = {
 }
 
 export type ComputeEmbeddingsStats = {
-  completed: number
-  total: number
   isCompleted: boolean
+  total: number
+  completed: number
   nextRuleTitle: string
 }
