@@ -33,11 +33,11 @@ export const SearchPanel: FunctionComponent = () => {
           enterButton={false}
           size="middle"
           value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onSearch={() => launchSearch()}
           onKeyDown={(e) => {
             if (e.key === 'Enter') launchSearch()
           }}
-          onChange={(e) => setSearch(e.target.value)}
-          onSearch={() => launchSearch()}
         />
       </Space>
 
