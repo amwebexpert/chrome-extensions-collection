@@ -21,6 +21,8 @@ export const useSearch = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
+  const shouldDisplayComputingProgress = !embeddingsProgress.isCompleted && embeddingsProgress.total > 0
+
   useEffect(() => {
     // restore search value
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
@@ -80,5 +82,13 @@ export const useSearch = () => {
     doSearchDebounced(search)
   }, [search])
 
-  return { search, setSearch, isSearching, searchResults, launchSearch, embeddingsProgress }
+  return {
+    search,
+    setSearch,
+    isSearching,
+    searchResults,
+    launchSearch,
+    embeddingsProgress,
+    shouldDisplayComputingProgress,
+  }
 }

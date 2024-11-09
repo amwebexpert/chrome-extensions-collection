@@ -7,13 +7,22 @@ import './search-panel.css'
 
 export const SearchPanel: FunctionComponent = () => {
   const inputRef = useRef<InputRef>(null)
-  const { search, setSearch, isSearching, searchResults, launchSearch, embeddingsProgress } = useSearch()
+
+  const {
+    search,
+    setSearch,
+    isSearching,
+    searchResults,
+    launchSearch,
+    embeddingsProgress,
+    shouldDisplayComputingProgress,
+  } = useSearch()
 
   useEffect(() => {
     setTimeout(() => inputRef.current?.select(), 300)
   }, [])
 
-  if (!embeddingsProgress.isCompleted) return <EmbeddingsComputingProgress stats={embeddingsProgress} />
+  if (shouldDisplayComputingProgress) return <EmbeddingsComputingProgress stats={embeddingsProgress} />
 
   return (
     <Flex gap="middle" vertical={true} flex={1} align="center">
@@ -27,7 +36,9 @@ export const SearchPanel: FunctionComponent = () => {
           enterButton={false}
           size="middle"
           value={search}
-          onKeyDown={(e) => console.debug(`onKeyDown ${e.key}`)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') launchSearch()
+          }}
           onChange={(e) => setSearch(e.target.value)}
           onSearch={() => launchSearch()}
         />
