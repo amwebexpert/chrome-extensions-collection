@@ -1,6 +1,7 @@
+import { DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { MessageType, type OptionsType, getOptions } from '@packages/coding-guide-helper-common'
 import type { FormProps } from 'antd'
-import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
+import { Button, Flex, Form, Input, Popconfirm, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import { useDarkTheme } from '../../components/theme/use-dark-theme'
 import { useMessage } from '../../hooks/use-message'
@@ -85,14 +86,20 @@ export const Options: FunctionComponent = () => {
             <Switch value={isDarkMode} onChange={toggleDarkMode} />
           </Form.Item>
 
-          <Form.Item label={`Clear cache (${cacheSize})`}>
-            <Button type="primary" htmlType="button" loading={isClearing} onClick={onClearCache}>
-              Clear cache and reload guidelines
-            </Button>
+          <Form.Item label={`Extension cache (${cacheSize})`}>
+            <Popconfirm
+              title="Clear cache confirmation"
+              description="Are you sure to clear the extension cache?"
+              onConfirm={onClearCache}
+            >
+              <Button type="primary" htmlType="button" loading={isClearing} icon={<DeleteOutlined />}>
+                Clear cache and reload guidelines
+              </Button>
+            </Popconfirm>
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
-            <Button type="primary" htmlType="submit" loading={isLoading}>
+            <Button type="primary" htmlType="submit" loading={isLoading} icon={<SaveOutlined />}>
               Save and close
             </Button>
           </Form.Item>
