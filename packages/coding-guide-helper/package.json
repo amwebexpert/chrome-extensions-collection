@@ -4,7 +4,7 @@
   "description": "Coding guide helper is a chrome extension to help doing pull requests review process.",
   "repository": "https://github.com/amwebexpert/chrome-extensions-collection/tree/master/packages/coding-guide-helper",
   "private": false,
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "main": "src/main-app.tsx",
   "type": "module",

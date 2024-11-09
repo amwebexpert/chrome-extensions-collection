@@ -11,3 +11,6 @@ export const doSearch = (payload = '') => {
 export const doSearchDebounced = debounce(doSearch, 500)
 
 export const EMPTY_PROGRESS: ComputeEmbeddingsStats = { completed: 0, total: 0, isCompleted: false, nextRuleTitle: '' }
+
+const popupConnect = () => chrome.runtime.connect({ name: 'popup' })
+export const POPUP_PORT = popupConnect()

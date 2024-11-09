@@ -1,7 +1,6 @@
 import { type ComputeEmbeddingsStats, type GuidelineNode, MessageType } from '@packages/coding-guide-helper-common'
-import { useCallback, useEffect, useState } from 'react'
-import { POPUP_PORT } from '../../../app/app.utils'
-import { EMPTY_PROGRESS, doSearch, doSearchDebounced, generateEmbeddings } from './use-search.utils'
+import { useEffect, useState } from 'react'
+import { EMPTY_PROGRESS, POPUP_PORT, doSearch, doSearchDebounced, generateEmbeddings } from './use-search.utils'
 
 export const useSearch = () => {
   const [embeddingsProgress, setEmbeddingsProgress] = useState<ComputeEmbeddingsStats>(EMPTY_PROGRESS)
@@ -11,45 +10,39 @@ export const useSearch = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<GuidelineNode[]>([])
 
-  // biome-ignore lint/suspicious/noExplicitAny: message comes from port.onMessage as <any>
-  const onMessage = useCallback((message: any) => {
-    const { type, payload } = message
-    switch (type) {
-      case MessageType.ON_SEARCH_COMPLETED: {
-        setSearchResults(payload)
-        setIsSearching(false)
-        break
-      }
-      case MessageType.ON_SEARCH_LOADING: {
-        setIsSearching(true)
-        break
-      }
-      case MessageType.ON_SEARCH_ERROR: {
-        setIsSearching(false)
-        break
-      }
-      case MessageType.ON_EMBEDDINGS_CREATED: {
-        const stats: ComputeEmbeddingsStats = payload
-        setEmbeddingsProgress(stats)
-        if (!stats.isCompleted) generateEmbeddings()
-        break
-      }
-
-      default:
-        console.warn(`unknown message type: ${type}`, payload)
-    }
-  }, [])
-
   useEffect(() => {
-    POPUP_PORT.onMessage.addListener(onMessage)
-    generateEmbeddings()
+    POPUP_PORT.onMessage.addListener((message) => {
+      const { type, payload } = message
+      switch (type) {
+        case MessageType.ON_SEARCH_COMPLETED: {
+          setSearchResults(payload)
+          setIsSearching(false)
+          break
+        }
+        case MessageType.ON_SEARCH_LOADING: {
+          setIsSearching(true)
+          break
+        }
+        case MessageType.ON_SEARCH_ERROR: {
+          setIsSearching(false)
+          break
+        }
+        case MessageType.ON_EMBEDDINGS_CREATED: {
+          const stats: ComputeEmbeddingsStats = payload
+          setEmbeddingsProgress(stats)
+          if (!stats.isCompleted) generateEmbeddings()
+          break
+        }
 
-    // restore previous user session search value
+        default:
+          console.warn(`unknown message type: ${type}`, payload)
+      }
+    })
+
     chrome.storage.local.get('search', ({ search }) => setSearch(search ?? ''))
 
-    // each time popup connection is lost, try to reconnect?
-    POPUP_PORT.onDisconnect.addListener(() => console.info('====>>> disconnected'))
-  }, [onMessage])
+    generateEmbeddings()
+  }, [])
 
   // trigger search on user action
   const launchSearch = () => doSearch(search)
