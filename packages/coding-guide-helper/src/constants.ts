@@ -7,8 +7,8 @@ export const APP_VERSION_INFO = Object.freeze({
   DESCRIPTION: "Coding guide helper is a chrome extension to help doing pull requests review process.",
   REPOSITORY: 'https://github.com/amwebexpert/chrome-extensions-collection/tree/master/packages/coding-guide-helper',
   AUTHOR: 'amwebexpert@gmail.com',
-  VERSION: '1.0.8',
+  VERSION: '1.0.9',
   VERSION_DATE: '2024-11-09',
 });
 
-export const LONG_VERSION_DATE = '1.0.8 (2024-11-09)';
+export const LONG_VERSION_DATE = '1.0.9 (2024-11-09)';

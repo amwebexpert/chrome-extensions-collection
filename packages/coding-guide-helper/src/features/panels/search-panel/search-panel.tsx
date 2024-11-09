@@ -1,12 +1,13 @@
-import { Flex, Input, type InputRef, Space } from 'antd'
-import { type FunctionComponent, useEffect, useRef } from 'react'
+import { Flex, Input, Space } from 'antd'
+import type { FunctionComponent } from 'react'
 import { SearchResults } from '../../../features/search-results/search-results'
 import { EmbeddingsComputingProgress } from './embeddings-computing-progress'
 import { useSearch } from './hooks/use-search'
+import { useSetFocus } from './hooks/use-set-focus'
 import './search-panel.css'
 
 export const SearchPanel: FunctionComponent = () => {
-  const inputRef = useRef<InputRef>(null)
+  const inputRef = useSetFocus({ delay: 300 })
 
   const {
     search,
@@ -17,10 +18,6 @@ export const SearchPanel: FunctionComponent = () => {
     embeddingsProgress,
     shouldDisplayComputingProgress,
   } = useSearch()
-
-  useEffect(() => {
-    setTimeout(() => inputRef.current?.select(), 300)
-  }, [])
 
   if (shouldDisplayComputingProgress) return <EmbeddingsComputingProgress stats={embeddingsProgress} />
 
