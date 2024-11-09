@@ -120,7 +120,7 @@ class ServiceWorker {
   private async filterWithSemantic(search: string): Promise<GuidelineNode[]> {
     if (!search || !this.rootNode || !this.semanticSearcher.isReadyForSemanticSearch) return []
 
-    const rules = await this.semanticSearcher.findRelevantDocuments({ queryText: search, maxResults: 3 })
+    const rules = await this.semanticSearcher.findRelevantDocuments({ queryText: search })
     return getNodesFromRules({ rootNode: this.rootNode, rules })
   }
 

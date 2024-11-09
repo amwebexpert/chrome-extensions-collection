@@ -97,7 +97,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     if (!this.isReadyForSemanticSearch) return []
     if (!this.featureExtractionEmbeddings) throw Error('Cannot compute embeddings')
 
-    const { queryText, maxResults = 3 } = configs
+    const { queryText, maxResults = 5 } = configs
     const tensor: Tensor = await this.featureExtractionEmbeddings(queryText, {
       pooling: 'mean',
       normalize: true,
