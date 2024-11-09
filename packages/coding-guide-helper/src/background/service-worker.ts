@@ -85,6 +85,9 @@ class ServiceWorker {
         case MessageType.ON_POPUP_OPEN:
           if (!this.rootNode) this.loadGuidelines()
           break
+        case MessageType.ON_RESET_CACHE:
+          if (!this.rootNode) this.loadGuidelines().then(() => this.semanticSearcher.init(this.rootNode))
+          break
         case MessageType.ON_SELECTION_CHANGE:
           console.info(`====>>> selection changed: ${payload}`)
           break

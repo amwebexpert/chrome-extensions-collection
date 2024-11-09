@@ -27,6 +27,7 @@ export enum MessageType {
   SET_OPTIONS = 'setOptions',
   ON_LINK_GUIDELINES_ITEM_SELECTED = 'onLinkGuidelinesItemSelected',
   ON_CONTENT_SCRIPT_STATUS = 'onContentScriptStatus',
+  ON_RESET_CACHE = 'onResetCache',
 
   CREATE_NEXT_EMBEDDINGS = 'createNextEmbeddings',
 

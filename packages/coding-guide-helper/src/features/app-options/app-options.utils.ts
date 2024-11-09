@@ -22,26 +22,26 @@ const buildInvalidResult = (message: string): ValidationResult => ({ isValid: fa
 export const validateOptions = async (options: OptionsType): Promise<ValidationResults> => {
   const { markdownFilesUrlPrefix = '', files: filesText = '' } = options
 
-  if (!markdownFilesUrlPrefix.trim()) return buildInvalidResults('Markdown files url prefix is required')
+  if (!markdownFilesUrlPrefix.trim()) return buildInvalidResults('❌ markdown files url prefix is required')
 
   const files = filesText
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean)
-  if (files.length === 0) return buildInvalidResults('At least one markdown file should be provided')
+  if (files.length === 0) return buildInvalidResults('❌ at least one markdown file should be provided')
 
   const invalidNames = files.filter((file) => !file.toLocaleLowerCase().endsWith('.md'))
   if (invalidNames.length > 0)
     return {
       isValid: false,
-      messages: invalidNames.map((file) => `Invalid markdown extension: "${file}"`),
+      messages: invalidNames.map((file) => `❌ invalid markdown extension: "${file}"`).slice(0, 1),
     }
 
   const links = files
     .map((file) => `${markdownFilesUrlPrefix.trim()}/${file}`)
     .map((link) => link.replace(/\/\//g, '/'))
   for (const link of links) {
-    if (!isValidHttpUrl(link)) return buildInvalidResults(`Not a valid http resource: "${link}"`)
+    if (!isValidHttpUrl(link)) return buildInvalidResults(`❌ not a valid http resource: "${link}"`)
   }
 
   const results = await Promise.all(links.map(checkIfFileExists))
@@ -63,9 +63,9 @@ const isValidHttpUrl = (link: string): boolean => {
 const checkIfFileExists = async (link: string): Promise<ValidationResult> => {
   try {
     const response = await fetch(link)
-    if (!response.ok) return buildInvalidResult(`Can't retrieve resource: "${link}"`)
+    if (!response.ok) return buildInvalidResult(`❌ can't retrieve resource: "${link}"`)
   } catch (e: unknown) {
-    return buildInvalidResult(`Error while fetching resource: "${link}". Error: ${JSON.stringify(e)}`)
+    return buildInvalidResult(`❌ error while fetching resource: "${link}". Error: ${JSON.stringify(e)}`)
   }
 
   return VALID_RESULT

@@ -3,19 +3,35 @@ import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Switch, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import { useDarkTheme } from '../../components/theme/use-dark-theme'
+import { useMessage } from '../../hooks/use-message'
 import { Environment } from '../../models/environment'
 import { validateOptions } from './app-options.utils'
+import { useCacheHelper } from './use-cache-helper'
 
 const { title } = Environment
 
 export const Options: FunctionComponent = () => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm<OptionsType>()
   const { isDarkMode, toggleDarkMode } = useDarkTheme()
   const [isLoading, setIsLoading] = useState(false)
+
+  const { contextHolder, showInfo } = useMessage()
+  const { cacheSize, clearExtensionCache, isClearing } = useCacheHelper()
 
   useEffect(() => {
     getOptions().then(form.setFieldsValue)
   }, [form])
+
+  const onClearCache = async () => {
+    const options = form.getFieldsValue()
+
+    const { isValid, messages } = await validateOptions(options)
+    if (isValid) {
+      clearExtensionCache().then(() => showInfo('Cache cleared successfully. You may have to reset the dark mode.'))
+    } else {
+      form.setFields([{ name: 'files', errors: messages }])
+    }
+  }
 
   const onFinish: FormProps<OptionsType>['onFinish'] = async (options) => {
     setIsLoading(true)
@@ -24,7 +40,6 @@ export const Options: FunctionComponent = () => {
       const { isValid, messages } = await validateOptions(options)
       if (!isValid) {
         form.setFields([{ name: 'files', errors: messages }])
-        setIsLoading(false)
         return
       }
 
@@ -32,6 +47,7 @@ export const Options: FunctionComponent = () => {
       setTimeout(() => window.close(), 700)
     } catch (error: unknown) {
       form.setFields([{ name: 'files', errors: [JSON.stringify(error)] }])
+    } finally {
       setIsLoading(false)
     }
   }
@@ -69,6 +85,12 @@ export const Options: FunctionComponent = () => {
             <Switch value={isDarkMode} onChange={toggleDarkMode} />
           </Form.Item>
 
+          <Form.Item label={`Clear cache (${cacheSize})`}>
+            <Button type="primary" htmlType="button" loading={isClearing} onClick={onClearCache}>
+              Clear cache and reload guidelines
+            </Button>
+          </Form.Item>
+
           <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
             <Button type="primary" htmlType="submit" loading={isLoading}>
               Save and close
@@ -76,6 +98,8 @@ export const Options: FunctionComponent = () => {
           </Form.Item>
         </Form>
       </Flex>
+
+      {contextHolder}
     </Flex>
   )
 }

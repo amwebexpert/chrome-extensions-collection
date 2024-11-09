@@ -1,3 +1,4 @@
+import prettyBytes from 'pretty-bytes'
 import { type Message, MessageType } from '../models/models'
 
 export const logPlatformInfo = () =>
@@ -19,3 +20,10 @@ export const getFirstActiveTab = async () => {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
   return tab?.id
 }
+
+export const getCacheBytesUsed = async (): Promise<string> => {
+  const bytesInUse = await chrome.storage.local.getBytesInUse()
+  return prettyBytes(bytesInUse)
+}
+
+export const clearCache = async (): Promise<void> => chrome.storage.local.clear()
