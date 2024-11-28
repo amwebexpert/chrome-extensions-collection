@@ -2,7 +2,7 @@ import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import { FeatureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
 import { SAMPLE_QUERIES } from './queries.utils'
 
-const main = async () => {
+export const main = async () => {
   const rootNode = await collectOnlineGuidelines()
   const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
   await featureExtractionEmbeddingsSearcher.init(rootNode)
