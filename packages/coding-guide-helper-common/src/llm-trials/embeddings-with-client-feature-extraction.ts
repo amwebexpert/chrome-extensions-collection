@@ -11,10 +11,8 @@ export const main = async () => {
   const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
   await featureExtractionEmbeddingsSearcher.init(rootNode)
 
-  for (const rule of featureExtractionEmbeddingsSearcher.rules) {
-    const { title, content } = rule
-    writeLocalTextFile({ title, content })
-  }
+  const { rules } = featureExtractionEmbeddingsSearcher
+  await Promise.all(rules.map(writeLocalTextFile))
 
   await featureExtractionEmbeddingsSearcher.computeAllEmbeddings()
 
