@@ -12,8 +12,6 @@ const extractRuleContent = (node: GuidelineNode): string => {
     })
     .join('\n')
 
-  console.info(`====>>> ${node.title}:`, content)
-
   return content
 }
 

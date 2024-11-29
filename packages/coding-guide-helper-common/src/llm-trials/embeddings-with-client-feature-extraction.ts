@@ -1,6 +1,7 @@
 import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import { FeatureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
 import { setLocalDevMode } from '../utils/env.utils'
+import { writeLocalTextFile } from '../utils/files.utils'
 import { SAMPLE_QUERIES } from './queries.utils'
 
 export const main = async () => {
@@ -9,6 +10,12 @@ export const main = async () => {
   const rootNode = await collectOnlineGuidelines()
   const featureExtractionEmbeddingsSearcher = new FeatureExtractionEmbeddingsSearcher()
   await featureExtractionEmbeddingsSearcher.init(rootNode)
+
+  for (const rule of featureExtractionEmbeddingsSearcher.rules) {
+    const { title, content } = rule
+    writeLocalTextFile({ title, content })
+  }
+
   await featureExtractionEmbeddingsSearcher.computeAllEmbeddings()
 
   const maxResults = 3
