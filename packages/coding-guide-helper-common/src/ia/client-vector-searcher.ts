@@ -77,11 +77,16 @@ export class FeatureExtractionEmbeddingsSearcher {
     rule.embedding = tensorToEmbeddingVector(tensor)
   }
 
-  async computeEmbeddings(): Promise<void> {
+  async computeAllEmbeddings(): Promise<void> {
     if (!this.featureExtractionEmbeddings) throw Error('Model should be loaded first')
 
-    const embeddingPromises = this.rules.map((rule) => this.computeRuleEmbedding(rule))
-    await Promise.all(embeddingPromises)
+    // @see Ticket-001 regarding multiple threads
+    // const embeddingPromises = this.rules.map((rule) => this.computeRuleEmbedding(rule))
+    // await Promise.all(embeddingPromises)
+    while (this.nextRuleToCompute) {
+      await this.computeNextRuleEmbedding()
+    }
+
     console.info('====>>> Computed embeddings for all rules. END.')
   }
 

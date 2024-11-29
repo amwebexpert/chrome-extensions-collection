@@ -4,13 +4,22 @@ import type { Rule } from './models'
 export const isAvoidOrPreferTitle = (title: string): boolean =>
   title.startsWith('❌ Avoid') || title.startsWith('✅ Prefer')
 
+const extractRuleContent = (node: GuidelineNode): string => {
+  const content = node.children
+    .map(({ title, markdownLines }) => {
+      const lines = markdownLines.join('\n')
+      return `${title}\n${lines}`
+    })
+    .join('\n')
+
+  console.info(`====>>> ${node.title}:`, content)
+
+  return content
+}
+
 export const extractFullRule = (node: GuidelineNode): Rule => {
   const { title, href } = node
-
-  const content = node.children
-    .map(({ title, markdownLines }) => `${title}\n${markdownLines.join('\n')}`)
-    .join('\n')
-  //console.info('====>>> content', { title, content })
+  const content = extractRuleContent(node)
 
   return { title, href, content }
 }
