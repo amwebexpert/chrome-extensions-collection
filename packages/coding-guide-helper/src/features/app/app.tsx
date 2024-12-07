@@ -1,5 +1,6 @@
 import { BookOutlined, InfoCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import { MessageType, logPlatformInfo } from '@packages/coding-guide-helper-common'
+import { logPlatformInfo } from '@packages/chrome-common'
+import { MessageType } from '@packages/coding-guide-helper-common'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
 import { Version } from '../../components/version/version'

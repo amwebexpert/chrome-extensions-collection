@@ -1,4 +1,5 @@
-import { sendLoadStatusToContentScript, toHhMmSs } from '@packages/coding-guide-helper-common'
+import { toHhMmSs } from '@packages/chrome-common'
+import { sendLoadStatusToContentScript } from '@packages/coding-guide-helper-common'
 import { Flex, Typography } from 'antd'
 import { type FunctionComponent, useEffect, useState } from 'react'
 import { Environment } from '../../models/environment'

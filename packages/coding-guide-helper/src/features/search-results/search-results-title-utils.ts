@@ -1,4 +1,5 @@
-import { type Message, MessageType, getFirstActiveTab } from '@packages/coding-guide-helper-common'
+import { getFirstActiveTab } from '@packages/chrome-common'
+import { type Message, MessageType } from '@packages/coding-guide-helper-common'
 
 export const sendMessageToContentScript = async (info: string) => {
   const tabId = await getFirstActiveTab()

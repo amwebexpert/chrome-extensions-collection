@@ -1,4 +1,4 @@
-import { getManifestData } from '@packages/coding-guide-helper-common'
+import { getManifestData } from '@packages/chrome-common'
 
 export const logManifestInfo = () => {
   const { version, author, name } = getManifestData()

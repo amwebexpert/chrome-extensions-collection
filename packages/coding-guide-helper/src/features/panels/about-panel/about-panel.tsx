@@ -1,4 +1,4 @@
-import { getManifestData } from '@packages/coding-guide-helper-common'
+import { getManifestData } from '@packages/chrome-common'
 import { Table } from 'antd'
 import type { FunctionComponent } from 'react'
 import { APP_VERSION_INFO } from '../../../constants'

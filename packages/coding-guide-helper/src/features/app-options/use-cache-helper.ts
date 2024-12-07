@@ -1,4 +1,5 @@
-import { MessageType, clearCache, getCacheBytesUsed } from '@packages/coding-guide-helper-common'
+import { clearCache, getCacheBytesUsed } from '@packages/chrome-common'
+import { MessageType } from '@packages/coding-guide-helper-common'
 import { useEffect, useState } from 'react'
 
 const DEFAULT_CACHE_SIZE = '0 bytes'
