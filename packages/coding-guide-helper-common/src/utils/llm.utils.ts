@@ -20,7 +20,9 @@ export const cosineSimilarity = (vecA: EmbeddingVector, vecB: EmbeddingVector): 
 
   if (magnitudeA === 0 || magnitudeB === 0) return 0
 
-  // calculate cosine similarity and round to specified precision
-  const cosineSim = dotProduct / (magnitudeA * magnitudeB)
+  const normalizedMagnitudeA = Math.sqrt(magnitudeA)
+  const normalizedMagnitudeB = Math.sqrt(magnitudeB)
+
+  const cosineSim = dotProduct / (normalizedMagnitudeA * normalizedMagnitudeB)
   return Number.parseFloat(cosineSim.toFixed(7))
 }

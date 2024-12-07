@@ -51,7 +51,7 @@ export const validateOptions = async (options: OptionsType): Promise<ValidationR
   return VALID_RESULTS
 }
 
-const isValidHttpUrl = (link: string): boolean => {
+export const isValidHttpUrl = (link: string): boolean => {
   try {
     const url = new URL(link)
     return ['https:', 'http:'].includes(url.protocol)
