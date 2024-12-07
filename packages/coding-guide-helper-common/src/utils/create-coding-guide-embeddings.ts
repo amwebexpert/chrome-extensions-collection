@@ -1,9 +1,9 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
+import { simpleHash } from '@packages/chrome-common'
 import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import { FeatureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
 import type { EmbeddingVector } from '../ia/models'
-import { simpleHash } from './hash.utils'
 
 export type EmbeddingInfo = {
   contentSha256: number

@@ -1,5 +1,5 @@
+import { isChromeExtension } from '@packages/chrome-common'
 import type { OptionsType } from '../models/models'
-import { isChromeExtension } from './chrome.utils'
 
 const DEFAULT_MARKDOWN_FILES_URL_PREFIX =
   'https://raw.githubusercontent.com/amwebexpert/chrome-extensions-collection/master/packages/coding-guide-helper/public/markdowns'
@@ -27,8 +27,7 @@ export const getOptions = async (): Promise<OptionsType> =>
       const options = result.options ?? DEFAULT_OPTIONS
 
       const files: string = options.files ?? DEFAULT_FILES.join('\n')
-      const markdownFilesUrlPrefix: string =
-        options.markdownFilesUrlPrefix ?? DEFAULT_MARKDOWN_FILES_URL_PREFIX
+      const markdownFilesUrlPrefix: string = options.markdownFilesUrlPrefix ?? DEFAULT_MARKDOWN_FILES_URL_PREFIX
 
       resolve({ markdownFilesUrlPrefix, files })
     })

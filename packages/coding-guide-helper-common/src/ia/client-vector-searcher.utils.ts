@@ -1,5 +1,4 @@
-import { isLocalDevMode } from '../utils/env.utils'
-import { simpleHash } from '../utils/hash.utils'
+import { isLocalDevMode, simpleHash } from '@packages/chrome-common'
 import type { EmbeddingVector, Rule, SerializedRule } from './models'
 
 const buildStorageKey = (rule: SerializedRule | Rule): string => `rule-${rule.href}`

@@ -1,7 +1,6 @@
+import { setLocalDevMode, writeLocalTextFile } from '@packages/chrome-common'
 import { collectOnlineGuidelines } from '../background/service-worker.utils'
 import { FeatureExtractionEmbeddingsSearcher } from '../ia/client-vector-searcher'
-import { setLocalDevMode } from '../utils/env.utils'
-import { writeLocalTextFile } from '../utils/files.utils'
 import { SAMPLE_QUERIES } from './queries.utils'
 
 export const main = async () => {
