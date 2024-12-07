@@ -9,11 +9,12 @@
   "private": true,
   "scripts": {
     "clean:node": "yarn workspaces run clean:node",
-    "build": "yarn workspaces run build",
+    "build": "yarn run check:cyclic && yarn workspaces run build",
     "test": "yarn workspaces run test",
     "lint": "yarn workspaces run lint",
     "lint:fix": "yarn workspaces run lint:fix",
-    "cyclic:dep:checker": "yarn workspaces run cyclic:dep:checker"
+    "cyclic:dep:checker": "yarn workspaces run cyclic:dep:checker",
+    "check:cyclic": "yarn run cyclic:dep:checker && echo '✅ No cyclic dependencies detected on the whole project.'"
   },
   "workspaces": [
     "packages/*"
