@@ -10,14 +10,14 @@ const data = `/* eslint-disable */
 // ----------------------------------------------------------------------------------------
 export const APP_VERSION_INFO = Object.freeze({
   NAME: '${name}',
-  DESCRIPTION: "${description}",
+  DESCRIPTION: '${description}',
   REPOSITORY: '${repository}',
   AUTHOR: '${author}',
   VERSION: '${version}',
   VERSION_DATE: '${date}',
-});
+})
 
-export const LONG_VERSION_DATE = '${version} (${date})';
+export const LONG_VERSION_DATE = '${version} (${date})'
 `
 
 const main = () => {
