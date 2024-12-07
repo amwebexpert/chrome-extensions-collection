@@ -8,10 +8,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "clean:node": "yarn workspaces run clean:node",
     "build": "yarn workspaces run build",
     "test": "yarn workspaces run test",
     "lint": "yarn workspaces run lint",
-    "lint:fix": "yarn workspaces run lint:fix"
+    "lint:fix": "yarn workspaces run lint:fix",
+    "cyclic:dep:checker": "yarn workspaces run cyclic:dep:checker"
   },
   "workspaces": [
     "packages/*"
@@ -21,7 +23,7 @@
     "@crxjs/vite-plugin": "2.0.0-beta.26",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.1.0",
     "@types/chrome": "^0.0.287",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
@@ -33,7 +35,7 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.1",
-    "vitest": "^2.1.6"
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
   }
 }

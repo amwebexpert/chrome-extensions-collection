@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@packages/coding-guide-helper-common": "*",
-    "antd": "^5.22.2",
-    "axios": "^1.7.8",
+    "antd": "^5.22.3",
+    "axios": "^1.7.9",
     "copy-to-clipboard": "^3.3.3",
     "debounce": "^2.2.0",
     "react": "^18.3.1",
@@ -48,7 +48,7 @@
     "@tensorflow/tfjs-converter": "^4.22.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.0.1",
+    "@testing-library/react": "^16.1.0",
     "@types/chrome": "^0.0.287",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
@@ -67,8 +67,8 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.1",
+    "vite": "^6.0.3",
     "vite-plugin-package-version": "^1.1.0",
-    "vitest": "^2.1.6"
+    "vitest": "^2.1.8"
   }
 }
