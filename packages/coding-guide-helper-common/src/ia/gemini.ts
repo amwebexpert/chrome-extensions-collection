@@ -11,8 +11,7 @@ declare global {
 }
 
 const ASSISTANT_ROLE = 'You are a react.js and typescript assistant and these are the coding rules:'
-const EXPECTED_ACTION =
-  'Give the one rule number (only the number) that matches the following search query:'
+const EXPECTED_ACTION = 'Give the one rule number (only the number) that matches the following search query:'
 
 export const isAssistantAvailableOnPlatform = (): boolean => !!window.ai?.assistant?.create
 

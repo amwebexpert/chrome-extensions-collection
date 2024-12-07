@@ -1,6 +1,7 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
+const baseConfig = require('../../jest.base.config')
+
 export default {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testMatch: ['**/*.test.ts'],
-};
+  ...baseConfig,
+  roots: ['<rootDir>/src'],
+}

@@ -5,11 +5,7 @@ type GuidelineFromTextArgs = {
   text: string
   baseUrl: string
 }
-export const createGuidelineNodes = ({
-  rootNode,
-  text,
-  baseUrl,
-}: GuidelineFromTextArgs): GuidelineNode => {
+export const createGuidelineNodes = ({ rootNode, text, baseUrl }: GuidelineFromTextArgs): GuidelineNode => {
   const { toc, content } = splitTocAndContent({ text, baseUrl })
   buildGuidelineNodesFromToC({ rootNode, text: toc, baseUrl })
 
@@ -54,10 +50,7 @@ type BuildOrderedNodesArgs = {
   node: GuidelineNode
   allOrderedNodes?: GuidelineNode[]
 }
-export const buildOrderedNodes = ({
-  node,
-  allOrderedNodes = [],
-}: BuildOrderedNodesArgs): GuidelineNode[] => {
+export const buildOrderedNodes = ({ node, allOrderedNodes = [] }: BuildOrderedNodesArgs): GuidelineNode[] => {
   allOrderedNodes.push(node)
 
   for (const subLink of node.children) {
@@ -75,10 +68,7 @@ type SplitTocAndContentArgs = {
   text: string
   baseUrl: string
 }
-export const splitTocAndContent = ({
-  text,
-  baseUrl,
-}: SplitTocAndContentArgs): SplitTocAndContentResult => {
+export const splitTocAndContent = ({ text, baseUrl }: SplitTocAndContentArgs): SplitTocAndContentResult => {
   const regex = /^# .*\n/gm // split at very first level one title line, starting with "# "
   const match = regex.exec(text)
   if (!match) {
@@ -96,11 +86,7 @@ export const splitTocAndContent = ({
   }
 }
 
-export const buildGuidelineNodesFromToC = ({
-  rootNode,
-  text,
-  baseUrl,
-}: GuidelineFromTextArgs): GuidelineNode => {
+export const buildGuidelineNodesFromToC = ({ rootNode, text, baseUrl }: GuidelineFromTextArgs): GuidelineNode => {
   const lines = text
     .split('\n')
     .filter((line) => line.trim().length > 0)
@@ -156,13 +142,7 @@ type BuildNodeArgs = {
   baseUrl: string
   href: string
 }
-export const buildNode = ({
-  parent,
-  level,
-  title,
-  href,
-  baseUrl,
-}: BuildNodeArgs): GuidelineNode => ({
+export const buildNode = ({ parent, level, title, href, baseUrl }: BuildNodeArgs): GuidelineNode => ({
   parent,
   level,
   title,
@@ -232,11 +212,7 @@ export const jsonSerializeReplacer = (key: string, value: unknown) => {
 }
 
 export const serializeWitoutParent = (node: GuidelineNode): string => {
-  return JSON.stringify(
-    node,
-    (key: string, value: unknown) => (key === 'parent' ? undefined : value),
-    2,
-  )
+  return JSON.stringify(node, (key: string, value: unknown) => (key === 'parent' ? undefined : value), 2)
 }
 
 export const cloneAndRemoveAllParents = (node: GuidelineNode): GuidelineNode => {
@@ -259,6 +235,4 @@ export const isGuidelineAvoidOrPreferSection = (node: GuidelineNode): boolean =>
   ['❌ avoid', '✅ prefer'].some((section) => node.title.toLowerCase().includes(section))
 
 export const hasDescendentMatching = (node: GuidelineNode): boolean =>
-  node.isMatching ||
-  node.children.some((child) => child.isMatching) ||
-  node.children.some(hasDescendentMatching)
+  node.isMatching || node.children.some((child) => child.isMatching) || node.children.some(hasDescendentMatching)

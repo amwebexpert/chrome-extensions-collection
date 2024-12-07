@@ -125,9 +125,7 @@ describe('markdown parser tests suite', () => {
 
     // debug ordered nodes
     const allOrderedNodes = buildOrderedNodes({ node: rootNode })
-    const debugInfo = allOrderedNodes.map(
-      (node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`,
-    )
+    const debugInfo = allOrderedNodes.map((node) => `${node.titleMarkdown}\n${node.markdownLines.join('\n    ')}`)
     //console.info('====>>> nodes', debugInfo)
   })
 })
