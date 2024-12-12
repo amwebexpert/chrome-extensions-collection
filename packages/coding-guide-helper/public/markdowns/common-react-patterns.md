@@ -60,6 +60,10 @@
     - [❌ Avoid direct index usage as key](#-avoid-direct-index-usage-as-key)
     - [✅ Prefer a unique identifier](#-prefer-a-unique-identifier)
     - [Why is this better?](#why-is-this-better)
+  - [Prefer react-native `Pressable` Over `TouchableOpacity`](#prefer-react-native-pressable-over-touchableopacity)
+    - [❌ Avoid TouchableOpacity usage](#-avoid-touchableopacity-usage)
+    - [✅ Prefer Pressable](#-prefer-pressable)
+    - [Why is this better?](#why-is-this-better-1)
 
 # Project React coding standards
 
@@ -1022,3 +1026,52 @@ const ItemList_GenerationApproach = () => (
 - **Avoiding Bugs:** Combining fields with indices, while not ideal, is better than relying solely on indices, as it reduces the likelihood of mismatches during re-renders.
 
 This approach ensures React efficiently handles rendering and avoids subtle bugs caused by key mismatches.
+
+## Prefer react-native `Pressable` Over `TouchableOpacity`
+
+### ❌ Avoid TouchableOpacity usage
+```tsx
+import { TouchableOpacity, Text } from 'react-native';
+
+const MyButton = () => (
+  <TouchableOpacity onPress={() => console.log('Button pressed!')}>
+    <Text>Press Me</Text>
+  </TouchableOpacity>
+);
+```
+
+### ✅ Prefer Pressable
+```tsx
+import { Pressable, Text, StyleSheet } from 'react-native';
+
+const MyButton = () => (
+  <Pressable
+    onPress={() => console.log('Button pressed!')}
+    style={({ pressed }) => [
+      styles.button,
+      pressed ? styles.buttonPressed : null,
+    ]}
+  >
+    <Text>Press Me</Text>
+  </Pressable>
+);
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'blue',
+  },
+  buttonPressed: {
+    backgroundColor: 'darkblue',
+  },
+});
+```
+
+### Why is this better?
+
+1. **Future-Proof API:** The official [React Native documentation](https://reactnative.dev/docs/pressable) recommends using the `Pressable` API for touch-based interactions. It is more extensive and designed to be future-proof.
+2. **Rich Features:** `Pressable` provides additional features like:
+   - Handling different interaction states (e.g., `onPressIn`, `onPressOut`, `onHoverIn`, `onHoverOut`).
+   - Easily customizing styles for various states using `style` as a function.
+3. **Better Customization:** `Pressable` simplifies managing complex touch gestures and states, making it ideal for modern React Native applications.
+
+By adopting `Pressable`, you ensure your app uses modern APIs, improves interaction handling, and remains aligned with React Native's evolving best practices.
