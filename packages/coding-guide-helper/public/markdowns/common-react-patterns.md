@@ -56,6 +56,10 @@
     - [✅ Prefer Breaking Down God Components into Smaller Subcomponents](#-prefer-breaking-down-god-components-into-smaller-subcomponents)
     - [ℹ️ Explanation](#ℹ️-explanation-11)
     - [📚 Additional Resources](#-additional-resources-1)
+  - [Avoid Numeric Index for the Key Value of a React Element](#avoid-numeric-index-for-the-key-value-of-a-react-element)
+    - [❌ Avoid direct index usage as key](#-avoid-direct-index-usage-as-key)
+    - [✅ Prefer a unique identifier](#-prefer-a-unique-identifier)
+    - [Why is this better?](#why-is-this-better)
 
 # Project React coding standards
 
@@ -957,3 +961,64 @@ By adhering to these principles, you can create React components that are not on
 For more detailed information on the benefits of small responsibilities components, you can refer to these resources:
 - [Are Your React Components Too BIG?](https://www.youtube.com/watch?v=NsFmOttIW9Y)
 - [Refactoring a messy react component](https://alexkondov.com/refactoring-a-messy-react-component/)
+
+## Avoid Numeric Index for the Key Value of a React Element
+
+### ❌ Avoid direct index usage as key
+```tsx
+const items = [
+  { id: 'a1', name: 'Apple' },
+  { id: 'b2', name: 'Banana' },
+];
+
+const ItemList = () => (
+  <div>
+    {items.map((item, index) => (
+      <p key={index}>{item.name}</p>
+    ))}
+  </div>
+);
+```
+
+### ✅ Prefer a unique identifier
+```tsx
+const items = [
+  { id: 'a1', name: 'Apple' },
+  { id: 'b2', name: 'Banana' },
+];
+
+const ItemList = () => (
+  <div>
+    {items.map((item) => (
+      <p key={item.id}>{item.name}</p>
+    ))}
+  </div>
+);
+
+// if id is unavailable, try to find an attribute that is unique to each element, such as a `name`, `slug`, or any property that ensures uniqueness
+const ItemList_WithUniqueIdentifier = () => (
+  <div>
+    {items.map((item) => (
+      <p key={item.name}>{item.name}</p>
+    ))}
+  </div>
+);
+
+// As a last resort, if no single attribute is unique, generate a unique key for each element in the list and pass the list as props to the component.
+// Note: A composite key (a combination of two or more attributes) can also be used, as the goal is to ensure that the final key is unique for each element.
+const ItemList_GenerationApproach = () => (
+  <div>
+    {items.map((item, index) => (
+      <p key={`${item.generatedUUID}`}>{item.name}</p>
+    ))}
+  </div>
+);
+```
+
+### Why is this better?
+
+- **Stability:** Unique keys allow React to properly identify elements between renders. Numeric indices alone are fragile when items are reordered or updated.
+- **Flexibility:** Using meaningful attributes (or combinations) as keys ensures your code reflects the underlying data's structure.
+- **Avoiding Bugs:** Combining fields with indices, while not ideal, is better than relying solely on indices, as it reduces the likelihood of mismatches during re-renders.
+
+This approach ensures React efficiently handles rendering and avoids subtle bugs caused by key mismatches.
