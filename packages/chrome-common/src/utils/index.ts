@@ -1,3 +1,4 @@
+export * from './async.utils'
 export * from './chrome.utils'
 export * from './date-time.utils'
 export * from './env.utils'
