@@ -22,6 +22,10 @@
     - [✅ Prefer Using `getByRole` for Finding Elements](#-prefer-using-getbyrole-for-finding-elements)
     - [ℹ️ Explanation](#ℹ️-explanation-4)
     - [📚 References](#-references-1)
+  - [Prefer Mock Factory Function Over Re-Assignable Object Graph](#prefer-mock-factory-function-over-re-assignable-object-graph)
+    - [❌ Avoid usage of re-assignable object graph](#-avoid-usage-of-re-assignable-object-graph)
+    - [✅ Prefer a mock factory with partial overrides](#-prefer-a-mock-factory-with-partial-overrides)
+    - [ℹ️ Explanation](#ℹ️-explanation-5)
 
 # Unit testing coding standards
 
@@ -387,3 +391,63 @@ By following these best practices and using `getByRole` for finding elements, yo
 
 - [The test should resemble how users interact with your code](https://testing-library.com/docs/queries/about/#priority)
 
+## Prefer Mock Factory Function Over Re-Assignable Object Graph
+
+### ❌ Avoid usage of re-assignable object graph
+```typescript
+// somewhere in a tests shared folder
+export const mockPerson: Person = {
+  id: 1,
+  name: 'John Doe',
+  age: 30,
+  email: 'john.doe@example.com',
+  isActive: true,
+};
+
+// unit test using the shared object
+describe('Person tests with shared mock object', () => {
+  it('should update the name', () => {
+    mockPerson.name = 'Jane Doe'; // modifies the shared object
+    expect(mockPerson.name).toBe('Jane Doe');
+  });
+
+  it('should have the initial name', () => {
+    expect(mockPerson.name).toBe('John Doe'); // ❌ fails because the shared object was modified in the previous test
+  });
+});
+```
+
+### ✅ Prefer a mock factory with partial overrides
+```typescript
+// somewhere in a tests shared folder
+export const buildMockPerson = (overrides?: Partial<Person>): Person => ({
+  id: 1,
+  name: 'John Doe',
+  age: 30,
+  email: 'john.doe@example.com',
+  isActive: true,
+  ...overrides,
+});
+
+// unit test using the mock factory function
+describe('Person tests with mock factory function', () => {
+  it('should update the name in one instance', () => {
+    const person = buildMockPerson({ name: 'Jane Doe' });
+    expect(person.name).toBe('Jane Doe');
+  });
+
+  it('should not affect other instances', () => {
+    const person = buildMockPerson();
+    expect(person.name).toBe('John Doe'); // ✅ passes because a new instance is created for each test
+  });
+});
+```
+
+### ℹ️ Explanation
+
+- **Isolation in Tests:** In the "bad" example, modifying the shared `mockPerson` object affects subsequent tests, leading to unintended side-effects. In the "good" example, the factory function creates a new object for each test, ensuring independence.
+- **Flexibility:** The factory function accepts `overrides`, allowing specific attributes to be customized for individual tests without altering the base structure.
+- **Reusability:** The factory function can be reused in multiple test files and scenarios, improving consistency and reducing duplication.
+- **Maintainability:** Updates to the `Person` structure only need to be made in the factory function, reducing maintenance overhead.
+
+By using a factory function, you eliminate shared state issues, enhance test clarity, and make your test setup more robust and maintainable.
