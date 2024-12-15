@@ -1,10 +1,10 @@
-import type { ComputeEmbeddingsStats } from '@packages/coding-guide-helper-common'
+import type { ComputedEmbeddingsStats } from '@packages/coding-guide-helper-common'
 import { Flex, Progress } from 'antd'
 import type { FunctionComponent } from 'react'
 import { MarkdownLines } from '../../../components/markdown/markdown-lines'
 
 export const EmbeddingsComputingProgress: FunctionComponent<{
-  stats: ComputeEmbeddingsStats
+  stats: ComputedEmbeddingsStats
 }> = ({ stats }) => {
   const hasTotal = stats.total > 0
   const percent = hasTotal ? Math.ceil((stats.completed / stats.total) * 100) : 0

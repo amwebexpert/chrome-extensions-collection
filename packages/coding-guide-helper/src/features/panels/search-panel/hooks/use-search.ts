@@ -1,9 +1,9 @@
-import { type ComputeEmbeddingsStats, type GuidelineNode, MessageType } from '@packages/coding-guide-helper-common'
+import { type ComputedEmbeddingsStats, type GuidelineNode, MessageType } from '@packages/coding-guide-helper-common'
 import { useEffect, useState } from 'react'
 import { EMPTY_PROGRESS, POPUP_PORT, doSearch, doSearchDebounced, generateEmbeddings } from './use-search.utils'
 
 export const useSearch = () => {
-  const [embeddingsProgress, setEmbeddingsProgress] = useState<ComputeEmbeddingsStats>(EMPTY_PROGRESS)
+  const [embeddingsProgress, setEmbeddingsProgress] = useState<ComputedEmbeddingsStats>(EMPTY_PROGRESS)
   const shouldDisplayComputingProgress = !embeddingsProgress.isCompleted && embeddingsProgress.total > 0
 
   const [search, setSearch] = useState('')
@@ -28,7 +28,7 @@ export const useSearch = () => {
           break
         }
         case MessageType.ON_EMBEDDINGS_CREATED: {
-          const stats: ComputeEmbeddingsStats = payload
+          const stats: ComputedEmbeddingsStats = payload
           setEmbeddingsProgress(stats)
           if (!stats.isCompleted) generateEmbeddings()
           break

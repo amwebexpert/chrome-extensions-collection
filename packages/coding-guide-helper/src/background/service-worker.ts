@@ -5,7 +5,7 @@ import {
   MessageType,
   PortName,
   collectOnlineGuidelines,
-  combineUniqueSearchResults,
+  combineSearchResults,
   filterGuidelines,
   getNodesFromRules,
   getSenderInfo,
@@ -104,7 +104,7 @@ class ServiceWorker {
 
   private async computeNextEmbeddings() {
     await this.semanticSearcher.computeNextRuleEmbedding()
-    const payload = this.semanticSearcher.computeEmbeddingsStats
+    const payload = this.semanticSearcher.computedEmbeddingsStats
     this.popupPort?.postMessage({ type: MessageType.ON_EMBEDDINGS_CREATED, payload })
   }
 
@@ -131,8 +131,8 @@ class ServiceWorker {
       const rootNode = await this.getRootNode()
 
       const exactMatches = filterGuidelines({ search, rootNode })
-      const semanticResults = await this.filterWithSemantic(search)
-      const payload = combineUniqueSearchResults({ exactMatches, semanticResults })
+      const semanticMatches = await this.filterWithSemantic(search)
+      const payload = combineSearchResults({ exactMatches, semanticMatches })
 
       this.popupPort?.postMessage({ type: MessageType.ON_SEARCH_COMPLETED, payload })
       chrome.storage.local.set({ search })

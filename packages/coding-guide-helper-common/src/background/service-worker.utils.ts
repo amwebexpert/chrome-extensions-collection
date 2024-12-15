@@ -9,26 +9,20 @@ import {
   isParentOfAvoidPreferSection,
 } from './markdown-parser'
 
-type CombineUniqueSearchResultsArgs = {
+type CombineSearchResultsArgs = {
   exactMatches: GuidelineNode[]
-  semanticResults: GuidelineNode[]
+  semanticMatches: GuidelineNode[]
 }
 
-export const combineUniqueSearchResults = ({
-  exactMatches,
-  semanticResults,
-}: CombineUniqueSearchResultsArgs): GuidelineNode[] => {
-  const exactMatchesHrefs = exactMatches.filter((node) => node.shouldDisplayNode).map((node) => node.href)
-  const semanticResultsHrefs = semanticResults.map((node) => node.href)
-  console.info('====>>> combineUniqueSearchResults', {
-    exactMatchesHrefs,
-    semanticResultsHrefs,
-  })
+export const combineSearchResults = ({ exactMatches, semanticMatches }: CombineSearchResultsArgs): GuidelineNode[] => {
+  const exactMatchHrefs = exactMatches.filter((node) => node.shouldDisplayNode).map((node) => node.href)
+  const semanticMatchHrefs = semanticMatches.map((node) => node.href)
+  console.info('====>>> combineearchResults', { exactMatchHrefs, semanticMatchHrefs })
 
   const combinedResults = [...exactMatches]
 
-  for (const semanticResult of semanticResults) {
-    if (!exactMatchesHrefs.includes(semanticResult.href)) combinedResults.push(semanticResult)
+  for (const semanticResult of semanticMatches) {
+    if (!exactMatchHrefs.includes(semanticResult.href)) combinedResults.push(semanticResult)
   }
 
   console.info(`====>>> returning ${combinedResults.length} combined search results`)

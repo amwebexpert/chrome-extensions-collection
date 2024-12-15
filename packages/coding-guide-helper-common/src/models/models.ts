@@ -56,7 +56,7 @@ export type TocLink = {
   href: string
 }
 
-export type ComputeEmbeddingsStats = {
+export type ComputedEmbeddingsStats = {
   isCompleted: boolean
   total: number
   completed: number

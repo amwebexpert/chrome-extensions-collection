@@ -1,5 +1,5 @@
 import { type FeatureExtractionPipeline, type Tensor, env, pipeline } from '@xenova/transformers'
-import type { ComputeEmbeddingsStats, GuidelineNode } from '../models/models'
+import type { ComputedEmbeddingsStats, GuidelineNode } from '../models/models'
 import { cosineSimilarity } from '../utils/llm.utils'
 import { loadRuleEmbeddings, storeRuleEmbeddings } from './client-vector-searcher.utils'
 import { loadAllRules } from './guideline.collector'
@@ -39,7 +39,7 @@ export class FeatureExtractionEmbeddingsSearcher {
     return this.hasRules && this.rules.every((rule) => !!rule.embedding)
   }
 
-  get computeEmbeddingsStats(): ComputeEmbeddingsStats {
+  get computedEmbeddingsStats(): ComputedEmbeddingsStats {
     return {
       isCompleted: this.isReadyForSemanticSearch,
       total: this.rules.length,
