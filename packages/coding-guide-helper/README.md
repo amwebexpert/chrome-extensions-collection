@@ -40,12 +40,7 @@ Instructions to install the Chrome extension from the source.
 
 ## TODOs
 
-- cache markdown files retrieval http requests results (see `collectOnlineGuidelines` fetcher perhaps `axios` cache interceptor?)
-- add option to remove that cache from within options page
 - add classic hyperlink icon (beside the clipboard icon) to open a browser tab with the given link
-- add UI feedbacks for the "options" validations
-  - test the provided links (try to fetch)
-  - add a ✅ for success and a ❌ for Http 404
 - add a wider search filter inside the TOC Tab
 - add a review tools TAB
   - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
