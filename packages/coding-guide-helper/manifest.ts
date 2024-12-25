@@ -3,8 +3,8 @@ import type { ManifestV3Export } from '@crxjs/vite-plugin'
 export const manifest: ManifestV3Export = {
   manifest_version: 3,
   name: 'coding-guide-helper',
-  version: process.env.npm_package_version,
-  author: 'amwebexpert@gmail.com',
+  version: process.env.npm_package_version ?? '0.0.0',
+  author: { email: 'amwebexpert@gmail.com' },
   description: 'Coding guide helper is a chrome extension to help doing pull requests review process.',
   action: {
     default_popup: 'index.html',
