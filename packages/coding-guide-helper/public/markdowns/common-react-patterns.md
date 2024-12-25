@@ -59,11 +59,23 @@
   - [Avoid Numeric Index for the Key Value of a React Element](#avoid-numeric-index-for-the-key-value-of-a-react-element)
     - [❌ Avoid direct index usage as key](#-avoid-direct-index-usage-as-key)
     - [✅ Prefer a unique identifier](#-prefer-a-unique-identifier)
-    - [Why is this better?](#why-is-this-better)
+    - [ℹ️ Why is this better?](#ℹ️-why-is-this-better)
   - [Prefer react-native `Pressable` Over `TouchableOpacity`](#prefer-react-native-pressable-over-touchableopacity)
     - [❌ Avoid TouchableOpacity usage](#-avoid-touchableopacity-usage)
     - [✅ Prefer Pressable](#-prefer-pressable)
-    - [Why is this better?](#why-is-this-better-1)
+    - [ℹ️ Why is this better?](#ℹ️-why-is-this-better-1)
+  - [Prefer Fragments Over DOM Nodes](#prefer-fragments-over-dom-nodes)
+    - [❌ Avoid DOM Nodes for Grouping](#-avoid-dom-nodes-for-grouping)
+    - [✅ Prefer Fragments](#-prefer-fragments)
+    - [ℹ️ Explanations](#ℹ️-explanations-1)
+  - [Use React Fragment Shorthand](#use-react-fragment-shorthand)
+    - [❌ Avoid useless verbose Fragment tag](#-avoid-useless-verbose-fragment-tag)
+    - [✅ Prefer Fragment shorthand syntax](#-prefer-fragment-shorthand-syntax)
+    - [ℹ️ Explanations](#ℹ️-explanations-2)
+  - [Prefer Props Destructuring Over Direct Props Access](#prefer-props-destructuring-over-direct-props-access)
+    - [❌ Avoid Using Direct Props Access](#-avoid-using-direct-props-access)
+    - [✅ Prefer Props Destructuring](#-prefer-props-destructuring)
+    - [ℹ️ Explanations](#ℹ️-explanations-3)
 
 # Project React coding standards
 
@@ -1019,7 +1031,7 @@ const ItemList_GenerationApproach = () => (
 );
 ```
 
-### Why is this better?
+### ℹ️ Why is this better?
 
 - **Stability:** Unique keys allow React to properly identify elements between renders. Numeric indices alone are fragile when items are reordered or updated.
 - **Flexibility:** Using meaningful attributes (or combinations) as keys ensures your code reflects the underlying data's structure.
@@ -1066,7 +1078,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-### Why is this better?
+### ℹ️ Why is this better?
 
 1. **Future-Proof API:** The official [React Native documentation](https://reactnative.dev/docs/pressable) recommends using the `Pressable` API for touch-based interactions. It is more extensive and designed to be future-proof.
 2. **Rich Features:** `Pressable` provides additional features like:
@@ -1075,3 +1087,167 @@ const styles = StyleSheet.create({
 3. **Better Customization:** `Pressable` simplifies managing complex touch gestures and states, making it ideal for modern React Native applications.
 
 By adopting `Pressable`, you ensure your app uses modern APIs, improves interaction handling, and remains aligned with React Native's evolving best practices.
+
+## Prefer Fragments Over DOM Nodes
+
+### ❌ Avoid DOM Nodes for Grouping
+
+Using `div` or `span` elements to group components adds unnecessary DOM nodes:
+
+```tsx
+const Dashboard = () => {
+  return (
+    <div>
+      <Header />
+      <Main />
+    </div>
+  );
+};
+```
+
+### ✅ Prefer Fragments
+
+Use React `Fragment` to group elements without affecting the DOM structure:
+
+```tsx
+const Dashboard = () => {
+  return (
+    <>
+      <Header />
+      <Main />
+    </>
+  );
+};
+```
+
+### ℹ️ Explanations
+
+- Fragments provide a cleaner way to group multiple elements without adding extra nodes to the DOM
+- Using unnecessary DOM nodes like `div` can:
+  - Make the DOM structure more complex and harder to maintain
+  - Require additional CSS to handle unwanted styling side effects
+  - Impact performance by increasing the DOM size
+- Fragments are particularly useful in:
+  - Component returns that require multiple elements
+  - List rendering where wrapper elements would break the layout
+  - Complex layouts where DOM hierarchy matters
+
+Je vais reformatter cette règle de développement selon vos critères.
+
+## Use React Fragment Shorthand
+
+### ❌ Avoid useless verbose Fragment tag
+```tsx
+<Fragment>
+   <FirstChild />
+   <SecondChild />
+</Fragment>
+```
+
+### ✅ Prefer Fragment shorthand syntax
+```tsx
+<>
+   <FirstChild />
+   <SecondChild />
+</>
+```
+
+### ℹ️ Explanations
+- The shorthand syntax `<></>` is more concise and readable
+- Use the full `Fragment` syntax only when you need to set a key
+- Example with key requirement:
+
+```tsx
+interface User {
+  id: string;
+  name: string;
+  occupation: string;
+}
+
+const List = ({ users }: { users: User[] }) => {
+  return (
+    <div>
+      {users.map((user) => (
+        <Fragment key={user.id}>
+          <span>{user.name}</span>
+          <span>{user.occupation}</span>
+        </Fragment>
+      ))}
+    </div>
+  );
+};
+```
+
+## Prefer Props Destructuring Over Direct Props Access
+
+### ❌ Avoid Using Direct Props Access
+
+```tsx
+// Accessing props directly throughout the code creates clutter
+type TodoListProps = {
+  todos: string[];
+  selectedTodo: string;
+  onSelectTodo: (todo: string) => void;
+};
+
+const TodoList = (props: TodoListProps) => {
+  return (
+    <>
+      {props.todos.map((todo) => (
+        <div key={todo}>
+          <button
+            onClick={() => props.onSelectTodo(todo)}
+            style={{
+              backgroundColor: todo === props.selectedTodo ? "gold" : undefined,
+            }}
+          >
+            <span>{todo}</span>
+          </button>
+        </div>
+      ))}
+    </>
+  );
+};
+```
+
+### ✅ Prefer Props Destructuring
+
+```tsx
+type TodoListProps = {
+  todos: string[];
+  selectedTodo: string;
+  onSelectTodo: (todo: string) => void;
+};
+
+const TodoList = ({ todos, selectedTodo, onSelectTodo }: TodoListProps) => {
+  return (
+    <>
+      {todos.map((todo) => (
+        <div key={todo}>
+          <button
+            onClick={() => onSelectTodo(todo)}
+            style={{
+              backgroundColor: todo === selectedTodo ? "gold" : undefined,
+            }}
+          >
+            <span>{todo}</span>
+          </button>
+        </div>
+      ))}
+    </>
+  );
+};
+```
+
+### ℹ️ Explanations
+
+Props destructuring in the function parameters offers several benefits:
+
+- Improves code readability by making it immediately clear which props the component uses
+- Reduces repetition of the `props.` prefix throughout the component
+- Provides better IDE support with immediate prop suggestions
+- Makes the code more concise and maintainable, especially in larger components
+- Destructuring at the component level clearly communicates the component's dependencies
+
+Additionally, when using TypeScript, destructuring props with proper typing provides better type safety and autocompletion support.
+
