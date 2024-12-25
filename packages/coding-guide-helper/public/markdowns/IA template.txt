@@ -1,0 +1,69 @@
+Voici une règle de "guide de développement" qui doit être reformattée:
+___________________________
+
+
+
+___________________________
+
+Instructions: 
+- tout doit être en anglais, même les explications
+- la section Avoid doit avoir aussi une phrase, ex: ### ❌ Avoid useless curly braces
+- la section Prefer doit avoir une phrase, ex: ### ✅ Prefer direct string assignment
+- converti les exemples en Typescript (.js en .ts et .jsx en .tsx)
+- les props passées au component doivent être typées via une interface explicite
+- utilise la syntaxe arrow function, ex: const Component = () => { return ... }
+- formatte la règle pour suivre le modèle markdown avec Titre et 3 sous-sections: Avoid, Prefers, Explaination
+- Règles de formarttage 
+  - utiliser ## pour le titre de la règle
+  - utiliser ### ❌ Avoid This or That
+  - utiliser ### ✅ Prefer This or That
+  - utiliser ### ℹ️ Explaination
+
+## Avoid Unnecessary State for Derived Values
+
+### ❌ Avoid storing derived values in state
+```tsx
+interface AppProps {
+  posts: Post[];
+}
+
+const App: React.FC<AppProps> = ({ posts }) => {
+  const [filters, setFilters] = useState<Filters>({});
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    setFilteredPosts(filterPosts({posts, filters}));
+  }, [posts, filters]);
+
+  return (
+    <Dashboard>
+      <Filters filters={filters} onFiltersChange={setFilters} />
+
+      {filteredPosts.length > 0 && <Posts posts={filteredPosts} />}
+    </Dashboard>
+  );
+};
+```
+
+### ✅ Prefer deriving values directly from state or props
+```tsx
+interface AppProps {
+  posts: Post[];
+}
+
+const App: React.FC<AppProps> = ({ posts }) => {
+  const [filters, setFilters] = useState<Filters>({});
+  const filteredPosts = filterPosts({posts, filters});
+
+  return (
+    <Dashboard>
+      <Filters filters={filters} onFiltersChange={setFilters} />
+
+      {filteredPosts.length > 0 && <Posts posts={filteredPosts} />}
+    </Dashboard>
+  );
+};
+```
+
+### ℹ️ Explanation
+Avoid creating state for values that can be derived from other state or props. Every piece of state introduces complexity, as it can trigger re-renders and make resetting state more difficult. Instead, compute derived values directly within your component. This simplifies the code and reduces potential bugs caused by state inconsistencies.

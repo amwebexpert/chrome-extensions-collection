@@ -76,6 +76,34 @@
     - [❌ Avoid Using Direct Props Access](#-avoid-using-direct-props-access)
     - [✅ Prefer Props Destructuring](#-prefer-props-destructuring)
     - [ℹ️ Explanations](#ℹ️-explanations-3)
+  - [Set Default Values While Destructuring Props](#set-default-values-while-destructuring-props)
+    - [❌ Avoid Setting Defaults After Destructuring](#-avoid-setting-defaults-after-destructuring)
+    - [✅ Prefer Setting Defaults During Destructuring](#-prefer-setting-defaults-during-destructuring)
+    - [ℹ️ Explanations](#ℹ️-explanations-4)
+  - [Drop String Props Curly Braces](#drop-string-props-curly-braces)
+    - [❌ Avoid useless curly braces for string props](#-avoid-useless-curly-braces-for-string-props)
+    - [✅ Prefer direct string assignment for string props](#-prefer-direct-string-assignment-for-string-props)
+    - [ℹ️ Explanations](#ℹ️-explanations-5)
+  - [Use explicit boolean conditions for conditional rendering](#use-explicit-boolean-conditions-for-conditional-rendering)
+    - [❌ Avoid implicit boolean conversion with non-boolean values](#-avoid-implicit-boolean-conversion-with-non-boolean-values)
+    - [✅ Prefer explicit boolean conditions](#-prefer-explicit-boolean-conditions)
+    - [ℹ️ Explanations](#ℹ️-explanations-6)
+  - [Move data outside the component for cleaner code](#move-data-outside-the-component-for-cleaner-code)
+    - [❌ Avoid keeping unnecessary data inside the component](#-avoid-keeping-unnecessary-data-inside-the-component)
+    - [✅ Prefer moving static data and functions outside the component](#-prefer-moving-static-data-and-functions-outside-the-component)
+    - [ℹ️ Explainations](#ℹ️-explainations)
+  - [Store the Selected Item by ID](#store-the-selected-item-by-id)
+    - [❌ Avoid storing the entire item](#-avoid-storing-the-entire-item)
+    - [✅ Prefer storing the item ID](#-prefer-storing-the-item-id)
+    - [ℹ️ Explanation](#ℹ️-explanation-12)
+  - [Clarify the Distinction Between Initial State and Current State](#clarify-the-distinction-between-initial-state-and-current-state)
+    - [❌ Avoid unclear naming for state variables](#-avoid-unclear-naming-for-state-variables)
+    - [✅ Prefer clear naming to differentiate initial state and current state](#-prefer-clear-naming-to-differentiate-initial-state-and-current-state)
+    - [ℹ️ Explaination](#ℹ️-explaination)
+  - [Always Clean Up in Your `useEffect` Hooks](#always-clean-up-in-your-useeffect-hooks)
+    - [❌ Avoid forgetting to clean up side effects](#-avoid-forgetting-to-clean-up-side-effects)
+    - [✅ Prefer cleaning up side effects with a cleanup function](#-prefer-cleaning-up-side-effects-with-a-cleanup-function)
+    - [ℹ️ Explaination](#ℹ️-explaination-1)
 
 # Project React coding standards
 
@@ -1251,3 +1279,385 @@ Props destructuring in the function parameters offers several benefits:
 
 Additionally, when using TypeScript, destructuring props with proper typing provides better type safety and autocompletion support.
 
+## Set Default Values While Destructuring Props
+
+### ❌ Avoid Setting Defaults After Destructuring
+
+```tsx
+interface ButtonProps {
+  onClick: () => void;
+  text?: string;
+  small?: boolean;
+  colorScheme?: 'light' | 'dark';
+}
+
+const Button = ({ onClick, text, small, colorScheme }: ButtonProps) => {
+  let scheme = colorScheme || "light";
+  let isSmall = small || false;
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        color: scheme === "dark" ? "white" : "black",
+        fontSize: isSmall ? "12px" : "16px",
+      }}
+    >
+      {text ?? "Click here"}
+    </button>
+  );
+};
+```
+
+### ✅ Prefer Setting Defaults During Destructuring
+
+```tsx
+interface ButtonProps {
+  onClick: () => void;
+  text?: string;
+  small?: boolean;
+  colorScheme?: 'light' | 'dark';
+}
+
+const Button = ({
+  onClick,
+  text = "",
+  small = false,
+  colorScheme = "light",
+}: ButtonProps) => {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        color: colorScheme === "dark" ? "white" : "black",
+        fontSize: small ? "12px" : "16px",
+      }}
+    >
+      {text}
+    </button>
+  );
+};
+```
+
+### ℹ️ Explanations
+
+- **Maintainability**: Setting defaults during destructuring centralizes all default values in one location, making the code easier to maintain and update.
+- **Readability**: Having all defaults defined at the component's entry point makes it immediately clear what the default behavior will be.
+- **Type Safety**: Using TypeScript interfaces ensures proper typing of props and their potential default values, catching type-related errors at compile time.
+- **DRY Principle**: Avoids the need to declare additional variables just to handle default values, reducing code duplication and potential inconsistencies.
+
+
+## Drop String Props Curly Braces
+
+### ❌ Avoid useless curly braces for string props
+
+```tsx
+interface ButtonProps {
+  text: string;
+  colorScheme: string;
+}
+
+const ExampleButton = ({ text, colorScheme }: ButtonProps) => {
+  return <Button text={"Click me"} colorScheme={"dark"} />;
+};
+```
+
+### ✅ Prefer direct string assignment for string props
+
+```tsx
+interface ButtonProps {
+  text: string;
+  colorScheme: string;
+}
+
+const ExampleButton = ({ text, colorScheme }: ButtonProps) => {
+  return <Button text="Click me" colorScheme="dark" />;
+};
+```
+
+### ℹ️ Explanations
+
+When passing string literals as props to React components, there's no need to wrap them in curly braces. Curly braces in JSX are used for embedding JavaScript expressions, but string literals can be passed directly using quotes. This leads to cleaner and more readable code. The curly braces are only necessary when passing dynamic values or expressions.
+
+## Use explicit boolean conditions for conditional rendering
+
+### ❌ Avoid implicit boolean conversion with non-boolean values
+
+```tsx
+interface ListWrapperProps {
+  items: any[];
+  selectedItem: any;
+  setSelectedItem: (item: any) => void;
+}
+
+const ListWrapper = ({ items, selectedItem, setSelectedItem }: ListWrapperProps) => {
+  return (
+    <div className="list">
+      {items.length && ( // Will print `0` if the list is empty
+        <List
+          items={items}
+          onSelectItem={setSelectedItem}
+          selectedItem={selectedItem}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+### ✅ Prefer explicit boolean conditions
+
+```tsx
+interface ListWrapperProps {
+  items: any[];
+  selectedItem: any;
+  setSelectedItem: (item: any) => void;
+}
+
+const ListWrapper = ({ items, selectedItem, setSelectedItem }: ListWrapperProps) => {
+  const shouldDisplayItems = items.length > 0;
+
+  return (
+    <div className="list">
+      {shouldDisplayItems && (
+        <List
+          items={items}
+          onSelectItem={setSelectedItem}
+          selectedItem={selectedItem}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+### ℹ️ Explanations
+
+When using conditional rendering with the `&&` operator in React, ensure the condition evaluates to a strict boolean value. Using non-boolean values like numbers can lead to unexpected rendering:
+
+- When using `items.length && <Component />`, if the length is 0, React will render the number `0` on the screen
+- Using `items.length > 0 && <Component />` ensures the condition is a proper `boolean`
+- This pattern applies to any conditional rendering where the left side of `&&` could evaluate to a non-boolean value
+
+## Move data outside the component for cleaner code
+
+### ❌ Avoid keeping unnecessary data inside the component
+
+Keeping data like constants or functions that don't rely on props or state inside a component can clutter the component and create new object references on every render. This can break optimizations like memoization.
+
+```tsx
+const CoursesSelector = () => {
+  const OPTIONS = ["Maths", "Literature", "History"];
+
+  const renderOption = (option: string) => {
+    return <option>{option}</option>;
+  };
+
+  return (
+    <select>
+      {OPTIONS.map((opt) => (
+        <Fragment key={opt}>{renderOption(opt)}</Fragment>
+      ))}
+    </select>
+  );
+}
+```
+
+### ✅ Prefer moving static data and functions outside the component
+
+Placing static data and functions outside the component keeps the component clean and ensures stable references, which helps with performance optimizations.
+
+```tsx
+const OPTIONS = ["Maths", "Literature", "History"];
+
+interface CoursesSelectorProps {}
+
+const CoursesSelector: React.FC<CoursesSelectorProps> = () => {
+  return (
+    <select>
+      {OPTIONS.map((opt) => (<option key={opt}>{opt}</option>))}
+    </select>
+  );
+};
+```
+
+### ℹ️ Explainations
+
+Moving static data and functions outside the component:
+- Reduces the size and complexity of the component.
+- Ensures that references remain stable across renders, which is crucial for optimizations like `React.memo`.
+- Improves readability and reusability of the code by separating concerns.
+
+## Store the Selected Item by ID
+
+### ❌ Avoid storing the entire item
+When storing the selected item from a list, avoid storing the entire item object. This can lead to issues if the item changes or is removed from the list.
+
+```tsx
+interface Item = { id: number; name: string };
+
+interface ListWrapperProps {
+  items: Item[];
+}
+
+const ListWrapper: React.FC<ListWrapperProps> = ({ items }) => {
+  // We are referencing the entire item
+  const [selectedItem, setSelectedItem] = React.useState<Item>();
+
+  return (
+    <>
+      {selectedItem && <div>{selectedItem.name}</div>}
+
+      <List
+        items={items}
+        selectedItem={selectedItem}
+        onSelectItem={setSelectedItem}
+      />
+    </>
+  );
+};
+```
+
+### ✅ Prefer storing the item ID
+Store the selected item by its ID (which should be stable). This ensures the UI remains correct even if the item is removed from the list or one of its properties changes.
+
+```tsx
+interface Item = { id: number; name: string };
+interface ListWrapperProps {
+  items: Item[];
+}
+
+const ListWrapper: React.FC<ListWrapperProps> = ({ items }) => {
+  const [selectedItemId, setSelectedItemId] = React.useState<number | undefined>();
+  // We derive the selected item from the list
+  const selectedItem = items.find((item) => item.id === selectedItemId);
+
+  return (
+    <>
+      {selectedItem && <div>{selectedItem.name}</div>}
+
+      <List
+        items={items}
+        selectedItemId={selectedItemId}
+        onSelectItem={setSelectedItemId}
+      />
+    </>
+  );
+};
+```
+
+### ℹ️ Explanation
+By storing only the ID of the selected item, we ensure that the selection logic is resilient to changes in the list or its items. This approach avoids retaining stale references and keeps the UI consistent and predictable. Furthermore, deriving the selected item from the list ensures that the UI is always in sync with the current state of the list.
+
+## Clarify the Distinction Between Initial State and Current State
+
+### ❌ Avoid unclear naming for state variables
+Avoid naming state variables in a way that makes it ambiguous whether they represent the initial state or the current state. This can lead to confusion and errors in state management.
+
+```tsx
+interface MainProps {
+  sortOrder: string;
+}
+
+const Main: React.FC<MainProps> = ({ sortOrder }) => {
+  const [internalSortOrder, setInternalSortOrder] = React.useState(sortOrder);
+
+  return (
+    <div>
+      <button
+        onClick={() => setInternalSortOrder("popular")}
+        className={internalSortOrder === "popular" ? "active" : ""}
+      >
+        Popular
+      </button>
+      <button
+        onClick={() => setInternalSortOrder("latest")}
+        className={internalSortOrder === "latest" ? "active" : ""}
+      >
+        Latest
+      </button>
+    </div>
+  );
+};
+```
+
+### ✅ Prefer clear naming to differentiate initial state and current state
+Prefer explicitly naming props and state variables to indicate their role, such as using `initial` as a prefix for initial state variables.
+
+```tsx
+interface MainProps {
+  initialSortOrder: string;
+}
+
+const Main: React.FC<MainProps> = ({ initialSortOrder }) => {
+  const [sortOrder, setSortOrder] = React.useState(initialSortOrder);
+
+  return (
+    <div>
+      <button
+        onClick={() => setSortOrder("popular")}
+        className={sortOrder === "popular" ? "active" : ""}
+      >
+        Popular
+      </button>
+      <button
+        onClick={() => setSortOrder("latest")}
+        className={sortOrder === "latest" ? "active" : ""}
+      >
+        Latest
+      </button>
+    </div>
+  );
+};
+```
+
+### ℹ️ Explaination
+Clear naming improves code readability and helps developers quickly understand the purpose of each variable. When working with state, distinguishing between initial values (e.g., `initialSortOrder`) and current values (e.g., `sortOrder`) ensures that the code is self-explanatory and reduces potential for errors during state updates. This is particularly important in collaborative environments or when revisiting code after a long time.
+
+## Always Clean Up in Your `useEffect` Hooks
+
+### ❌ Avoid forgetting to clean up side effects
+Avoid setting up side effects like intervals, subscriptions, or event listeners in `useEffect` without properly cleaning them up. Neglecting this step can lead to resource waste and memory leaks.
+
+```tsx
+import { useState, useEffect } from 'react';
+
+const Timer = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+  }, []);
+
+  return <div>Current time: {time.toLocaleTimeString()}</div>;
+};
+```
+
+### ✅ Prefer cleaning up side effects with a cleanup function
+Always return a cleanup function in `useEffect` to ensure side effects like intervals, subscriptions, or event listeners are removed when the component unmounts.
+
+```tsx
+import { useState, useEffect } from 'react';
+
+interface TimerProps {}
+
+const Timer: React.FC<TimerProps> = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalId); // Cleanup
+  }, []);
+
+  return <div>Current time: {time.toLocaleTimeString()}</div>;
+};
+```
+
+### ℹ️ Explaination
+In React, `useEffect` is used to handle side effects such as setting up intervals, subscribing to events, or interacting with external resources. When these side effects are no longer needed (e.g., the component unmounts), they must be cleaned up to prevent issues such as memory leaks or excessive resource usage. 
+
+By returning a cleanup function in `useEffect`, you ensure that any resources allocated during the effect are properly released. This approach leads to better performance and more reliable applications.
