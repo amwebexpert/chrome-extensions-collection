@@ -104,6 +104,26 @@
     - [❌ Avoid forgetting to clean up side effects](#-avoid-forgetting-to-clean-up-side-effects)
     - [✅ Prefer cleaning up side effects with a cleanup function](#-prefer-cleaning-up-side-effects-with-a-cleanup-function)
     - [ℹ️ Explaination](#ℹ️-explaination-1)
+  - [Prefer Functions Over Custom Hooks](#prefer-functions-over-custom-hooks)
+    - [❌ Avoid creating unnecessary custom hooks](#-avoid-creating-unnecessary-custom-hooks)
+    - [✅ Prefer using plain functions instead](#-prefer-using-plain-functions-instead)
+    - [ℹ️ Explanation](#ℹ️-explanation-13)
+  - [Use `ReactNode` instead of `JSX.Element | null | undefined`](#use-reactnode-instead-of-jsxelement--null--undefined)
+    - [❌ Avoid typing props with JSX.Element | null | undefined](#-avoid-typing-props-with-jsxelement--null--undefined)
+    - [✅ Prefer using `ReactNode` for more compact code](#-prefer-using-reactnode-for-more-compact-code)
+    - [ℹ️ Explanation](#ℹ️-explanation-14)
+  - [Simplify Typing of Components Expecting Children Props](#simplify-typing-of-components-expecting-children-props)
+    - [❌ Avoid manually typing the children prop](#-avoid-manually-typing-the-children-prop)
+    - [✅ Prefer using PropsWithChildren for typing children props](#-prefer-using-propswithchildren-for-typing-children-props)
+    - [ℹ️ Explanation](#ℹ️-explanation-15)
+  - [Specify Types Explicitly in useState, useRef, etc.](#specify-types-explicitly-in-usestate-useref-etc)
+    - [❌ Avoid omitting types when they can't be inferred](#-avoid-omitting-types-when-they-cant-be-inferred)
+    - [✅ Prefer specifying types explicitly when they can't be inferred](#-prefer-specifying-types-explicitly-when-they-cant-be-inferred)
+    - [ℹ️ Explanation](#ℹ️-explanation-16)
+  - [Use ElementRef Type Helper for Typing Refs](#use-elementref-type-helper-for-typing-refs)
+    - [❌ Avoid typing refs directly with element type names](#-avoid-typing-refs-directly-with-element-type-names)
+    - [✅ Prefer using the ElementRef type helper for typing refs](#-prefer-using-the-elementref-type-helper-for-typing-refs)
+    - [ℹ️ Explanation](#ℹ️-explanation-17)
 
 # Project React coding standards
 
@@ -1661,3 +1681,159 @@ const Timer: React.FC<TimerProps> = () => {
 In React, `useEffect` is used to handle side effects such as setting up intervals, subscribing to events, or interacting with external resources. When these side effects are no longer needed (e.g., the component unmounts), they must be cleaned up to prevent issues such as memory leaks or excessive resource usage. 
 
 By returning a cleanup function in `useEffect`, you ensure that any resources allocated during the effect are properly released. This approach leads to better performance and more reliable applications.
+
+
+## Prefer Functions Over Custom Hooks
+
+### ❌ Avoid creating unnecessary custom hooks
+Hooks should not be used when a simple function can achieve the same purpose. For example:
+
+```tsx
+interface AppProps {
+  post: BlogPost;
+}
+
+const App: React.FC<AppProps> = ({ post }) => {
+  const locale = useLocale();
+
+  return (
+    <div className="App">
+      <IntlProvider locale={locale}>
+        <BlogPost post={post} />
+      </IntlProvider>
+    </div>
+  );
+};
+
+const useLocale = () => {
+  return window.navigator.languages?.[0] ?? window.navigator.language;
+};
+```
+
+In this case, `useLocale` doesn't leverage any hook features (e.g., `useState`, `useEffect`).
+
+### ✅ Prefer using plain functions instead
+Functions are simpler, easier to test, and more versatile than hooks. Here's the refactored example:
+
+```tsx
+interface AppProps {
+  post: BlogPost;
+}
+
+const App: React.FC<AppProps> = ({ post }) => {
+  const locale = getLocale();
+
+  return (
+    <div className="App">
+      <IntlProvider locale={locale}>
+        <BlogPost post={post} />
+      </IntlProvider>
+    </div>
+  );
+};
+
+const getLocale = () => window.navigator.languages?.[0] ?? window.navigator.language;
+```
+
+### ℹ️ Explanation
+- **Hooks are restrictive**: They can only be used inside React components or other hooks. Functions, however, can be used anywhere.
+- **Functions are simpler**: They don’t require adhering to the rules of hooks and are easier to understand and debug.
+- **Functions are more testable**: Pure functions are straightforward to unit test without needing the React environment.
+
+By preferring functions over unnecessary hooks, your code remains lean, maintainable, and easy to reason about.
+
+## Use `ReactNode` instead of `JSX.Element | null | undefined`
+
+### ❌ Avoid typing props with JSX.Element | null | undefined
+
+```tsx
+interface PanelProps {
+  leftElement: JSX.Element | null | undefined;
+  rightElement: JSX.Element | null | undefined;
+}
+
+const Panel: React.FC<PanelProps> = ({ leftElement, rightElement }) => {
+  // ...
+};
+```
+
+### ✅ Prefer using `ReactNode` for more compact code
+
+You can use `ReactNode` to keep the code more compact.
+
+```tsx
+import { ReactNode } from 'react';
+
+interface MyComponentProps {
+  leftElement: ReactNode;
+  rightElement: ReactNode;
+}
+
+const MyComponent: React.FC<MyComponentProps> = ({ leftElement, rightElement }) => {
+  // ...
+};
+```
+
+### ℹ️ Explanation
+- **ReactNode is more inclusive**: It covers all possible return types for a component, including strings, numbers, and fragments.
+- **Simplifies prop types**: Using ReactNode makes the prop types more concise and easier to read.
+- **Improves maintainability**: By using a single type, you reduce the complexity and potential for errors in your code.
+
+## Simplify Typing of Components Expecting Children Props
+
+### ❌ Avoid manually typing the children prop
+```tsx
+interface PageProps {
+  // ...page props definition...
+}
+
+const HeaderPage: React.FC<{ children: ReactNode } & PageProps> = ({ children, ...pageProps }) => {
+  // ...
+};
+```
+
+### ✅ Prefer using PropsWithChildren for typing children props
+```tsx
+import { PropsWithChildren } from 'react';
+
+interface PageProps {
+  // ...page props definition...
+}
+
+const HeaderPage: React.FC<PropsWithChildren<PageProps>> = ({ children, ...pageProps }) => {
+  // ...
+};
+```
+
+### ℹ️ Explanation
+You don't have to type the children prop manually. Instead, you can use PropsWithChildren to simplify the typings. This makes your code cleaner and reduces the chance of errors.
+
+## Specify Types Explicitly in useState, useRef, etc.
+
+### ❌ Avoid omitting types when they can't be inferred
+```tsx
+const [selectedItemId, setSelectedItemId] = useState();
+```
+
+### ✅ Prefer specifying types explicitly when they can't be inferred
+```tsx
+const [selectedItemId, setSelectedItemId] = useState<string>();
+```
+
+### ℹ️ Explanation
+When using hooks like `useState` or `useRef`, always specify the type explicitly if it can't be inferred from the initial value. This ensures that TypeScript correctly understands the type of the state or ref, preventing potential type-related bugs. For example, if you have a state variable `selectedItemId` that should be an optional `string`, explicitly typing it as `useState<string>()` ensures that TypeScript will enforce this type.
+
+## Use ElementRef Type Helper for Typing Refs
+
+### ❌ Avoid typing refs directly with element type names
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+```
+
+### ✅ Prefer using the ElementRef type helper for typing refs
+```tsx
+const ref = useRef<ElementRef<"div">>(null);
+```
+
+### ℹ️ Explanation
+Typing refs directly with element type names can be cumbersome and error-prone, as it requires remembering the exact type name of the element. Instead, use the `ElementRef` type helper, which simplifies the process by allowing you to use the element's name directly. This approach is more straightforward and reduces the likelihood of mistakes.
