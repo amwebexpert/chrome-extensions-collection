@@ -1,4 +1,4 @@
-import { clearCache, getCacheBytesUsed } from '@packages/chrome-common'
+import { clearCache, getCacheBytesUsed, sendAsyncMessage } from '@packages/chrome-common'
 import { MessageType } from '@packages/coding-guide-helper-common'
 import { useEffect, useState } from 'react'
 
@@ -18,7 +18,7 @@ export const useCacheHelper = () => {
     clearCache()
       .then(() => {
         setCacheSize(DEFAULT_CACHE_SIZE)
-        chrome.runtime.sendMessage({ type: MessageType.ON_RESET_CACHE })
+        sendAsyncMessage({ type: MessageType.ON_RESET_CACHE })
       })
       .catch((e) => console.error('error clearing cache', e))
       .finally(() => setIsClearing(false))

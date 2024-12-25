@@ -1,11 +1,12 @@
+import { sendAsyncMessage } from '@packages/chrome-common'
 import { type ComputedEmbeddingsStats, MessageType } from '@packages/coding-guide-helper-common'
 import debounce from 'debounce'
 
-export const generateEmbeddings = () => chrome.runtime.sendMessage({ type: MessageType.CREATE_NEXT_EMBEDDINGS })
+export const generateEmbeddings = () => sendAsyncMessage({ type: MessageType.CREATE_NEXT_EMBEDDINGS })
 
 export const doSearch = (payload = '') => {
   if (!payload) return
-  chrome.runtime.sendMessage({ type: MessageType.SET_SEARCH, payload })
+  sendAsyncMessage({ type: MessageType.SET_SEARCH, payload })
 }
 
 export const doSearchDebounced = debounce(doSearch, 500)

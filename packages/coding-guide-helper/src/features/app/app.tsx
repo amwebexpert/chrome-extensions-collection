@@ -1,5 +1,5 @@
 import { BookOutlined, InfoCircleOutlined, SearchOutlined } from '@ant-design/icons'
-import { logPlatformInfo } from '@packages/chrome-common'
+import { logPlatformInfo, sendAsyncMessage } from '@packages/chrome-common'
 import { MessageType } from '@packages/coding-guide-helper-common'
 import { Flex, Tabs, Typography } from 'antd'
 import { type FunctionComponent, useEffect } from 'react'
@@ -13,7 +13,7 @@ const TITLE = 'Coding guidelines helper'
 
 export const App: FunctionComponent = () => {
   useEffect(() => {
-    chrome.runtime.sendMessage({ type: MessageType.ON_POPUP_OPEN })
+    sendAsyncMessage({ type: MessageType.ON_POPUP_OPEN })
 
     logPlatformInfo()
 

@@ -1,3 +1,4 @@
+import { sendAsyncMessage } from '@packages/chrome-common'
 import { type Message, MessageType } from '@packages/coding-guide-helper-common'
 import debounce from 'debounce'
 
@@ -52,11 +53,11 @@ const onLinkGuidelinesItemSelected = ({ message, sendResponse }: OnLinkGuideline
 
 const onSelectionChange = () => {
   const payload = window.getSelection()?.toString() ?? ''
-  chrome.runtime.sendMessage({ type: MessageType.ON_SELECTION_CHANGE, payload })
+  sendAsyncMessage({ type: MessageType.ON_SELECTION_CHANGE, payload })
 }
 
 const init = () => {
-  chrome.runtime.sendMessage({
+  sendAsyncMessage({
     type: MessageType.CONTENT_SCRIPT_STARTED,
     payload: window.location.href,
   })

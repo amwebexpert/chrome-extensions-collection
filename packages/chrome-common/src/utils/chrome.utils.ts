@@ -18,3 +18,11 @@ export const getCacheBytesUsed = async (): Promise<string> => {
 }
 
 export const clearCache = async (): Promise<void> => chrome.storage.local.clear()
+
+export const sendAsyncMessage = <M = unknown, R = unknown>(message: M, callback?: (resp: R) => void) => {
+  if (message && typeof message === 'object' && 'type' in message) {
+    console.info(`sendAsyncMessage ${message.type}`)
+  }
+
+  chrome.runtime.sendMessage(message, callback ?? (() => {}))
+}

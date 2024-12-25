@@ -68,6 +68,8 @@ class ServiceWorker {
     chrome.runtime.onMessage.addListener((request, sender) => {
       const { type, payload } = request
 
+      console.info('service-worker onMessage', type)
+
       switch (type) {
         case MessageType.SET_SEARCH: {
           this.onSearch(payload)
@@ -103,6 +105,11 @@ class ServiceWorker {
   }
 
   private async computeNextEmbeddings() {
+    const rootNode = await this.getRootNode()
+    if (!this.semanticSearcher.featureExtractionEmbeddings) {
+      await this.semanticSearcher.init(rootNode)
+    }
+
     await this.semanticSearcher.computeNextRuleEmbedding()
     const payload = this.semanticSearcher.computedEmbeddingsStats
     this.popupPort?.postMessage({ type: MessageType.ON_EMBEDDINGS_CREATED, payload })

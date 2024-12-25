@@ -1,4 +1,5 @@
 import { DeleteOutlined, SaveOutlined } from '@ant-design/icons'
+import { sendAsyncMessage } from '@packages/chrome-common'
 import { MessageType, type OptionsType, getOptions } from '@packages/coding-guide-helper-common'
 import type { FormProps } from 'antd'
 import { Button, Flex, Form, Input, Popconfirm, Switch, Typography } from 'antd'
@@ -44,7 +45,7 @@ export const Options: FunctionComponent = () => {
         return
       }
 
-      chrome.runtime.sendMessage({ type: MessageType.SET_OPTIONS, payload: options })
+      sendAsyncMessage({ type: MessageType.SET_OPTIONS, payload: options })
       setTimeout(() => window.close(), 700)
     } catch (error: unknown) {
       form.setFields([{ name: 'files', errors: [JSON.stringify(error)] }])
