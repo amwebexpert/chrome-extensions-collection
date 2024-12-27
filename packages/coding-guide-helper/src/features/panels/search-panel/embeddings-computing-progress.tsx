@@ -14,6 +14,9 @@ export const EmbeddingsComputingProgress: FunctionComponent<{
       <p>Computing styleguide semantic infos for the very first time...</p>
       <Progress type="circle" size={80} percent={percent} />
       <MarkdownLines markdownLines={[stats.nextRuleTitle]} />
+      <p>
+        {stats.completed} / {stats.total}
+      </p>
     </Flex>
   )
 }
