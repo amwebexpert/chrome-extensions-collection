@@ -43,7 +43,9 @@ Instructions to install the Chrome extension from the source.
 - add classic hyperlink icon (beside the clipboard icon) to open a browser tab with the given link
 - add a wider search filter inside the TOC Tab
 - add a review tools TAB
-  - toggle all viewed files On/Off (`document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`)
+  - toggle all viewed files On/Off
+    - could be: `document.querySelectorAll('input[type=checkbox][name=viewed]').forEach(e => e.checked = false)`
+    - or: `document.querySelectorAll('input[type="checkbox"][name="viewed"]').forEach(e => e.click())`
   - toggle all panels `document.querySelectorAll('[aria-label="Toggle diff contents"]').forEach(e => e.click())`
   - any other ideas welcome
 - add a reset button for the default original guidelines
