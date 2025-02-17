@@ -64,6 +64,8 @@ export class FeatureExtractionEmbeddingsSearcher {
       await this.computeRuleEmbedding(rule)
       storeRuleEmbeddings(rule)
     }
+
+    console.info(`🚀 → ${rule.title}`, rule);
   }
 
   async computeRuleEmbedding(rule: Rule): Promise<void> {

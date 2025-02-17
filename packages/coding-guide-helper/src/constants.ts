@@ -8,7 +8,7 @@ export const APP_VERSION_INFO = Object.freeze({
   REPOSITORY: 'https://github.com/amwebexpert/chrome-extensions-collection/tree/master/packages/coding-guide-helper',
   AUTHOR: 'amwebexpert@gmail.com',
   VERSION: '1.1.1',
-  VERSION_DATE: '2024-12-25',
+  VERSION_DATE: '2025-02-14',
 })
 
-export const LONG_VERSION_DATE = '1.1.1 (2024-12-25)'
+export const LONG_VERSION_DATE = '1.1.1 (2025-02-14)'
