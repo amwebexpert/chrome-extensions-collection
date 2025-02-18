@@ -2,7 +2,7 @@ import similarity from 'compute-cosine-similarity'
 import type { EmbeddingVector } from '../ia/models'
 
 export const cosineSimilarity = (vecA: EmbeddingVector, vecB: EmbeddingVector): number => {
-  if (!vecA || !vecA.length || !vecB || !vecB.length) {
+  if (!vecA?.length || !vecB?.length) {
     return 0
   }
 
