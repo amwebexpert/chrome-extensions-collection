@@ -87,7 +87,7 @@ export const Options: FunctionComponent = () => {
             <Switch value={isDarkMode} onChange={toggleDarkMode} />
           </Form.Item>
 
-          <Form.Item label={`Extension cache (${cacheSize})`}>
+          <Form.Item label={`Cache (${cacheSize})`}>
             <Popconfirm
               title="Clear cache confirmation"
               description="Are you sure to clear the extension cache?"

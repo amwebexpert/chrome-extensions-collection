@@ -28,6 +28,12 @@ Keeping up with best practices and avoiding anti-patterns can be challenging, es
 
 Download (or install it from this current project) the extension today and take the first step towards a more efficient and consistent development process.
 
+## Semantic search
+
+Semantic search implementation throught [Transformer.js](https://huggingface.co/docs/transformers.js/en/index) and [ONNX Runtime](https://onnxruntime.ai/) was inspired by this great Tutorial from [@RabbitHoleSyndrome](https://www.youtube.com/@RabbitHoleSyndrome) youtuber:
+
+- [$0 Embeddings (OpenAI vs. free & open source)](https://www.youtube.com/watch?v=QdDoFfkVkcw&list=LL&index=74)
+
 ## Installing from source
 
 Instructions to install the Chrome extension from the source.
