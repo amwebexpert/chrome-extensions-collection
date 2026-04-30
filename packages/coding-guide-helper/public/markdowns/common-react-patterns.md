@@ -14,47 +14,59 @@
     - [✅ prefer divide to conquer rule through small sub-components](#-prefer-divide-to-conquer-rule-through-small-sub-components-1)
     - [ℹ️ Explanation](#ℹ️-explanation-1)
     - [📚 References](#-references-2)
-  - [Single arrow function event handler](#single-arrow-function-event-handler)
-    - [❌ avoid double arrows functions](#-avoid-double-arrows-functions)
-    - [✅ prefer single arrow functions](#-prefer-single-arrow-functions)
+  - [Avoid storing JSX in variables and injecting in the return](#avoid-storing-jsx-in-variables-and-injecting-in-the-return)
+    - [❌ avoid storing JSX in variables (e.g. labelNode, textNode)](#-avoid-storing-jsx-in-variables-eg-labelnode-textnode)
+    - [✅ prefer small declared components with props](#-prefer-small-declared-components-with-props)
     - [ℹ️ Explanation](#ℹ️-explanation-2)
+  - [Event handlers — where to put them](#event-handlers--where-to-put-them)
+    - [❌ avoid](#-avoid)
+    - [✅ prefer](#-prefer)
+    - [ℹ️ Explanation](#ℹ️-explanation-3)
+  - [Conditionally executable handlers — use a dedicated handler with early returns](#conditionally-executable-handlers--use-a-dedicated-handler-with-early-returns)
+    - [❌ avoid inline conditional execution in event props](#-avoid-inline-conditional-execution-in-event-props)
+    - [✅ prefer a dedicated handler with early returns](#-prefer-a-dedicated-handler-with-early-returns)
+    - [ℹ️ Explanation](#ℹ️-explanation-4)
   - [Promote pure typescript functions](#promote-pure-typescript-functions)
     - [❌ avoid inline unsharable code](#-avoid-inline-unsharable-code)
     - [✅ prefer pure typescript extracted logic](#-prefer-pure-typescript-extracted-logic)
-    - [ℹ️ Explanation](#ℹ️-explanation-3)
+    - [ℹ️ Explanation](#ℹ️-explanation-5)
   - [Avoid Misusing the `use` Prefix](#avoid-misusing-the-use-prefix)
     - [❌ Avoid Misusing the `use` Prefix for Non-Hook Functions](#-avoid-misusing-the-use-prefix-for-non-hook-functions)
     - [✅ Prefer a More Descriptive Name for Pure Functions](#-prefer-a-more-descriptive-name-for-pure-functions)
-    - [ℹ️ Explanation](#ℹ️-explanation-4)
+    - [ℹ️ Explanation](#ℹ️-explanation-6)
   - [Avoid Simple Assignment in State Update Functions](#avoid-simple-assignment-in-state-update-functions)
     - [❌ Avoid Simple Assignment for State Updates Dependent on Current State](#-avoid-simple-assignment-for-state-updates-dependent-on-current-state)
     - [✅ Prefer Using Setter Function for State Updates Dependent on Current State](#-prefer-using-setter-function-for-state-updates-dependent-on-current-state)
-    - [ℹ️ Explanation](#ℹ️-explanation-5)
+    - [ℹ️ Explanation](#ℹ️-explanation-7)
+  - [Prefer useToggle from @uidotdev/usehooks for Boolean Toggle State](#prefer-usetoggle-from-uidotdevusehooks-for-boolean-toggle-state)
+    - [❌ Avoid useState for Simple Open/Close or Show/Hide Toggles](#-avoid-usestate-for-simple-openclose-or-showhide-toggles)
+    - [✅ Prefer useToggle When @uidotdev/usehooks Is Present](#-prefer-usetoggle-when-uidotdevusehooks-is-present)
+    - [ℹ️ Explanation](#ℹ️-explanation-8)
   - [Prefer External Filters and Sorters Over Inline Logic in Rendering](#prefer-external-filters-and-sorters-over-inline-logic-in-rendering)
     - [❌ Avoid Using Inline Logic for Filtering and Sorting in the Rendering Template](#-avoid-using-inline-logic-for-filtering-and-sorting-in-the-rendering-template)
     - [✅ Prefer Using External Filters and Sorters for Better Readability](#-prefer-using-external-filters-and-sorters-for-better-readability)
-    - [ℹ️ Explanation](#ℹ️-explanation-6)
+    - [ℹ️ Explanation](#ℹ️-explanation-9)
   - [Prefer External Utility Functions Over Complex Logic in the Rendering Template](#prefer-external-utility-functions-over-complex-logic-in-the-rendering-template)
     - [❌ Avoid Complex Logic in the Rendering Template](#-avoid-complex-logic-in-the-rendering-template)
     - [✅ Prefer Using External Utility Functions for Better Readability](#-prefer-using-external-utility-functions-for-better-readability)
-    - [ℹ️ Explanation](#ℹ️-explanation-7)
+    - [ℹ️ Explanation](#ℹ️-explanation-10)
   - [Prefer Using Hooks for Business Logic Over Returning React Components](#prefer-using-hooks-for-business-logic-over-returning-react-components)
     - [❌ Avoid Using Hooks to Return React Components](#-avoid-using-hooks-to-return-react-components)
     - [✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate](#-prefer-using-hooks-for-business-logic-and-keep-rendering-separate)
-    - [ℹ️ Explanation](#ℹ️-explanation-8)
+    - [ℹ️ Explanation](#ℹ️-explanation-11)
   - [Prefer Using `gap`, `rowGap`, and `columnGap` Over `margin` or `padding` in React Native](#prefer-using-gap-rowgap-and-columngap-over-margin-or-padding-in-react-native)
     - [❌ Avoid Using `margin` or `padding` for Spacing Between Elements](#-avoid-using-margin-or-padding-for-spacing-between-elements)
     - [✅ Prefer Using `gap`, `rowGap`, and `columnGap` for Spacing Between Elements](#-prefer-using-gap-rowgap-and-columngap-for-spacing-between-elements)
-    - [ℹ️ Explanation](#ℹ️-explanation-9)
+    - [ℹ️ Explanation](#ℹ️-explanation-12)
   - [Prefer Using Early Returns for Simplified Rendering in React Components](#prefer-using-early-returns-for-simplified-rendering-in-react-components)
     - [❌ Avoid Complex Conditional Rendering with Nested Ternaries](#-avoid-complex-conditional-rendering-with-nested-ternaries)
     - [✅ Prefer Using Early Returns for Improved Readability and Maintainability](#-prefer-using-early-returns-for-improved-readability-and-maintainability)
-    - [ℹ️ Explanation](#ℹ️-explanation-10)
+    - [ℹ️ Explanation](#ℹ️-explanation-13)
     - [📚 Additional Resources](#-additional-resources)
   - [Prefer Breaking Down `<GodComponents />` into Subcomponents](#prefer-breaking-down-godcomponents--into-subcomponents)
     - [❌ Avoid Complex Components with Excessive Responsibilities](#-avoid-complex-components-with-excessive-responsibilities)
     - [✅ Prefer Breaking Down God Components into Smaller Subcomponents](#-prefer-breaking-down-god-components-into-smaller-subcomponents)
-    - [ℹ️ Explanation](#ℹ️-explanation-11)
+    - [ℹ️ Explanation](#ℹ️-explanation-14)
     - [📚 Additional Resources](#-additional-resources-1)
   - [Avoid Numeric Index for the Key Value of a React Element](#avoid-numeric-index-for-the-key-value-of-a-react-element)
     - [❌ Avoid direct index usage as key](#-avoid-direct-index-usage-as-key)
@@ -91,48 +103,49 @@
   - [Move data outside the component for cleaner code](#move-data-outside-the-component-for-cleaner-code)
     - [❌ Avoid keeping unnecessary data inside the component](#-avoid-keeping-unnecessary-data-inside-the-component)
     - [✅ Prefer moving static data and functions outside the component](#-prefer-moving-static-data-and-functions-outside-the-component)
-    - [ℹ️ Explainations](#ℹ️-explainations)
+    - [ℹ️ Explanations](#ℹ️-explanations-7)
   - [Store the Selected Item by ID](#store-the-selected-item-by-id)
     - [❌ Avoid storing the entire item](#-avoid-storing-the-entire-item)
     - [✅ Prefer storing the item ID](#-prefer-storing-the-item-id)
-    - [ℹ️ Explanation](#ℹ️-explanation-12)
+    - [ℹ️ Explanation](#ℹ️-explanation-15)
   - [Clarify the Distinction Between Initial State and Current State](#clarify-the-distinction-between-initial-state-and-current-state)
     - [❌ Avoid unclear naming for state variables](#-avoid-unclear-naming-for-state-variables)
     - [✅ Prefer clear naming to differentiate initial state and current state](#-prefer-clear-naming-to-differentiate-initial-state-and-current-state)
-    - [ℹ️ Explaination](#ℹ️-explaination)
+    - [ℹ️ Explanation](#ℹ️-explanation-16)
   - [Always Clean Up in Your `useEffect` Hooks](#always-clean-up-in-your-useeffect-hooks)
     - [❌ Avoid forgetting to clean up side effects](#-avoid-forgetting-to-clean-up-side-effects)
     - [✅ Prefer cleaning up side effects with a cleanup function](#-prefer-cleaning-up-side-effects-with-a-cleanup-function)
-    - [ℹ️ Explaination](#ℹ️-explaination-1)
+    - [ℹ️ Explanation](#ℹ️-explanation-17)
   - [Prefer Functions Over Custom Hooks](#prefer-functions-over-custom-hooks)
     - [❌ Avoid creating unnecessary custom hooks](#-avoid-creating-unnecessary-custom-hooks)
     - [✅ Prefer using plain functions instead](#-prefer-using-plain-functions-instead)
-    - [ℹ️ Explanation](#ℹ️-explanation-13)
+    - [ℹ️ Explanation](#ℹ️-explanation-18)
   - [Use `ReactNode` instead of `JSX.Element | null | undefined`](#use-reactnode-instead-of-jsxelement--null--undefined)
     - [❌ Avoid typing props with JSX.Element | null | undefined](#-avoid-typing-props-with-jsxelement--null--undefined)
     - [✅ Prefer using `ReactNode` for more compact code](#-prefer-using-reactnode-for-more-compact-code)
-    - [ℹ️ Explanation](#ℹ️-explanation-14)
+    - [ℹ️ Explanation](#ℹ️-explanation-19)
   - [Simplify Typing of Components Expecting Children Props](#simplify-typing-of-components-expecting-children-props)
     - [❌ Avoid manually typing the children prop](#-avoid-manually-typing-the-children-prop)
     - [✅ Prefer using PropsWithChildren for typing children props](#-prefer-using-propswithchildren-for-typing-children-props)
-    - [ℹ️ Explanation](#ℹ️-explanation-15)
+    - [ℹ️ Explanation](#ℹ️-explanation-20)
   - [Specify Types Explicitly in useState, useRef, etc.](#specify-types-explicitly-in-usestate-useref-etc)
     - [❌ Avoid omitting types when they can't be inferred](#-avoid-omitting-types-when-they-cant-be-inferred)
     - [✅ Prefer specifying types explicitly when they can't be inferred](#-prefer-specifying-types-explicitly-when-they-cant-be-inferred)
-    - [ℹ️ Explanation](#ℹ️-explanation-16)
+    - [ℹ️ Explanation](#ℹ️-explanation-21)
   - [Use ElementRef Type Helper for Typing Refs](#use-elementref-type-helper-for-typing-refs)
     - [❌ Avoid typing refs directly with element type names](#-avoid-typing-refs-directly-with-element-type-names)
     - [✅ Prefer using the ElementRef type helper for typing refs](#-prefer-using-the-elementref-type-helper-for-typing-refs)
-    - [ℹ️ Explanation](#ℹ️-explanation-17)
+    - [ℹ️ Explanation](#ℹ️-explanation-22)
 
 # Project React coding standards
 
 This section outlines the coding patterns recommended for the project, focusing on both `React` and pure `TypeScript` practices:
 
-- **Apply the DRY Principle (Don't Repeat Yourself)**: Strive to reduce code duplication by creating reusable components and functions.  
+- **Apply the DRY Principle (Don't Repeat Yourself)**: Strive to reduce code duplication by creating reusable components and functions.
 - **Divide and Conquer**: Break down complex problems into smaller, more manageable functions, each with a single responsibility.
 - **Promote Reusability**: Develop components and functions that can be reused across different parts of the application, enhancing consistency and reducing redundancy.
 - **Encourage Maintainability**: Write code that is easy to understand, modify, and extend, ensuring long-term maintainability and reducing technical debt.
+- **Use arrow function syntax**: Prefer arrow functions for components and handlers (e.g. `const MyComponent = (props) => { ... }`, `const handleClick = () => { ... }`) so that examples and codebase stay consistent.
 
 By adhering to these principles, the project will benefit from cleaner, more efficient, and more sustainable code.
 
@@ -143,20 +156,17 @@ Memoizing primitive values in `React` is redundant as they are cheap to compare 
 ### ❌ avoid premature memoizations through `useMemo`
 
 ```tsx
-const productName = useMemo(() => route.params?.productName, [route.params?.productName])
+const productName = useMemo(() => route.params?.productName, [route.params?.productName]);
 
-const fullName = useMemo(
-  () => `${firstName} ${lastName} (${age} years old)`,
-  [firstName, lastName, age]
-)
+const fullName = useMemo(() => `${firstName} ${lastName} (${age} years old)`, [firstName, lastName, age]);
 ```
 
 ### ✅ prefer simple computations
 
 ```tsx
-const productName = route.params?.productName
+const productName = route.params?.productName;
 
-const fullName = `${firstName} ${lastName} (${age} years old)`
+const fullName = `${firstName} ${lastName} (${age} years old)`;
 ```
 
 ### ℹ️ Explanations:
@@ -167,7 +177,6 @@ Re-renders will cause recomputations of the code above the final return but usua
 
 - [Don’t worry about re-renders (too much)](https://www.youtube.com/watch?v=4FhJkX18fS8&t=722s)
 - [How to tell if a calculation is expensive?](https://react.dev/reference/react/useMemo#how-to-tell-if-a-calculation-is-expensive)
-
 
 ## Avoid `useCallback` missusage
 
@@ -209,7 +218,7 @@ return (
       isSensitiveTextVisible={isSecuredTextEntryEnabled} />
     {/** ... */}
   </View>
-)```
+)
 ```
 
 ### ℹ️ Explanation
@@ -264,12 +273,13 @@ return (
       isSensitiveTextVisible={isSecuredTextEntryEnabled} />
     {/** ... */}
   </View>
-)```
+)
 ```
 
 ### ℹ️ Explanation
 
 Creating small dumb components:
+
 - removes template complexity
 - promotes potential re-usability
 - promotes separation of concerns
@@ -278,63 +288,201 @@ Creating small dumb components:
 
 - [3 React Mistakes, 1 App Killer](https://youtube.com/watch?v=QuLfCUh-iwI&si=JofynxnU-J58sA53)
 
-## Single arrow function event handler
+## Avoid storing JSX in variables and injecting in the return
 
-### ❌ avoid double arrows functions
+Storing JSX in variables (e.g. `labelNode`, `textNode`) and injecting them in the return blurs component boundaries, hinders reuse and testability, and goes against single responsibility. Prefer small, declared components with explicit props.
 
-```tsx
-// Note the double arrow functions (a.k.a. function factories)
-// those are "function returning a function"
-const onEditPress = (id: string) => () => {
-   // ...
-}
-const onSharePress = (id: string) => () => {
-   //...
-}
-
-//...
-
-return (
-  <>
-    <View onPress={onEditPress(id)}>
-      {/** ... */}
-    </View>
-    <View onPress={onSharePress(id)}>
-      {/** ... */}
-    </View>
-  </>
-)
-```
-
-### ✅ prefer single arrow functions
+### ❌ avoid storing JSX in variables (e.g. labelNode, textNode)
 
 ```tsx
-const onEditPress = (id: string) => {
-   //...
-}
-const onSharePress = (id: string) => {
-   //...
-}
+const labelNode = !isNullish(displayLabel) ? (
+  <Text variant="bodyLarge" style={styles.checkboxesTitle}>
+    {displayLabel}
+  </Text>
+) : null;
+
+const textNode = (
+  <Text variant="bodyLarge" style={styles.checkboxesTitle}>
+    {text}
+  </Text>
+);
 
 // ...
 
 return (
-  <>
-    <View onPress={() => onEditPress(id)}>
-      {/** ... */}
+  <View style={styles.checkboxRow}>
+    <Switch value={checked} onValueChange={handleValueChange} disabled={disabled} />
+    {labelNode}
+  </View>
+);
+```
+
+### ✅ prefer small declared components with props
+
+Extract small components with clear props so they are reusable and have a single responsibility:
+
+```tsx
+type CheckboxRowLabelProps = {
+  displayLabel?: string | null;
+  variant?: "bodyLarge";
+  style?: StyleProp<TextStyle>;
+};
+
+const CheckboxRowLabel = ({ displayLabel, variant = "bodyLarge", style }: CheckboxRowLabelProps) => {
+  if (isNullish(displayLabel)) return null;
+  return (
+    <Text variant={variant} style={style}>
+      {displayLabel}
+    </Text>
+  );
+};
+
+// In the parent component:
+return (
+  <View style={styles.checkboxRow}>
+    <Switch value={checked} onValueChange={handleValueChange} disabled={disabled} />
+    <CheckboxRowLabel displayLabel={displayLabel} style={styles.checkboxesTitle} />
+  </View>
+);
+```
+
+<a id="explanation-jsx-variables"></a>
+
+### ℹ️ Explanation
+
+- **Reusability**: Declared components can be reused elsewhere and tested in isolation.
+- **Single responsibility**: Each component has one job; the parent composes them instead of building JSX in variables.
+- **Clarity**: Props make the data flow explicit; “node” variables hide what the UI depends on.
+- **Consistency**: Aligns with “divide and conquer” and the existing rule against `{renderXyz()}` and inline template renderers.
+
+## Event handlers — where to put them
+
+- **Pure TypeScript only** → move to `component-name.utils.ts` next to the component.
+- **Very simple (e.g. one line)** → keep inline in the event prop: `onPress={() => doSomething(id)}`.
+- **More complex or involves state** → one arrow per handler in the component: `const handleClick = () => { ... }`.
+- **Always avoid** factories that return handlers (double arrow functions).
+
+### ❌ avoid
+
+```tsx
+const ProductCard = ({ id, name, onSelect }: ProductCardProps) => {
+  const [loading, setLoading] = useState(false);
+
+  // ❌ Pure TS logic in component: no state/hooks → belongs in utils
+  const shareProduct = (id: string) => {
+    const url = buildShareUrl(id);
+    if (navigator.share) navigator.share({ url });
+    else navigator.clipboard.writeText(url);
+  };
+
+  // ❌ Double arrow (factory): returns a function — confusing, avoid
+  const handleShare = (id: string) => () => shareProduct(id);
+
+  // ❌ Useless for 1 liner
+  const onSelectPress = () => onSelect(id);
+
+  return (
+    <View>
+      <Text>{name}</Text>
+      {/* ❌ Factory call at render: handleShare(id) returns the handler */}
+      <Button onPress={handleShare(id)} title="Share" />
+      {/* ❌ Complex logic inline: multi-step + state → use a named handler */}
+      <Button
+        onPress={() => {
+          setLoading(true);
+          updateProduct(id, formData).then(() => setLoading(false));
+        }}
+        title="Save"
+      />
+      {/* ❌ Useless for 1 liner */}
+      <Button onPress={onSelectPress} title="Select" />
     </View>
-    <View onPress={() => onSharePress(id)}>
-      {/** ... */}
+  );
+};
+```
+
+### ✅ prefer
+
+```tsx
+// product-card.utils.ts — pure TS, no state/hooks
+export const shareProduct = (id: string) => {
+  const url = buildShareUrl(id);
+  if (navigator.share) navigator.share({ url });
+  else navigator.clipboard.writeText(url);
+};
+
+const ProductCard = ({ id, name, onSelect }: ProductCardProps) => {
+  const [loading, setLoading] = useState(false);
+
+  // ✅ Complex / state: one named handler
+  const handleSave = () => {
+    setLoading(true);
+    updateProduct(id, formData).then(() => setLoading(false));
+  };
+
+  return (
+    <View>
+      <Text>{name}</Text>
+      {/* ✅ Pure TS from utils: simple inline call */}
+      <Button onPress={() => shareProduct(id)} title="Share" />
+      {/* ✅ Complex: named handler */}
+      <Button onPress={handleSave} disabled={loading} title="Save" />
+      {/* ✅ Simple one-liner: inline is fine */}
+      <Button onPress={() => onSelect(id)} title="Select" />
     </View>
-  </>
-)
+  );
+};
 ```
 
 ### ℹ️ Explanation
 
-- Naming the handler `onNameOfEventPress` clearly indicates when the event is triggered.
-- Passing a function factory (a function that returns another function) to `onPress` can be confusing because it’s not immediately clear that a factory is being passed instead of the actual event handler.
-- Using a factory pattern makes the code harder to read and maintain, adding unnecessary complexity.
+- **Pure TypeScript handlers** (no React state, no hooks) belong in `component-name.utils.ts` for reuse and testability.
+- **Very simple handlers** (e.g. one existing function call) can stay inline in the event prop — no need for a named handler.
+- **Complex or state-involving handlers** should be one arrow per handler (e.g. `const handleClick = () => { ... }`); naming like `handleEditPress` makes it clear when the event fires.
+- **Avoid function factories** (double arrows): a function that returns another function passed to `onPress` is confusing and adds unnecessary complexity.
+
+## Conditionally executable handlers — use a dedicated handler with early returns
+
+When a handler should run only under certain conditions (e.g. when not `disabled` and not `readonly`), avoid inlining the condition in the event prop. Define a dedicated handler before the render step and use early returns so the handler stays simple; pass only the handler reference in the prop.
+
+### ❌ avoid inline conditional execution in event props
+
+```tsx
+<Pressable
+  onPress={() => !disabled && !readonly && handleValueChange(!checked)}
+  ...
+/>
+```
+
+```tsx
+<Button onPress={() => !loading && isValid && submit()} />
+```
+
+### ✅ prefer a dedicated handler with early returns
+
+```tsx
+const handleOnPress = () => {
+  if (disabled || readonly) return;
+  handleValueChange(!checked);
+};
+
+return (
+  <Pressable onPress={handleOnPress} ... />
+);
+```
+
+```tsx
+const handleSubmit = () => {
+  if (loading || !isValid) return;
+  submit();
+};
+
+return <Button onPress={handleSubmit} />;
+```
+
+### ℹ️ Explanation
+
+Inline conditionals in event props (`() => condition && doSomething()`) mix control flow and callback wiring, which hurts readability and makes the JSX harder to scan. A small named handler with early returns keeps the intent clear, keeps the render lean (`onPress={handleOnPress}`), and makes the handler easy to test or reuse.
 
 ## Promote pure typescript functions
 
@@ -370,16 +518,20 @@ return (...)
 
 ```tsx
 //...
-export const computeTotal = (numbers: number[] = []) =>
-  numbers.reduce((acc, value) => acc + value, 0)
+export const computeTotal = (numbers: number[] = []) => numbers.reduce((acc, value) => acc + value, 0);
 
-type MultiplyByArgs = { numbers?: number[], by?: number }
-export const multiplyBy = ({ numbers = [], by = 1 }: MultiplyByArgs) =>
-  numbers.map((value) => value * by)
+interface MultiplyByArgs {
+  numbers?: number[];
+  by?: number;
+}
+export const multiplyBy = ({ numbers = [], by = 1 }: MultiplyByArgs) => numbers.map((value) => value * by);
 
-type BuildPersonArgs = { firstName: string, lastName: string, age: number }
-export const buildPersonFullName = (person: BuildPersonArgs) =>
-  `${firstName} ${lastName} (${age} years old)`
+interface BuildPersonArgs {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+export const buildPersonFullName = (person: BuildPersonArgs) => `${firstName} ${lastName} (${age} years old)`;
 ```
 
 - inside `my-component.tsx` component file:
@@ -419,17 +571,17 @@ Creating small, pure typescript functions:
 ```tsx
 // This function is named like a React hook but does not use any hooks internally
 const useCalculateDiscount = (price: number, discount: number) => {
-  return price - (price * discount)
-}
+  return price - price * discount;
+};
 
 // Usage in a component
 const Component = () => {
-  const price = 100
-  const discount = 0.1
-  const discountedPrice = useCalculateDiscount(price, discount)
+  const price = 100;
+  const discount = 0.1;
+  const discountedPrice = useCalculateDiscount(price, discount);
 
-  return <TextView>Discounted Price: {discountedPrice}</TextView>
-}
+  return <TextView>Discounted Price: {discountedPrice}</TextView>;
+};
 ```
 
 ### ✅ Prefer a More Descriptive Name for Pure Functions
@@ -438,28 +590,28 @@ const Component = () => {
 
 ```tsx
 // This function is correctly named to reflect that it's a pure utility function
-type CalculateDiscountArgs = {
-  price: number
-  discount: number
+interface CalculateDiscountArgs {
+  price: number;
+  discount: number;
 }
 export const calculateDiscount = ({ price, discount }: CalculateDiscountArgs) => {
-  return price - (price * discount)
-}
+  return price - price * discount;
+};
 ```
 
 - inside `my-component.tsx` component file:
 
 ```tsx
-import { calculateDiscount } from 'my-component.utils.ts'
+import { calculateDiscount } from "my-component.utils.ts";
 
 // Usage in a component
 const Component = () => {
-  const price = 100
-  const discount = 0.1
-  const discountedPrice = calculateDiscount({ price, discount })
+  const price = 100;
+  const discount = 0.1;
+  const discountedPrice = calculateDiscount({ price, discount });
 
-  return <TextView>Discounted Price: {discountedPrice}</TextView>
-}
+  return <TextView>Discounted Price: {discountedPrice}</TextView>;
+};
 ```
 
 ### ℹ️ Explanation
@@ -475,21 +627,21 @@ const Component = () => {
 ```tsx
 // This code uses a simple assignment for state update which can lead to issues
 const addNumber = () => {
-  const newNumber = numbers.length + 1
-  setNumbers([...numbers, newNumber])
-}
+  const newNumber = numbers.length + 1;
+  setNumbers([...numbers, newNumber]);
+};
 
 // Usage in a component
 const Component = () => {
-  const [numbers, setNumbers] = useState<number[]>([])
+  const [numbers, setNumbers] = useState<number[]>([]);
 
   return (
     <div>
       <button onClick={addNumber}>Add Number</button>
-      <div>{numbers.join(', ')}</div>
+      <div>{numbers.join(", ")}</div>
     </div>
-  )
-}
+  );
+};
 ```
 
 ### ✅ Prefer Using Setter Function for State Updates Dependent on Current State
@@ -497,20 +649,20 @@ const Component = () => {
 ```tsx
 // This code uses the setter function for state update which ensures correctness
 const addNumber = () => {
-  setNumbers((currentNumbers) => [...currentNumbers, currentNumbers.length + 1])
-}
+  setNumbers((currentNumbers) => [...currentNumbers, currentNumbers.length + 1]);
+};
 
 // Usage in a component
 const Component = () => {
-  const [numbers, setNumbers] = useState<number[]>([])
+  const [numbers, setNumbers] = useState<number[]>([]);
 
   return (
     <div>
       <button onClick={addNumber}>Add Number</button>
-      <div>{numbers.join(', ')}</div>
+      <div>{numbers.join(", ")}</div>
     </div>
-  )
-}
+  );
+};
 ```
 
 ### ℹ️ Explanation
@@ -519,6 +671,38 @@ const Component = () => {
 - **Use Setter Function:** Using the setter function (`setNumbers((currentNumbers) => [...currentNumbers, currentNumbers.length + 1])`) ensures that the update is based on the latest state. This approach prevents potential bugs related to state being updated concurrently.
 - **Correctness:** Using the setter function makes sure that the new state is computed correctly, even when multiple updates occur at the same time.
 - **Maintainability:** This pattern is more robust and easier to understand, making the codebase more maintainable.
+
+## Prefer useToggle from @uidotdev/usehooks for Boolean Toggle State
+
+For visual toggles (e.g. dialog open/close, modal visibility, accordion expanded state), prefer `useToggle` from `@uidotdev/usehooks` when the library is present in the project. It provides a clear API (`value`, `toggle`, `setTrue`, `setFalse`) and avoids manual boolean state for simple on/off cases.
+
+### ❌ Avoid useState for Simple Open/Close or Show/Hide Toggles
+
+```tsx
+const [isDialogOpen, setIsDialogOpen] = useState(false);
+// ...
+<Button onClick={() => setIsDialogOpen(true)}>Open</Button>
+<Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
+```
+
+### ✅ Prefer useToggle When @uidotdev/usehooks Is Present
+
+```tsx
+import { useToggle } from "@uidotdev/usehooks";
+
+const [isDialogOpen, { setTrue: openDialog, setFalse: closeDialog }] = useToggle(false);
+// ...
+<Button onClick={openDialog}>Open</Button>
+<Dialog open={isDialogOpen} onClose={closeDialog} />
+```
+
+Apply this rule only when `@uidotdev/usehooks` is a dependency; otherwise, `useState(false)` with explicit setters remains acceptable.
+
+### ℹ️ Explanation
+
+- **Readability:** `useToggle` exposes intent (open/close, show/hide) via `setTrue`/`setFalse` or a single `toggle`, making call sites clearer.
+- **Consistency:** When the project already uses `@uidotdev/usehooks`, using `useToggle` for boolean UI state keeps patterns consistent.
+- **Optional:** If the library is not in the project, do not add it solely for this; use `useState` for toggles.
 
 ## Prefer External Filters and Sorters Over Inline Logic in Rendering
 
@@ -561,7 +745,7 @@ const Component = ({ items }) => {
   const displayItems = items
     .filter(canDisplayFilter)
     .sort(itemComparator)
-  
+
   return (
     <ul>
       {displayItems.map(item => (
@@ -626,11 +810,11 @@ const items = [
 
 ```tsx
 // This code uses external utility functions for better readability and maintainability
-type MyItemType = {
-  id: number,
-  name: string,
-  isActive: boolean,
-  isAvailable: boolean,
+interface MyItemType {
+  id: number
+  name: string
+  isActive: boolean
+  isAvailable: boolean
   age: number
 }
 
@@ -639,7 +823,9 @@ export const itemComparator = (a: MyItemType, b: MyItemType) => a.name.localeCom
 export const formatItem = (item: MyItemType) => `${item.name} (${item.age} years old)`
 
 // then inside the component (once the above functions have been imported)
-type Props = { items: MyItemType[] }
+interface Props {
+  items: MyItemType[]
+}
 const Component: FunctionComponent<Props> = ({ items }) => {
   const filteredAndSortedItems = items.filter(canDisplayFilter).sort(itemComparator)
   const hasItems = filteredAndSortedItems.length > 0
@@ -674,55 +860,50 @@ const items = [
 - **Early Return for Conditional Rendering:** Using an early return for cases where there are no items to display simplifies the component structure and avoids nested conditions.
 - **Readability and Maintainability:** Using external functions improves readability by breaking down the logic into manageable, reusable pieces. This also makes the code easier to test and maintain.
 
-
 ## Prefer Using Hooks for Business Logic Over Returning React Components
 
 ### ❌ Avoid Using Hooks to Return React Components
 
 ```tsx
 const useMySuperBoostedHook = () => {
-  const [theValue, setTheValue] = useState('')
+  const [theValue, setTheValue] = useState("");
 
   const onUpdate = (data: DataStructure) => {
     // ...
-  }
+  };
 
   //...
 
   const onMessage = (message: Message) => {
-    // ...  
-  }
+    // ...
+  };
 
   const MyReturnedComponentFromHook = (
-    <HookGeneratedComponent
-      value={theValue}
-      onMessage={onMessage}
-      onUpdate={onUpdate}
-    />
-  )
+    <HookGeneratedComponent value={theValue} onMessage={onMessage} onUpdate={onUpdate} />
+  );
 
-  return { MyReturnedComponentFromHook }
-}
+  return { MyReturnedComponentFromHook };
+};
 ```
 
 ### ✅ Prefer Using Hooks for Business Logic and Keep Rendering Separate
 
 ```tsx
 const useMySuperBoostedHook = () => {
-  const [theValue, setTheValue] = useState('')
+  const [theValue, setTheValue] = useState("");
 
   const onUpdate = (data: DataStructure) => {
     // ...
-  }
+  };
 
   //...
 
   const onMessage = (message: Message) => {
-    // ...  
-  }
+    // ...
+  };
 
-  return { theValue, onUpdate, onMessage }
-}
+  return { theValue, onUpdate, onMessage };
+};
 
 // then inside the component
 const Component = () => {
@@ -730,13 +911,7 @@ const Component = () => {
 
   //...
 
-  return (
-    <ClassicFonctionComponentHere
-      value={theValue}
-      onMessage={onMessage}
-      onUpdate={onUpdate}
-    />
-  );
+  return <ClassicFonctionComponentHere value={theValue} onMessage={onMessage} onUpdate={onUpdate} />;
 };
 
 export default Component;
@@ -755,8 +930,8 @@ export default Component;
 
 ```tsx
 // This code uses margin and padding for spacing, which can be less efficient and harder to maintain
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const Component = () => {
   return (
@@ -770,8 +945,8 @@ const Component = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   item: {
     margin: 10,
@@ -785,8 +960,8 @@ export default Component;
 
 ```tsx
 // This code uses gap for spacing, which is more efficient and easier to maintain
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const Component = () => {
   return (
@@ -800,7 +975,7 @@ const Component = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10, // Using gap for spacing between elements
   },
   item: {
@@ -824,29 +999,27 @@ export default Component;
 
 ```tsx
 // This code uses nested ternary operators, making it harder to read and maintain
-const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
-  <View style={styles.container}>{children}</View>
-)
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => <View style={styles.container}>{children}</View>;
 
 export const MyComponent = ({ userId }) => {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await getUserById(userId)
-        setUser(response)
+        const response = await getUserById(userId);
+        setUser(response);
       } catch (err) {
-        setError(err)
+        setError(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchUser()
-  }, [userId])
+    fetchUser();
+  }, [userId]);
 
   return (
     <View style={styles.container}>
@@ -863,16 +1036,16 @@ export const MyComponent = ({ userId }) => {
         )
       )}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+});
 ```
 
 ### ✅ Prefer Using Early Returns for Improved Readability and Maintainability
@@ -880,51 +1053,59 @@ const styles = StyleSheet.create({
 ```tsx
 // This code uses early returns, making it more readable and easier to maintain
 
-const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => (
-  <View style={styles.container}>{children}</View>
-)
+const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => <View style={styles.container}>{children}</View>;
 
 export const MyComponent = ({ userId }) => {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await getUserById(userId)
-        setUser(response)
+        const response = await getUserById(userId);
+        setUser(response);
       } catch (err) {
-        setError(err)
+        setError(err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchUser()
-  }, [userId])
+    fetchUser();
+  }, [userId]);
 
-  if (loading) return (<Layout><ActivityIndicator /></Layout>)
+  if (loading)
+    return (
+      <Layout>
+        <ActivityIndicator />
+      </Layout>
+    );
 
-  if (error) return (<Layout><Text>{error.message}</Text></Layout>)
+  if (error)
+    return (
+      <Layout>
+        <Text>{error.message}</Text>
+      </Layout>
+    );
 
-  if (!user) return <Layout />
+  if (!user) return <Layout />;
 
   return (
     <Layout>
       <Text>User Name: {user.name}</Text>
       <Text>User Email: {user.email}</Text>
     </Layout>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+});
 ```
 
 ### ℹ️ Explanation
@@ -942,6 +1123,7 @@ By following these best practices and using early returns, you can create React 
 ### 📚 Additional Resources
 
 For more detailed information on the benefits of using early returns in your code, you can refer to these resources:
+
 - [The Early Return Pattern in JavaScript](https://gomakethings.com/the-early-return-pattern-in-javascript/)
 - [The Return Early Pattern](https://www.linkedin.com/pulse/return-early-pattern-marny-lopez-eq6je/)
 
@@ -953,7 +1135,6 @@ For more detailed information on the benefits of using early returns in your cod
 // This code is an example of a God Component, making it challenging to read, maintain, and test.
 
 export const Dashboard = () => {
-
   // Overloaded with state management hooks
   // Multiple hook calls and useEffects
   // Numerous event handlers
@@ -979,8 +1160,8 @@ export const Dashboard = () => {
 
       {/** ... It’s time to stop feeding this uncontrollable beast :-/ */}
     </>
-  )
-}
+  );
+};
 ```
 
 ### ✅ Prefer Breaking Down God Components into Smaller Subcomponents
@@ -1002,8 +1183,8 @@ export const Dashboard = () => {
         <SubComponent4 attribute2={value2} />
       </SubComponent2>
     </>
-  )
-}
+  );
+};
 ```
 
 ### ℹ️ Explanation
@@ -1023,16 +1204,18 @@ By adhering to these principles, you can create React components that are not on
 ### 📚 Additional Resources
 
 For more detailed information on the benefits of small responsibilities components, you can refer to these resources:
+
 - [Are Your React Components Too BIG?](https://www.youtube.com/watch?v=NsFmOttIW9Y)
 - [Refactoring a messy react component](https://alexkondov.com/refactoring-a-messy-react-component/)
 
 ## Avoid Numeric Index for the Key Value of a React Element
 
 ### ❌ Avoid direct index usage as key
+
 ```tsx
 const items = [
-  { id: 'a1', name: 'Apple' },
-  { id: 'b2', name: 'Banana' },
+  { id: "a1", name: "Apple" },
+  { id: "b2", name: "Banana" },
 ];
 
 const ItemList = () => (
@@ -1045,10 +1228,11 @@ const ItemList = () => (
 ```
 
 ### ✅ Prefer a unique identifier
+
 ```tsx
 const items = [
-  { id: 'a1', name: 'Apple' },
-  { id: 'b2', name: 'Banana' },
+  { id: "a1", name: "Apple" },
+  { id: "b2", name: "Banana" },
 ];
 
 const ItemList = () => (
@@ -1090,27 +1274,26 @@ This approach ensures React efficiently handles rendering and avoids subtle bugs
 ## Prefer react-native `Pressable` Over `TouchableOpacity`
 
 ### ❌ Avoid TouchableOpacity usage
+
 ```tsx
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text } from "react-native";
 
 const MyButton = () => (
-  <TouchableOpacity onPress={() => console.log('Button pressed!')}>
+  <TouchableOpacity onPress={() => console.log("Button pressed!")}>
     <Text>Press Me</Text>
   </TouchableOpacity>
 );
 ```
 
 ### ✅ Prefer Pressable
+
 ```tsx
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, Text, StyleSheet } from "react-native";
 
 const MyButton = () => (
   <Pressable
-    onPress={() => console.log('Button pressed!')}
-    style={({ pressed }) => [
-      styles.button,
-      pressed ? styles.buttonPressed : null,
-    ]}
+    onPress={() => console.log("Button pressed!")}
+    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
   >
     <Text>Press Me</Text>
   </Pressable>
@@ -1118,10 +1301,10 @@ const MyButton = () => (
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: "blue",
   },
   buttonPressed: {
-    backgroundColor: 'darkblue',
+    backgroundColor: "darkblue",
   },
 });
 ```
@@ -1180,27 +1363,28 @@ const Dashboard = () => {
   - List rendering where wrapper elements would break the layout
   - Complex layouts where DOM hierarchy matters
 
-Je vais reformatter cette règle de développement selon vos critères.
-
 ## Use React Fragment Shorthand
 
 ### ❌ Avoid useless verbose Fragment tag
+
 ```tsx
 <Fragment>
-   <FirstChild />
-   <SecondChild />
+  <FirstChild />
+  <SecondChild />
 </Fragment>
 ```
 
 ### ✅ Prefer Fragment shorthand syntax
+
 ```tsx
 <>
-   <FirstChild />
-   <SecondChild />
+  <FirstChild />
+  <SecondChild />
 </>
 ```
 
 ### ℹ️ Explanations
+
 - The shorthand syntax `<></>` is more concise and readable
 - Use the full `Fragment` syntax only when you need to set a key
 - Example with key requirement:
@@ -1232,11 +1416,11 @@ const List = ({ users }: { users: User[] }) => {
 
 ```tsx
 // Accessing props directly throughout the code creates clutter
-type TodoListProps = {
+interface TodoListProps {
   todos: string[];
   selectedTodo: string;
   onSelectTodo: (todo: string) => void;
-};
+}
 
 const TodoList = (props: TodoListProps) => {
   return (
@@ -1261,11 +1445,11 @@ const TodoList = (props: TodoListProps) => {
 ### ✅ Prefer Props Destructuring
 
 ```tsx
-type TodoListProps = {
+interface TodoListProps {
   todos: string[];
   selectedTodo: string;
   onSelectTodo: (todo: string) => void;
-};
+}
 
 const TodoList = ({ todos, selectedTodo, onSelectTodo }: TodoListProps) => {
   return (
@@ -1308,7 +1492,7 @@ interface ButtonProps {
   onClick: () => void;
   text?: string;
   small?: boolean;
-  colorScheme?: 'light' | 'dark';
+  colorScheme?: "light" | "dark";
 }
 
 const Button = ({ onClick, text, small, colorScheme }: ButtonProps) => {
@@ -1335,15 +1519,10 @@ interface ButtonProps {
   onClick: () => void;
   text?: string;
   small?: boolean;
-  colorScheme?: 'light' | 'dark';
+  colorScheme?: "light" | "dark";
 }
 
-const Button = ({
-  onClick,
-  text = "",
-  small = false,
-  colorScheme = "light",
-}: ButtonProps) => {
+const Button = ({ onClick, text = "", small = false, colorScheme = "light" }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -1364,7 +1543,6 @@ const Button = ({
 - **Readability**: Having all defaults defined at the component's entry point makes it immediately clear what the default behavior will be.
 - **Type Safety**: Using TypeScript interfaces ensures proper typing of props and their potential default values, catching type-related errors at compile time.
 - **DRY Principle**: Avoids the need to declare additional variables just to handle default values, reducing code duplication and potential inconsistencies.
-
 
 ## Drop String Props Curly Braces
 
@@ -1413,11 +1591,7 @@ const ListWrapper = ({ items, selectedItem, setSelectedItem }: ListWrapperProps)
   return (
     <div className="list">
       {items.length && ( // Will print `0` if the list is empty
-        <List
-          items={items}
-          onSelectItem={setSelectedItem}
-          selectedItem={selectedItem}
-        />
+        <List items={items} onSelectItem={setSelectedItem} selectedItem={selectedItem} />
       )}
     </div>
   );
@@ -1438,13 +1612,7 @@ const ListWrapper = ({ items, selectedItem, setSelectedItem }: ListWrapperProps)
 
   return (
     <div className="list">
-      {shouldDisplayItems && (
-        <List
-          items={items}
-          onSelectItem={setSelectedItem}
-          selectedItem={selectedItem}
-        />
-      )}
+      {shouldDisplayItems && <List items={items} onSelectItem={setSelectedItem} selectedItem={selectedItem} />}
     </div>
   );
 };
@@ -1479,7 +1647,7 @@ const CoursesSelector = () => {
       ))}
     </select>
   );
-}
+};
 ```
 
 ### ✅ Prefer moving static data and functions outside the component
@@ -1494,15 +1662,18 @@ interface CoursesSelectorProps {}
 const CoursesSelector: React.FC<CoursesSelectorProps> = () => {
   return (
     <select>
-      {OPTIONS.map((opt) => (<option key={opt}>{opt}</option>))}
+      {OPTIONS.map((opt) => (
+        <option key={opt}>{opt}</option>
+      ))}
     </select>
   );
 };
 ```
 
-### ℹ️ Explainations
+### ℹ️ Explanations
 
 Moving static data and functions outside the component:
+
 - Reduces the size and complexity of the component.
 - Ensures that references remain stable across renders, which is crucial for optimizations like `React.memo`.
 - Improves readability and reusability of the code by separating concerns.
@@ -1510,10 +1681,14 @@ Moving static data and functions outside the component:
 ## Store the Selected Item by ID
 
 ### ❌ Avoid storing the entire item
+
 When storing the selected item from a list, avoid storing the entire item object. This can lead to issues if the item changes or is removed from the list.
 
 ```tsx
-interface Item = { id: number; name: string };
+interface Item {
+  id: number;
+  name: string;
+}
 
 interface ListWrapperProps {
   items: Item[];
@@ -1527,21 +1702,21 @@ const ListWrapper: React.FC<ListWrapperProps> = ({ items }) => {
     <>
       {selectedItem && <div>{selectedItem.name}</div>}
 
-      <List
-        items={items}
-        selectedItem={selectedItem}
-        onSelectItem={setSelectedItem}
-      />
+      <List items={items} selectedItem={selectedItem} onSelectItem={setSelectedItem} />
     </>
   );
 };
 ```
 
 ### ✅ Prefer storing the item ID
+
 Store the selected item by its ID (which should be stable). This ensures the UI remains correct even if the item is removed from the list or one of its properties changes.
 
 ```tsx
-interface Item = { id: number; name: string };
+interface Item {
+  id: number;
+  name: string;
+}
 interface ListWrapperProps {
   items: Item[];
 }
@@ -1555,22 +1730,20 @@ const ListWrapper: React.FC<ListWrapperProps> = ({ items }) => {
     <>
       {selectedItem && <div>{selectedItem.name}</div>}
 
-      <List
-        items={items}
-        selectedItemId={selectedItemId}
-        onSelectItem={setSelectedItemId}
-      />
+      <List items={items} selectedItemId={selectedItemId} onSelectItem={setSelectedItemId} />
     </>
   );
 };
 ```
 
 ### ℹ️ Explanation
+
 By storing only the ID of the selected item, we ensure that the selection logic is resilient to changes in the list or its items. This approach avoids retaining stale references and keeps the UI consistent and predictable. Furthermore, deriving the selected item from the list ensures that the UI is always in sync with the current state of the list.
 
 ## Clarify the Distinction Between Initial State and Current State
 
 ### ❌ Avoid unclear naming for state variables
+
 Avoid naming state variables in a way that makes it ambiguous whether they represent the initial state or the current state. This can lead to confusion and errors in state management.
 
 ```tsx
@@ -1589,10 +1762,7 @@ const Main: React.FC<MainProps> = ({ sortOrder }) => {
       >
         Popular
       </button>
-      <button
-        onClick={() => setInternalSortOrder("latest")}
-        className={internalSortOrder === "latest" ? "active" : ""}
-      >
+      <button onClick={() => setInternalSortOrder("latest")} className={internalSortOrder === "latest" ? "active" : ""}>
         Latest
       </button>
     </div>
@@ -1601,6 +1771,7 @@ const Main: React.FC<MainProps> = ({ sortOrder }) => {
 ```
 
 ### ✅ Prefer clear naming to differentiate initial state and current state
+
 Prefer explicitly naming props and state variables to indicate their role, such as using `initial` as a prefix for initial state variables.
 
 ```tsx
@@ -1613,16 +1784,10 @@ const Main: React.FC<MainProps> = ({ initialSortOrder }) => {
 
   return (
     <div>
-      <button
-        onClick={() => setSortOrder("popular")}
-        className={sortOrder === "popular" ? "active" : ""}
-      >
+      <button onClick={() => setSortOrder("popular")} className={sortOrder === "popular" ? "active" : ""}>
         Popular
       </button>
-      <button
-        onClick={() => setSortOrder("latest")}
-        className={sortOrder === "latest" ? "active" : ""}
-      >
+      <button onClick={() => setSortOrder("latest")} className={sortOrder === "latest" ? "active" : ""}>
         Latest
       </button>
     </div>
@@ -1630,16 +1795,18 @@ const Main: React.FC<MainProps> = ({ initialSortOrder }) => {
 };
 ```
 
-### ℹ️ Explaination
+### ℹ️ Explanation
+
 Clear naming improves code readability and helps developers quickly understand the purpose of each variable. When working with state, distinguishing between initial values (e.g., `initialSortOrder`) and current values (e.g., `sortOrder`) ensures that the code is self-explanatory and reduces potential for errors during state updates. This is particularly important in collaborative environments or when revisiting code after a long time.
 
 ## Always Clean Up in Your `useEffect` Hooks
 
 ### ❌ Avoid forgetting to clean up side effects
+
 Avoid setting up side effects like intervals, subscriptions, or event listeners in `useEffect` without properly cleaning them up. Neglecting this step can lead to resource waste and memory leaks.
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const Timer = () => {
   const [time, setTime] = useState(new Date());
@@ -1655,10 +1822,11 @@ const Timer = () => {
 ```
 
 ### ✅ Prefer cleaning up side effects with a cleanup function
+
 Always return a cleanup function in `useEffect` to ensure side effects like intervals, subscriptions, or event listeners are removed when the component unmounts.
 
 ```tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface TimerProps {}
 
@@ -1677,15 +1845,16 @@ const Timer: React.FC<TimerProps> = () => {
 };
 ```
 
-### ℹ️ Explaination
-In React, `useEffect` is used to handle side effects such as setting up intervals, subscribing to events, or interacting with external resources. When these side effects are no longer needed (e.g., the component unmounts), they must be cleaned up to prevent issues such as memory leaks or excessive resource usage. 
+### ℹ️ Explanation
+
+In React, `useEffect` is used to handle side effects such as setting up intervals, subscribing to events, or interacting with external resources. When these side effects are no longer needed (e.g., the component unmounts), they must be cleaned up to prevent issues such as memory leaks or excessive resource usage.
 
 By returning a cleanup function in `useEffect`, you ensure that any resources allocated during the effect are properly released. This approach leads to better performance and more reliable applications.
-
 
 ## Prefer Functions Over Custom Hooks
 
 ### ❌ Avoid creating unnecessary custom hooks
+
 Hooks should not be used when a simple function can achieve the same purpose. For example:
 
 ```tsx
@@ -1713,6 +1882,7 @@ const useLocale = () => {
 In this case, `useLocale` doesn't leverage any hook features (e.g., `useState`, `useEffect`).
 
 ### ✅ Prefer using plain functions instead
+
 Functions are simpler, easier to test, and more versatile than hooks. Here's the refactored example:
 
 ```tsx
@@ -1736,6 +1906,7 @@ const getLocale = () => window.navigator.languages?.[0] ?? window.navigator.lang
 ```
 
 ### ℹ️ Explanation
+
 - **Hooks are restrictive**: They can only be used inside React components or other hooks. Functions, however, can be used anywhere.
 - **Functions are simpler**: They don’t require adhering to the rules of hooks and are easier to understand and debug.
 - **Functions are more testable**: Pure functions are straightforward to unit test without needing the React environment.
@@ -1762,7 +1933,7 @@ const Panel: React.FC<PanelProps> = ({ leftElement, rightElement }) => {
 You can use `ReactNode` to keep the code more compact.
 
 ```tsx
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface MyComponentProps {
   leftElement: ReactNode;
@@ -1775,6 +1946,7 @@ const MyComponent: React.FC<MyComponentProps> = ({ leftElement, rightElement }) 
 ```
 
 ### ℹ️ Explanation
+
 - **ReactNode is more inclusive**: It covers all possible return types for a component, including strings, numbers, and fragments.
 - **Simplifies prop types**: Using ReactNode makes the prop types more concise and easier to read.
 - **Improves maintainability**: By using a single type, you reduce the complexity and potential for errors in your code.
@@ -1782,6 +1954,7 @@ const MyComponent: React.FC<MyComponentProps> = ({ leftElement, rightElement }) 
 ## Simplify Typing of Components Expecting Children Props
 
 ### ❌ Avoid manually typing the children prop
+
 ```tsx
 interface PageProps {
   // ...page props definition...
@@ -1793,8 +1966,9 @@ const HeaderPage: React.FC<{ children: ReactNode } & PageProps> = ({ children, .
 ```
 
 ### ✅ Prefer using PropsWithChildren for typing children props
+
 ```tsx
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren } from "react";
 
 interface PageProps {
   // ...page props definition...
@@ -1806,34 +1980,41 @@ const HeaderPage: React.FC<PropsWithChildren<PageProps>> = ({ children, ...pageP
 ```
 
 ### ℹ️ Explanation
+
 You don't have to type the children prop manually. Instead, you can use PropsWithChildren to simplify the typings. This makes your code cleaner and reduces the chance of errors.
 
 ## Specify Types Explicitly in useState, useRef, etc.
 
 ### ❌ Avoid omitting types when they can't be inferred
+
 ```tsx
 const [selectedItemId, setSelectedItemId] = useState();
 ```
 
 ### ✅ Prefer specifying types explicitly when they can't be inferred
+
 ```tsx
 const [selectedItemId, setSelectedItemId] = useState<string>();
 ```
 
 ### ℹ️ Explanation
+
 When using hooks like `useState` or `useRef`, always specify the type explicitly if it can't be inferred from the initial value. This ensures that TypeScript correctly understands the type of the state or ref, preventing potential type-related bugs. For example, if you have a state variable `selectedItemId` that should be an optional `string`, explicitly typing it as `useState<string>()` ensures that TypeScript will enforce this type.
 
 ## Use ElementRef Type Helper for Typing Refs
 
 ### ❌ Avoid typing refs directly with element type names
+
 ```tsx
 const ref = useRef<HTMLDivElement>(null);
 ```
 
 ### ✅ Prefer using the ElementRef type helper for typing refs
+
 ```tsx
 const ref = useRef<ElementRef<"div">>(null);
 ```
 
 ### ℹ️ Explanation
+
 Typing refs directly with element type names can be cumbersome and error-prone, as it requires remembering the exact type name of the element. Instead, use the `ElementRef` type helper, which simplifies the process by allowing you to use the element's name directly. This approach is more straightforward and reduces the likelihood of mistakes.

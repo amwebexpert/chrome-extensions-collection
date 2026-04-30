@@ -1,4 +1,3 @@
-
 - [Unit testing coding standards](#unit-testing-coding-standards)
   - [Prefer Using the AAA Pattern in Unit Tests with Jest](#prefer-using-the-aaa-pattern-in-unit-tests-with-jest)
     - [❌ Avoid Writing Tests Without Clear Structure](#-avoid-writing-tests-without-clear-structure)
@@ -9,9 +8,9 @@
     - [✅ Prefer Using `screen.getByText` for Better Readability and Maintainability](#-prefer-using-screengetbytext-for-better-readability-and-maintainability)
     - [ℹ️ Explanation](#ℹ️-explanation-1)
     - [📚 References](#-references)
-  - [Prefer Using `jest.spyOn` with Explicit Imports for Mocking Custom Hooks](#prefer-using-jestspyon-with-explicit-imports-for-mocking-custom-hooks)
-    - [❌ Avoid Mocking Custom Hooks Without `jest.spyOn`](#-avoid-mocking-custom-hooks-without-jestspyon)
-    - [✅ Prefer Using `jest.spyOn` with Explicit Imports for Mocking Custom Hooks](#-prefer-using-jestspyon-with-explicit-imports-for-mocking-custom-hooks)
+  - [Prefer Using `jest.spyOn` / `vi.spyOn` with Explicit Imports for Mocking Custom Hooks](#prefer-using-jestspyon--vispyon-with-explicit-imports-for-mocking-custom-hooks)
+    - [❌ Avoid Mocking Custom Hooks Without Explicit Spy](#-avoid-mocking-custom-hooks-without-explicit-spy)
+    - [✅ Prefer Using `jest.spyOn` or `vi.spyOn` with Explicit Imports](#-prefer-using-jestspyon-or-vispyon-with-explicit-imports)
     - [ℹ️ Explanation](#ℹ️-explanation-2)
   - [Prefer Using `it.each` for Parametrized Tests Over Multiple Individual `it` Blocks](#prefer-using-iteach-for-parametrized-tests-over-multiple-individual-it-blocks)
     - [❌ Avoid Using Multiple Individual `it` Blocks for Similar Tests](#-avoid-using-multiple-individual-it-blocks-for-similar-tests)
@@ -29,7 +28,7 @@
 
 # Unit testing coding standards
 
-This section list coding patterns promoted in the unit tests of a `React` `Typescript` project, while using `Jest` and `React Testing Library`.
+This section lists coding patterns promoted in the unit tests of a `React` `TypeScript` project, using **Jest** or **Vitest** with React Testing Library. The same patterns apply: use `describe`, `it`, `it.each`, AAA, `screen` queries, and mock factories. Use `jest` (Jest) or `vi` (Vitest) for spies and mocks (e.g. `vi.spyOn`, `vi.clearAllMocks`, `jest.spyOn`).
 
 ## Prefer Using the AAA Pattern in Unit Tests with Jest
 
@@ -37,16 +36,16 @@ This section list coding patterns promoted in the unit tests of a `React` `Types
 
 ```tsx
 // This code lacks a clear structure, making it harder to read and maintain
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import { Button } from 'react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, fireEvent } from "@testing-library/react-native";
+import { Button } from "react-native";
+import { MyComponent } from "./MyComponent";
 
-test('should increment count on button press', () => {
+test("should increment count on button press", () => {
   render(<MyComponent />);
-  const button = screen.getByText('Increment');
+  const button = screen.getByText("Increment");
   fireEvent.press(button);
-  expect(screen.getByText('Count: 1')).toBeTruthy();
+  expect(screen.getByText("Count: 1")).toBeTruthy();
 });
 ```
 
@@ -54,32 +53,32 @@ test('should increment count on button press', () => {
 
 ```tsx
 // This code uses the AAA pattern, making the test more readable and maintainable
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
 
-describe('MyComponent', () => {
-  it('should increment count on button press', () => {
+describe("MyComponent", () => {
+  it("should increment count on button press", () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const button = screen.getByText('Increment');
+    const button = screen.getByText("Increment");
     fireEvent.press(button);
-    
+
     // Assert
-    expect(screen.getByText('Count: 1')).toBeTruthy();
+    expect(screen.getByText("Count: 1")).toBeTruthy();
   });
 
-  it('should display initial count', () => {
+  it("should display initial count", () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
     // No action needed for this test
-    
+
     // Assert
-    expect(screen.getByText('Count: 0')).toBeTruthy();
+    expect(screen.getByText("Count: 0")).toBeTruthy();
   });
 });
 ```
@@ -100,15 +99,15 @@ describe('MyComponent', () => {
 
 ```tsx
 // This code destructures getByText directly from the render result, which can be less readable and harder to maintain
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, fireEvent } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
 
-test('should increment count on button press', () => {
+test("should increment count on button press", () => {
   const { getByText } = render(<MyComponent />);
-  const button = getByText('Increment');
+  const button = getByText("Increment");
   fireEvent.press(button);
-  expect(getByText('Count: 1')).toBeTruthy();
+  expect(getByText("Count: 1")).toBeTruthy();
 });
 ```
 
@@ -116,32 +115,32 @@ test('should increment count on button press', () => {
 
 ```tsx
 // This code uses screen.getByText, making the test more readable and maintainable
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
 
-describe('MyComponent', () => {
-  it('should increment count on button press', () => {
+describe("MyComponent", () => {
+  it("should increment count on button press", () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const button = screen.getByText('Increment');
+    const button = screen.getByText("Increment");
     fireEvent.press(button);
-    
+
     // Assert
-    expect(screen.getByText('Count: 1')).toBeTruthy();
+    expect(screen.getByText("Count: 1")).toBeTruthy();
   });
 
-  it('should display initial count', () => {
+  it("should display initial count", () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
     // No action needed for this test
-    
+
     // Assert
-    expect(screen.getByText('Count: 0')).toBeTruthy();
+    expect(screen.getByText("Count: 0")).toBeTruthy();
   });
 });
 ```
@@ -159,40 +158,43 @@ By following these best practices and using `screen.getByText`, you can create t
 
 - [Common mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library#not-using-screen)
 
-## Prefer Using `jest.spyOn` with Explicit Imports for Mocking Custom Hooks
+## Prefer Using `jest.spyOn` / `vi.spyOn` with Explicit Imports for Mocking Custom Hooks
 
-### ❌ Avoid Mocking Custom Hooks Without `jest.spyOn`
+Use `jest.spyOn` (Jest) or `vi.spyOn` (Vitest) with explicit imports so the mocked module is clear. Same pattern for both runners.
+
+### ❌ Avoid Mocking Custom Hooks Without Explicit Spy
 
 ```tsx
-// This code mocks a custom hook without using jest.spyOn, making it less explicit and harder to understand
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
-import { useMyCustomHook } from 'location/of/my-custom-hook';
+// This code mocks a custom hook without using jest.spyOn/vi.spyOn, making it less explicit
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
+import { useMyCustomHook } from "location/of/my-custom-hook";
 
-jest.mock('location/of/my-custom-hook', () => ({
+jest.mock("location/of/my-custom-hook", () => ({
   useMyCustomHook: jest.fn(),
 }));
 
-test('should render custom hook data', () => {
-  (useMyCustomHook as jest.Mock).mockReturnValue('mocked data');
+test("should render custom hook data", () => {
+  (useMyCustomHook as jest.Mock).mockReturnValue("mocked data");
   render(<MyComponent />);
-  expect(screen.getByText('mocked data')).toBeTruthy();
+  expect(screen.getByText("mocked data")).toBeTruthy();
 });
 ```
 
-### ✅ Prefer Using `jest.spyOn` with Explicit Imports for Mocking Custom Hooks
+### ✅ Prefer Using `jest.spyOn` or `vi.spyOn` with Explicit Imports
 
 ```tsx
-// This code uses jest.spyOn with explicit imports, making the test more readable and maintainable
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
-import * as hookModule from 'location/of/my-custom-hook';
+// Jest: jest.spyOn
+import * as hookModule from "location/of/my-custom-hook";
+const useMyCustomHookSpy = jest.spyOn(hookModule, "useMyCustomHook");
 
-describe('MyComponent', () => {
-  const useMyCustomHookSpy = jest.spyOn(hookModule, 'useMyCustomHook');
+// Vitest: vi.spyOn
+import { vi } from "vitest";
+import * as hookModule from "location/of/my-custom-hook";
+const useMyCustomHookSpy = vi.spyOn(hookModule, "useMyCustomHook");
 
+describe("MyComponent", () => {
   afterEach(() => {
     useMyCustomHookSpy.mockClear();
   });
@@ -201,26 +203,13 @@ describe('MyComponent', () => {
     useMyCustomHookSpy.mockRestore();
   });
 
-  it('should render custom hook data with mocked data', () => {
+  it("should render custom hook data with mocked data", () => {
     // Arrange
-    useMyCustomHookSpy.mockReturnValue('mocked data');
-    
+    useMyCustomHookSpy.mockReturnValue("mocked data");
     // Act
     render(<MyComponent />);
-    
     // Assert
-    expect(screen.getByText('mocked data')).toBeTruthy();
-  });
-
-  it('should render custom hook data with another mocked data', () => {
-    // Arrange
-    useMyCustomHookSpy.mockReturnValue('another mocked data');
-    
-    // Act
-    render(<MyComponent />);
-    
-    // Assert
-    expect(screen.getByText('another mocked data')).toBeTruthy();
+    expect(screen.getByText("mocked data")).toBeTruthy();
   });
 });
 ```
@@ -241,24 +230,24 @@ By following these best practices and using `jest.spyOn` with explicit imports, 
 
 ```tsx
 // This code uses multiple individual it blocks for similar tests, which can be repetitive and harder to maintain
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
 
-describe('MyComponent', () => {
+describe("MyComponent", () => {
   it('should render with text "Hello, Alice!"', () => {
     render(<MyComponent name="Alice" />);
-    expect(screen.getByText('Hello, Alice!')).toBeTruthy();
+    expect(screen.getByText("Hello, Alice!")).toBeTruthy();
   });
 
   it('should render with text "Hello, Bob!"', () => {
     render(<MyComponent name="Bob" />);
-    expect(screen.getByText('Hello, Bob!')).toBeTruthy();
+    expect(screen.getByText("Hello, Bob!")).toBeTruthy();
   });
 
   it('should render with text "Hello, Charlie!"', () => {
     render(<MyComponent name="Charlie" />);
-    expect(screen.getByText('Hello, Charlie!')).toBeTruthy();
+    expect(screen.getByText("Hello, Charlie!")).toBeTruthy();
   });
 });
 ```
@@ -267,11 +256,11 @@ describe('MyComponent', () => {
 
 ```tsx
 // This code uses it.each for parametrized tests, making the test more concise and easier to maintain
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { MyComponent } from './MyComponent';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { MyComponent } from "./MyComponent";
 
-describe('MyComponent', () => {
+describe("MyComponent", () => {
   it.each`
     name         | expected
     ${"Alice"}   | ${"Hello, Alice!"}
@@ -280,7 +269,7 @@ describe('MyComponent', () => {
   `('should render with text "$expected"', ({ name, expected }) => {
     // Arrange & Act
     render(<MyComponent name={name} />);
-    
+
     // Assert
     expect(screen.getByText(expected)).toBeTruthy();
   });
@@ -302,9 +291,9 @@ By following these best practices and using `it.each` for parametrized tests, yo
 
 ```tsx
 // This code uses getByTestId for finding elements, which can be less semantic and harder to maintain
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { Text, Button, View } from 'react-native';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { Text, Button, View } from "react-native";
 
 const MyComponent = () => (
   <View>
@@ -313,14 +302,14 @@ const MyComponent = () => (
   </View>
 );
 
-describe('MyComponent', () => {
+describe("MyComponent", () => {
   it('should render a button with text "Submit"', () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const button = screen.getByTestId('submit-button');
-    
+    const button = screen.getByTestId("submit-button");
+
     // Assert
     expect(button).toBeTruthy();
   });
@@ -328,10 +317,10 @@ describe('MyComponent', () => {
   it('should render a heading with text "Welcome"', () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const heading = screen.getByTestId('heading');
-    
+    const heading = screen.getByTestId("heading");
+
     // Assert
     expect(heading).toBeTruthy();
   });
@@ -342,9 +331,9 @@ describe('MyComponent', () => {
 
 ```tsx
 // This code uses getByRole for finding elements, making the tests more semantic and maintainable
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { Text, Button, View } from 'react-native';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { Text, Button, View } from "react-native";
 
 const MyComponent = () => (
   <View>
@@ -353,14 +342,14 @@ const MyComponent = () => (
   </View>
 );
 
-describe('MyComponent', () => {
+describe("MyComponent", () => {
   it('should render a button with text "Submit"', () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const button = screen.getByRole('button', { name: 'Submit' });
-    
+    const button = screen.getByRole("button", { name: "Submit" });
+
     // Assert
     expect(button).toBeTruthy();
   });
@@ -368,10 +357,10 @@ describe('MyComponent', () => {
   it('should render a heading with text "Welcome"', () => {
     // Arrange
     render(<MyComponent />);
-    
+
     // Act
-    const heading = screen.getByRole('header', { name: 'Welcome' });
-    
+    const heading = screen.getByRole("header", { name: "Welcome" });
+
     // Assert
     expect(heading).toBeTruthy();
   });
@@ -394,51 +383,53 @@ By following these best practices and using `getByRole` for finding elements, yo
 ## Prefer Mock Factory Function Over Re-Assignable Object Graph
 
 ### ❌ Avoid usage of re-assignable object graph
+
 ```typescript
 // somewhere in a tests shared folder
 export const mockPerson: Person = {
   id: 1,
-  name: 'John Doe',
+  name: "John Doe",
   age: 30,
-  email: 'john.doe@example.com',
+  email: "john.doe@example.com",
   isActive: true,
 };
 
 // unit test using the shared object
-describe('Person tests with shared mock object', () => {
-  it('should update the name', () => {
-    mockPerson.name = 'Jane Doe'; // modifies the shared object
-    expect(mockPerson.name).toBe('Jane Doe');
+describe("Person tests with shared mock object", () => {
+  it("should update the name", () => {
+    mockPerson.name = "Jane Doe"; // modifies the shared object
+    expect(mockPerson.name).toBe("Jane Doe");
   });
 
-  it('should have the initial name', () => {
-    expect(mockPerson.name).toBe('John Doe'); // ❌ fails because the shared object was modified in the previous test
+  it("should have the initial name", () => {
+    expect(mockPerson.name).toBe("John Doe"); // ❌ fails because the shared object was modified in the previous test
   });
 });
 ```
 
 ### ✅ Prefer a mock factory with partial overrides
+
 ```typescript
 // somewhere in a tests shared folder
 export const buildMockPerson = (overrides?: Partial<Person>): Person => ({
   id: 1,
-  name: 'John Doe',
+  name: "John Doe",
   age: 30,
-  email: 'john.doe@example.com',
+  email: "john.doe@example.com",
   isActive: true,
   ...overrides,
 });
 
 // unit test using the mock factory function
-describe('Person tests with mock factory function', () => {
-  it('should update the name in one instance', () => {
-    const person = buildMockPerson({ name: 'Jane Doe' });
-    expect(person.name).toBe('Jane Doe');
+describe("Person tests with mock factory function", () => {
+  it("should update the name in one instance", () => {
+    const person = buildMockPerson({ name: "Jane Doe" });
+    expect(person.name).toBe("Jane Doe");
   });
 
-  it('should not affect other instances', () => {
+  it("should not affect other instances", () => {
     const person = buildMockPerson();
-    expect(person.name).toBe('John Doe'); // ✅ passes because a new instance is created for each test
+    expect(person.name).toBe("John Doe"); // ✅ passes because a new instance is created for each test
   });
 });
 ```

@@ -1,27 +1,19 @@
-Table of Content
+Table of Content:
 
-- [Naming patterns](#naming-patterns)
-  - [Prefer Using Descriptive Prefixes for Boolean Variables in TypeScript](#prefer-using-descriptive-prefixes-for-boolean-variables-in-typescript)
-    - [❌ Avoid Using Generic or Non-Descriptive Names for Boolean Variables](#-avoid-using-generic-or-non-descriptive-names-for-boolean-variables)
-    - [✅ Prefer Using Descriptive Prefixes for Boolean Variables](#-prefer-using-descriptive-prefixes-for-boolean-variables)
-    - [ℹ️ Explanation](#ℹ️-explanation)
-    - [📚 References](#-references)
+- [Prefer Using Descriptive Prefixes for Boolean Variables in TypeScript](#prefer-using-descriptive-prefixes-for-boolean-variables-in-typescript)
+  - [❌ Avoid Using Generic or Non-Descriptive Names for Boolean Variables](#-avoid-using-generic-or-non-descriptive-names-for-boolean-variables)
+  - [✅ Prefer Using Descriptive Prefixes for Boolean Variables](#-prefer-using-descriptive-prefixes-for-boolean-variables)
+  - [ℹ️ Explanation](#ℹ️-explanation)
+  - [📚 References](#-references)
+- [Avoid one-letter variable names](#avoid-one-letter-variable-names)
+  - [❌ Avoid single-letter and opaque ultra-short names](#-avoid-single-letter-and-opaque-ultra-short-names)
+  - [✅ Prefer descriptive names for locals and parameters](#-prefer-descriptive-names-for-locals-and-parameters)
+  - [ℹ️ Explanation](#ℹ️-explanation-1)
+  - [📚 References](#-references-1)
 
-# Naming patterns
+Consistent naming of variables, functions, and types improves readability, maintainability, and collaboration. This document covers **in-code** naming only. For file and folder naming, see [react-files-structure-standards](../../react-files-structure-standards/references/file-and-folder-naming-patterns.md).
 
-Naming conventions in a React Native TypeScript project are crucial for several reasons:
-
-- **Readability**: Consistent naming makes the code easier to read and understand, especially for new team members or collaborators. It helps in quickly identifying the purpose of variables, functions, and files.
-
-- **Maintainability**: Proper naming conventions contribute to maintaining the codebase over time. It makes it simpler to locate and modify code when needed, reducing the risk of introducing bugs.
-
-- **Scalability**: As the project grows, consistent naming helps in managing and organizing the codebase. It prevents confusion and redundancy, ensuring that new components or modules fit seamlessly into the existing structure.
-
-- **Collaboration**: When multiple developers are working on the same project, following a standard naming convention minimizes conflicts and misunderstandings. It ensures that everyone adheres to the same style, making the development process smoother.
-
-- **Tooling and Automation**: Many development tools and automated systems rely on naming conventions to function correctly. Consistent naming aids in code generation, linting, testing, and other automated processes, enhancing overall productivity.
-
-In summary, naming conventions are vital for readability, maintainability, scalability, collaboration, and effective use of development tools in a React Native TypeScript project.
+---
 
 ## Prefer Using Descriptive Prefixes for Boolean Variables in TypeScript
 
@@ -106,3 +98,52 @@ By following these best practices and using descriptive prefixes for boolean var
 ### 📚 References
 
 - [Variable naming patterns](https://www.linkedin.com/posts/muhamadzolfaghari_variable-javascript-naming-activity-7179568278841737216-zFrX/)
+
+---
+
+## Avoid one-letter variable names
+
+Names with a single letter (`n`, `e`, `t`, `x`) or opaque two-letter abbreviations (`fn`, `cb`, `el` when the domain is not “callback”/“element”) hide intent and slow down reviews and refactors. Prefer words that describe the value’s role in the surrounding code.
+
+### ❌ Avoid single-letter and opaque ultra-short names
+
+```ts
+// Hard to scan: what is `n`? what is `d`?
+const visit = (n: Node) => {
+  for (const c of n.children) {
+    visit(c);
+  }
+};
+
+const d = await fetchUserProfile();
+if (d.role === "admin") {
+  // ...
+}
+```
+
+### ✅ Prefer descriptive names for locals and parameters
+
+```ts
+const visit = (node: Node) => {
+  for (const child of node.children) {
+    visit(child);
+  }
+};
+
+const userProfile = await fetchUserProfile();
+if (userProfile.role === "admin") {
+  // ...
+}
+```
+
+### ℹ️ Explanation
+
+- **Readability:** A name should answer what the value _means_ in context, not only what type it has.
+- **Parameters and locals:** Apply the same bar as for exported symbols; short names in inner scopes still add cognitive load when the block grows or is nested.
+- **Loops:** For non-trivial bodies, prefer `rowIndex`, `partIndex`, `candidate`, `syntaxNode`, etc., over `i`, `p`, `d`, `n`.
+- **Callbacks:** In `sort`, `map`, and similar APIs, prefer `left`/`right` or domain-specific pair names over `a`/`b` when it clarifies ordering or comparison intent.
+- **Rare exceptions:** Conventional math symbols (`x`/`y` for coordinates) or extremely tight numeric loops with empty/minimal bodies may stay short—still upgrade the name when the loop body gains branches or side effects.
+
+### 📚 References
+
+- [Airbnb JavaScript Style Guide — Naming Conventions](https://github.com/airbnb/javascript#naming-conventions)
