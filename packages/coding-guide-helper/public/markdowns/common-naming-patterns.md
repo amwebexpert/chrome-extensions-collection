@@ -1,15 +1,16 @@
-Table of Content:
+- [Common naming patterns](#common-naming-patterns)
+  - [Prefer Using Descriptive Prefixes for Boolean Variables in TypeScript](#prefer-using-descriptive-prefixes-for-boolean-variables-in-typescript)
+    - [❌ Avoid Using Generic or Non-Descriptive Names for Boolean Variables](#-avoid-using-generic-or-non-descriptive-names-for-boolean-variables)
+    - [✅ Prefer Using Descriptive Prefixes for Boolean Variables](#-prefer-using-descriptive-prefixes-for-boolean-variables)
+    - [ℹ️ Explanation](#ℹ️-explanation)
+    - [📚 References](#-references)
+  - [Avoid one-letter variable names](#avoid-one-letter-variable-names)
+    - [❌ Avoid single-letter and opaque ultra-short names](#-avoid-single-letter-and-opaque-ultra-short-names)
+    - [✅ Prefer descriptive names for locals and parameters](#-prefer-descriptive-names-for-locals-and-parameters)
+    - [ℹ️ Explanation](#ℹ️-explanation-1)
+    - [📚 References](#-references-1)
 
-- [Prefer Using Descriptive Prefixes for Boolean Variables in TypeScript](#prefer-using-descriptive-prefixes-for-boolean-variables-in-typescript)
-  - [❌ Avoid Using Generic or Non-Descriptive Names for Boolean Variables](#-avoid-using-generic-or-non-descriptive-names-for-boolean-variables)
-  - [✅ Prefer Using Descriptive Prefixes for Boolean Variables](#-prefer-using-descriptive-prefixes-for-boolean-variables)
-  - [ℹ️ Explanation](#ℹ️-explanation)
-  - [📚 References](#-references)
-- [Avoid one-letter variable names](#avoid-one-letter-variable-names)
-  - [❌ Avoid single-letter and opaque ultra-short names](#-avoid-single-letter-and-opaque-ultra-short-names)
-  - [✅ Prefer descriptive names for locals and parameters](#-prefer-descriptive-names-for-locals-and-parameters)
-  - [ℹ️ Explanation](#ℹ️-explanation-1)
-  - [📚 References](#-references-1)
+# Common naming patterns
 
 Consistent naming of variables, functions, and types improves readability, maintainability, and collaboration. This document covers **in-code** naming only. For file and folder naming, see [react-files-structure-standards](../../react-files-structure-standards/references/file-and-folder-naming-patterns.md).
 
