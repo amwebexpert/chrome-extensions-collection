@@ -422,11 +422,6 @@ const user = createUser("John", undefined, "Doe", 30, "john.doe@example.com");
 console.log(user); // Output: { firstName: 'John', lastName: 'Doe', age: 30, email: 'john.doe@example.com' }
 ```
 
-```tsx
-// Also avoid: even two positional parameters are a violation
-const formatRange = (start: number, end: number) => `${start}-${end}`;
-```
-
 ### ✅ Prefer Object Destructuring for Function Arguments
 
 ```tsx
