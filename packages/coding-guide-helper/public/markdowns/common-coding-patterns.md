@@ -322,27 +322,34 @@ console.log(total); // Output: 15
 
 ```tsx
 // This code uses multiple comparisons in a single if statement
-const value = "b";
-
-if (value === "a" || value === "b" || value === "c") {
-  console.log("Value is a, b, or c");
-} else {
-  console.log("Value is something else");
-}
+const handleApiReturnCode = (apiReturnCode: string) => {
+  if (
+    apiReturnCode === "RULE_12_ACC_EMPTY" ||
+    apiReturnCode === "RULE_27_ACC_LOCKED" ||
+    apiReturnCode === "RULE_31_ACC_EXPIRED" ||
+    apiReturnCode === "RULE_45_ACC_FROZEN"
+  ) {
+    rejectTransaction(apiReturnCode);
+  } else {
+    processTransaction();
+  }
+};
 ```
 
 ### ✅ Prefer Using `Array.includes()` for Multiple Comparisons
 
 ```tsx
 // This code uses Array.includes() for a cleaner conditional statement
-const value = "b";
-const VALID_VALUES = ["a", "b", "c"];
+const ACCOUNT_REJECTION_CODES = [ "RULE_12_ACC_EMPTY", "RULE_27_ACC_LOCKED", "RULE_31_ACC_EXPIRED", "RULE_45_ACC_FROZEN"];
+export const isAccountRejected = (code): boolean => ACCOUNT_REJECTION_CODES.includes(code);
 
-if (VALID_VALUES.includes(value)) {
-  console.log("Value is a, b, or c");
-} else {
-  console.log("Value is something else");
-}
+const handleApiReturnCode = (apiReturnCode: string) => {
+  if (isAccountRejected(apiReturnCode)) {
+    rejectTransaction(apiReturnCode);
+  } else {
+    processTransaction();
+  }
+};
 ```
 
 ### ℹ️ Explanation
@@ -350,6 +357,7 @@ if (VALID_VALUES.includes(value)) {
 - **Avoid Multiple Comparisons:** Using multiple comparisons (e.g., `if (x === 'a' || x === 'b' || x === 'c')`) can make the code harder to read and maintain.
 - **Use `Array.includes()`:** The `Array.includes()` method provides a cleaner and more readable way to check if a value is present in an array.
 - **Readability and Maintainability:** Using `Array.includes()` enhances code readability and makes it easier to add or remove values from the condition, improving maintainability.
+- **Name the Business Rule:** Wrapping the check in a small predicate like `isAccountRejected()` turns a technical lookup into a named business rule. The calling code reads like the requirement itself, the rule is reusable across the codebase as a single source of truth, and it can be unit tested in isolation.
 
 ## Prefer Object Destructuring Over Positional Parameters
 
