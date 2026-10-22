@@ -203,7 +203,9 @@ For more detailed information on why you should avoid using `any` in TypeScript 
 ### ❌ Avoid Overusing the Ternary Operator in a Single Expression
 
 ```tsx
-// This function uses multiple ternary operators in a single expression, making it hard to read
+// This function nests ternary operators in a single expression: every new rule adds
+// another level of indentation, and the reader must keep the whole path in mind
+// to know which branch returns what
 enum Status {
   Loading,
   Error,
@@ -211,25 +213,48 @@ enum Status {
   DataLoaded,
 }
 
-const getStatusMessage = (status: Status): string => {
-  return status === Status.Loading
-    ? "Loading"
-    : status === Status.Error
-      ? "Error"
-      : status === Status.NoData
-        ? "No Data"
-        : "Data Loaded";
+interface StatusContext {
+  status: Status;
+  isOffline: boolean;
+  retryCount: number;
+  itemCount: number;
+}
+
+const MAX_RETRIES = 3;
+
+const getStatusMessage = ({ status, isOffline, retryCount, itemCount }: StatusContext): string => {
+  return isOffline
+    ? status === Status.DataLoaded && itemCount > 0
+      ? `Offline - showing ${itemCount} cached items`
+      : "Offline - please check your connection"
+    : status === Status.Loading
+      ? retryCount > 0
+        ? `Retrying (${retryCount}/${MAX_RETRIES})...`
+        : "Loading"
+      : status === Status.Error
+        ? retryCount >= MAX_RETRIES
+          ? "Error - please contact support"
+          : "Error - retrying soon"
+        : status === Status.NoData || itemCount === 0
+          ? "No Data"
+          : `${itemCount} items loaded`;
 };
 
 // Usage
-const statusMessage = getStatusMessage(Status.Loading);
-console.log(statusMessage); // Output: Loading
+const statusMessage = getStatusMessage({
+  status: Status.Error,
+  isOffline: false,
+  retryCount: 3,
+  itemCount: 0,
+});
+console.log(statusMessage); // Output: Error - please contact support
 ```
 
 ### ✅ Prefer Using Early Returns for Multiple Conditions
 
 ```tsx
-// This function uses early returns for better readability
+// Same rules, written with early returns: each condition is handled once and then
+// forgotten, so the reader only needs to understand one case at a time
 enum Status {
   Loading,
   Error,
@@ -237,24 +262,53 @@ enum Status {
   DataLoaded,
 }
 
-const getStatusMessage = (status: Status): string => {
-  if (status === Status.Loading) return "Loading";
-  if (status === Status.Error) return "Error";
-  if (status === Status.NoData) return "No Data";
-  if (status === Status.DataLoaded) return "Data Loaded";
+interface StatusContext {
+  status: Status;
+  isOffline: boolean;
+  retryCount: number;
+  itemCount: number;
+}
 
-  return "Unknown Status";
+const MAX_RETRIES = 3;
+
+const getStatusMessage = ({ status, isOffline, retryCount, itemCount }: StatusContext): string => {
+  if (isOffline) {
+    const hasCachedItems = status === Status.DataLoaded && itemCount > 0;
+    if (hasCachedItems) return `Offline - showing ${itemCount} cached items`;
+    return "Offline - please check your connection";
+  }
+
+  if (status === Status.Loading) {
+    if (retryCount > 0) return `Retrying (${retryCount}/${MAX_RETRIES})...`;
+    return "Loading";
+  }
+
+  if (status === Status.Error) {
+    if (retryCount >= MAX_RETRIES) return "Error - please contact support";
+    return "Error - retrying soon";
+  }
+
+  if (status === Status.NoData || itemCount === 0) return "No Data";
+
+  return `${itemCount} items loaded`;
 };
 
 // Usage
-const statusMessage = getStatusMessage(Status.Loading);
-console.log(statusMessage); // Output: Loading
+const statusMessage = getStatusMessage({
+  status: Status.Error,
+  isOffline: false,
+  retryCount: 3,
+  itemCount: 0,
+});
+console.log(statusMessage); // Output: Error - please contact support
 ```
 
 ### ℹ️ Explanation
 
-- **Avoid Overcomplicating with Ternary Operators:** Using multiple ternary operators in a single expression can make the code hard to read and understand.
-- **Improved Readability:** Using early returns makes the logic clearer and easier to follow, especially when dealing with more than two conditions.
+- **Avoid Overcomplicating with Ternary Operators:** Nested ternaries force the reader to keep the whole chain of conditions in mind to know which branch applies. Each new rule (offline mode, retries, item count) adds a level of nesting and quickly makes the expression unreadable.
+- **Reduced Cognitive Load with Early Returns:** Each `if` handles one case and exits immediately. Once a case is returned, the reader can forget it: the code below only deals with the remaining cases.
+- **Guard Clauses First, Happy Path Last:** Special cases (offline, loading, error) are handled up front, so the main result sits at the end of the function, without nesting.
+- **Easier to Extend:** Adding a new rule means adding a new `if` block, instead of restructuring a nested expression and risking breaking another branch.
 - **Maintainability:** Clear and readable code is easier to maintain and debug.
 
 ## Prefer `const` Over `let` for Variable Declarations
@@ -314,14 +368,13 @@ console.log(total); // Output: 15
 ### ❌ Avoid Using Multiple Comparisons in Conditional Statements
 
 ```tsx
-// This code uses multiple comparisons in a single if statement
-const handleApiReturnCode = (apiReturnCode: string) => {
+export const handleApiReturnCode = (apiReturnCode: string) => {
   if (
-    apiReturnCode === "RULE_12_ACC_EMP" ||
-    apiReturnCode === "RULE_27_ACC_LOC" ||
-    apiReturnCode === "RULE_31_ACC_EXP" ||
-    apiReturnCode === "RULE_45_ACC_FRZ" ||
-    apiReturnCode === "RULE_58_ACC_CLS"
+    apiReturnCode === "ERR_12" ||
+    apiReturnCode === "ERR_27" ||
+    apiReturnCode === "ERR_31" ||
+    apiReturnCode === "ERR_45" ||
+    apiReturnCode === "ERR_58"
   ) {
     rejectTransaction(apiReturnCode);
   } else {
@@ -333,12 +386,10 @@ const handleApiReturnCode = (apiReturnCode: string) => {
 ### ✅ Prefer Using `Array.includes()` for Multiple Comparisons
 
 ```tsx
-// This code uses Array.includes() for a cleaner conditional statement
-const ACCOUNT_REJECTION_CODES = [ "RULE_12_ACC_EMP", "RULE_27_ACC_LOC", "RULE_31_ACC_EXP", "RULE_45_ACC_FRZ", "RULE_58_ACC_CLS"];
-export const isAccountRejected = (code: string): boolean => ACCOUNT_REJECTION_CODES.includes(code);
+const ACCOUNT_REJECTION_CODES = [ "ERR_12", "ERR_27", "ERR_31", "ERR_45", "ERR_58"];
 
-const handleApiReturnCode = (apiReturnCode: string) => {
-  if (isAccountRejected(apiReturnCode)) {
+export const handleApiReturnCode = (apiReturnCode: string) => {
+  if (ACCOUNT_REJECTION_CODES.includes(apiReturnCode)) {
     rejectTransaction(apiReturnCode);
   } else {
     processTransaction();
@@ -351,7 +402,6 @@ const handleApiReturnCode = (apiReturnCode: string) => {
 - **Avoid Multiple Comparisons:** Using multiple comparisons (e.g., `if (x === 'a' || x === 'b' || x === 'c')`) can make the code harder to read and maintain.
 - **Use `Array.includes()`:** The `Array.includes()` method provides a cleaner and more readable way to check if a value is present in an array.
 - **Readability and Maintainability:** Using `Array.includes()` enhances code readability and makes it easier to add or remove values from the condition, improving maintainability.
-- **Name the Business Rule:** Wrapping the check in a small predicate like `isAccountRejected()` turns a technical lookup into a named business rule. The calling code reads like the requirement itself, the rule is reusable across the codebase as a single source of truth, and it can be unit tested in isolation.
 
 ## Prefer Object Destructuring Over Positional Parameters
 
