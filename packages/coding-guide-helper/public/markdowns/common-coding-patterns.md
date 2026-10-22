@@ -324,10 +324,11 @@ console.log(total); // Output: 15
 // This code uses multiple comparisons in a single if statement
 const handleApiReturnCode = (apiReturnCode: string) => {
   if (
-    apiReturnCode === "RULE_12_ACC_EMPTY" ||
-    apiReturnCode === "RULE_27_ACC_LOCKED" ||
-    apiReturnCode === "RULE_31_ACC_EXPIRED" ||
-    apiReturnCode === "RULE_45_ACC_FROZEN"
+    apiReturnCode === "RULE_12_ACC_EMP" ||
+    apiReturnCode === "RULE_27_ACC_LOC" ||
+    apiReturnCode === "RULE_31_ACC_EXP" ||
+    apiReturnCode === "RULE_45_ACC_FRZ" ||
+    apiReturnCode === "RULE_58_ACC_CLS"
   ) {
     rejectTransaction(apiReturnCode);
   } else {
@@ -340,7 +341,7 @@ const handleApiReturnCode = (apiReturnCode: string) => {
 
 ```tsx
 // This code uses Array.includes() for a cleaner conditional statement
-const ACCOUNT_REJECTION_CODES = [ "RULE_12_ACC_EMPTY", "RULE_27_ACC_LOCKED", "RULE_31_ACC_EXPIRED", "RULE_45_ACC_FROZEN"];
+const ACCOUNT_REJECTION_CODES = [ "RULE_12_ACC_EMP", "RULE_27_ACC_LOC", "RULE_31_ACC_EXP", "RULE_45_ACC_FRZ", "RULE_58_ACC_CLS"];
 export const isAccountRejected = (code: string): boolean => ACCOUNT_REJECTION_CODES.includes(code);
 
 const handleApiReturnCode = (apiReturnCode: string) => {
