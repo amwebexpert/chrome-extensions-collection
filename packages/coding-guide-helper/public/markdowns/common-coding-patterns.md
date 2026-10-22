@@ -238,18 +238,11 @@ enum Status {
 }
 
 const getStatusMessage = (status: Status): string => {
-  if (status === Status.Loading) {
-    return "Loading";
-  }
-  if (status === Status.Error) {
-    return "Error";
-  }
-  if (status === Status.NoData) {
-    return "No Data";
-  }
-  if (status === Status.DataLoaded) {
-    return "Data Loaded";
-  }
+  if (status === Status.Loading) return "Loading";
+  if (status === Status.Error) return "Error";
+  if (status === Status.NoData) return "No Data";
+  if (status === Status.DataLoaded) return "Data Loaded";
+
   return "Unknown Status";
 };
 
