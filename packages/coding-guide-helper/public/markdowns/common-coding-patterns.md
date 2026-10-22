@@ -341,7 +341,7 @@ const handleApiReturnCode = (apiReturnCode: string) => {
 ```tsx
 // This code uses Array.includes() for a cleaner conditional statement
 const ACCOUNT_REJECTION_CODES = [ "RULE_12_ACC_EMPTY", "RULE_27_ACC_LOCKED", "RULE_31_ACC_EXPIRED", "RULE_45_ACC_FROZEN"];
-export const isAccountRejected = (code): boolean => ACCOUNT_REJECTION_CODES.includes(code);
+export const isAccountRejected = (code: string): boolean => ACCOUNT_REJECTION_CODES.includes(code);
 
 const handleApiReturnCode = (apiReturnCode: string) => {
   if (isAccountRejected(apiReturnCode)) {
