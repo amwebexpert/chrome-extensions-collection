@@ -386,7 +386,7 @@ export const handleApiReturnCode = (apiReturnCode: string) => {
 ### ✅ Prefer Using `Array.includes()` for Multiple Comparisons
 
 ```tsx
-const ACCOUNT_REJECTION_CODES = [ "ERR_12", "ERR_27", "ERR_31", "ERR_45", "ERR_58"];
+const ACCOUNT_REJECTION_CODES = [ "ERR_12", "ERR_27", "ERR_31", "ERR_45", "ERR_58" ];
 
 export const handleApiReturnCode = (apiReturnCode: string) => {
   if (ACCOUNT_REJECTION_CODES.includes(apiReturnCode)) {
